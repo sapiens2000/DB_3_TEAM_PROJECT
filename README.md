@@ -18,8 +18,8 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/doc/Phase3.md)
 * [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/doc/Phase4.md)
 
-# Contributors
+## Contributors
 
-* [박휘성](https://github.com/hwistar0717)
-* [류수성](https://github.com/Hermes997)
-* [전병규](https://github.com/sapiens2000)
+* [](https://github.com/hwistar0717)
+* [](https://github.com/Hermes997)
+* [](https://github.com/sapiens2000)
