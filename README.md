@@ -13,10 +13,10 @@ This Repository is Database (COMP322) Project of 3 TEAM
 
 # PHASE
 
-* [Phase 1](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/doc/Phase1.md)
-* [Phase 2](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/doc/Phase2.md)
-* [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/doc/Phase3.md)
-* [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/doc/Phase4.md)
+* [Phase 1](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase1/Phase1.md)
+* [Phase 2](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase2/Phase2.md)
+* [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase3/Phase3.md)
+* [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4/Phase4.md)
 
 ## Contributors
 
