@@ -20,6 +20,6 @@ This Repository is Database (COMP322) Project of 3 TEAM
 
 ## Contributors
 
-* [](https://github.com/hwistar0717)
-* [](https://github.com/Hermes997)
-* [](https://github.com/sapiens2000)
+* [박휘성](https://github.com/hwistar0717)
+* [류수성](https://github.com/Hermes997)
+* [전병규](https://github.com/sapiens2000)
