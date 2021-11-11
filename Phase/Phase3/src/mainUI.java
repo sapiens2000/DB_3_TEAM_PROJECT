@@ -11,9 +11,12 @@ import java.util.StringTokenizer;
 
 public class mainUI {
 	
-	public static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
+	// Need modification according to your oracle env
+	public static final String URL = "jdbc:oracle:thin:@localhost:1521:orcl";
 	public static final String USER_UNIVERSITY ="hr";
 	public static final String USER_PASSWD ="hr";
+	
+	
 	static mainUI start;
 	static Scanner scanner;
 	static Connection conn;
@@ -27,14 +30,6 @@ public class mainUI {
 		scanner = new Scanner(System.in);
 		start = new mainUI();
 		
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			System.out.println("Driver Loading : Success!");
-		} catch(ClassNotFoundException e) {
-			System.err.println("error = " + e.getMessage());
-			System.exit(1);
-		}
-
 		try {
 			conn = DriverManager.getConnection(URL, USER_UNIVERSITY, USER_PASSWD);
 			System.out.println("Oracle Connected.");
