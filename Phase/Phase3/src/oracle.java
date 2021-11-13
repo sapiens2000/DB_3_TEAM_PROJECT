@@ -1,11 +1,16 @@
-
-
+package project3;
+import java.sql.*;
 
 public class oracle {
     
-
-    priavte Connecton conn;
-
+	// Need modification according to your oracle env
+	public static final String URL = "jdbc:oracle:thin:@localhost:1521:orcl";
+	public static final String USER_UNIVERSITY ="hr";
+	public static final String USER_PASSWD ="hr";
+		
+    private Connection conn;
+    private Statement stmt;
+    
     public oracle(){
         try {
 		
@@ -16,7 +21,6 @@ public class oracle {
 			System.exit(1);
 		}
     
-
         try {
             conn = DriverManager.getConnection(URL, USER_UNIVERSITY, USER_PASSWD);
             System.out.println("Oracle Connected.");
@@ -26,5 +30,14 @@ public class oracle {
             System.err.println("Cannot get a connection: " + ex.getMessage());
             System.exit(1);
         }
+        
+        try {
+			conn.setAutoCommit(false);
+			stmt = conn.createStatement();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+        
+        
     }
 }
