@@ -11,7 +11,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 
 
 
-# PHASE
+## Progress
 
 * [Phase 1](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase1/Phase1.md)
 * [Phase 2](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase2/Phase2.md)
