@@ -47,7 +47,7 @@ public class Oracle {
 		
 	public int login(String userId, String userPw) {               
 		try {			
-			String sql = "SELECT Unum " +
+			String sql = "SELECT  User_id, Upassword " +
 						 "FROM USERS " +
 						 "WHERE User_id = '" + userId +"' and Upassword = '" + userPw +"' ";
 			pstmt = conn.prepareStatement(sql);
@@ -56,9 +56,9 @@ public class Oracle {
 			
 			if(rs.next()) {
 				if(rs.getString(1).equals(userPw)) {
-					return 1; // Success
+					return 0; // Success
 				}else
-					return 0; // Wrong passWd
+					return 1; // Wrong passWd
 			}
 			return -1; // No Id
 			
