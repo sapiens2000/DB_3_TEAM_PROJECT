@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="phase4.Oracle" %>
 <% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
@@ -13,12 +13,12 @@
 	
 	// No id
 	if(request.getParameter("userId") == ""){  
-		out.println("<script>alert('¾ÆÀÌµğ¸¦ ÀÔ·ÂÇÏ¼¼¿ä.');</script>");
+		out.println("<script>alert('ì•„ì´ë””ë¥¼ ì…ë ¥í•˜ì„¸ìš”.');</script>");
 		out.println("<script>document.location.href='login.jsp';</script>");
 	}
 	// No pw
 	else if(request.getParameter("userPw") == ""){ 
-		out.println("<script>alert('ºñ¹Ğ¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä.');</script>");
+		out.println("<script>alert('ë¹„ë°€ë²ˆí˜¸ë¥¼ ì…ë ¥í•˜ì„¸ìš”.');</script>");
 		out.println("<script>document.location.href='login.jsp';</script>");
 	}
 	// Try login
@@ -31,22 +31,23 @@
 		int result = orcl.login(userId, userPw);
 		
 		switch(result){		
-		case 0:	// Success
-			out.println("<script>alert('·Î±×ÀÎ µÇ¾ú½À´Ï´Ù.');</script>");
-			out.println("<script>document.location.href='main.html';</script>");
+		case -1: // Wrong Pw
+			out.println("<script>alert('ë¹„ë°€ë²ˆí˜¸ê°€ ë‹¤ë¦…ë‹ˆë‹¤.');</script>");
+			out.println("<script>location.href='login.jsp';</script>");
 			break;
-		case 1: // Wrong Pw
-			out.println("<script>alert('ºñ¹Ğ¹øÈ£°¡ ´Ù¸¨´Ï´Ù.');</script>");
-			out.println("<script>document.location.href='login.jsp';</script>");
+		case -2: // No matching id
+			out.println("<script>alert('ì•„ì´ë””ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.');</script>");
+			out.println("<script>location.href='login.jsp';</script>");
 			break;
-		case -1: // No matching id
-			out.println("<script>alert('¾ÆÀÌµğ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.');</script>");
-			out.println("<script>document.location.href='login.jsp';</script>");
+		case -3:
+			out.println("<script>alert('ì˜ˆê¸°ì¹˜ ëª»í•œ ì—ëŸ¬.');</script>");
+			out.println("<script>location.href='login.jsp';</script>");
 			break;
-		case -2:
-			out.println("<script>alert('¿¹±âÄ¡ ¸øÇÑ ¿¡·¯.');</script>");
-			out.println("<script>document.location.href='login.jsp';</script>");
-			break;
+		default: // Success
+			out.println("<script>alert('ë¡œê·¸ì¸ ë˜ì—ˆìŠµë‹ˆë‹¤.');</script>");
+			session.setAttribute("uNum", result);
+			out.println("<script>location.href='main2.jsp';</script>");
+			break;		
 		}
 	}	
 %>

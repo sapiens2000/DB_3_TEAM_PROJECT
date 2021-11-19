@@ -44,10 +44,10 @@ public class Oracle {
 		}
 	}
 		
-		
+	// return Unum for Session
 	public int login(String userId, String userPw) {               
 		try {			
-			String sql = "SELECT  User_id, Upassword " +
+			String sql = "SELECT  User_id, Upassword, Unum " +
 						 "FROM USERS " +
 						 "WHERE User_id = '" + userId +"' and Upassword = '" + userPw +"' ";
 			pstmt = conn.prepareStatement(sql);
@@ -56,17 +56,24 @@ public class Oracle {
 			
 			if(rs.next()) {
 				if(rs.getString(1).equals(userPw)) {
-					return 0; // Success
+					return Integer.parseInt(rs.getString(3)); // return uNum
 				}else
-					return 1; // Wrong passWd
+					close();
+					return -1; // Wrong passWd
 			}
-			return -1; // No Id
+			return -2; // No Id
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return -2; // error
+		return -3; // error
 	}
+	
+	
+	
+	
+	
+	
 	
 	public void close() {
 		try {
