@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,11 +21,11 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-link active" aria-current="page" href="main.html">Home</a> 
-					<a class="nav-link" href="#">ÁÖ½Ä</a> 
-					<a class="nav-link" href="#">´º½º</a> 
-					<a class="nav-link" href="login.jsp">·Î±×ÀÎ</a>
-					<a class="nav-link" href="register.jsp">È¸¿ø°¡ÀÔ</a> 
+					<a class="nav-link active" aria-current="page" href="main.jsp">í™ˆ</a> 
+					<a class="nav-link" href="#">ì£¼ì‹</a> 
+					<a class="nav-link" href="#">ë‰´ìŠ¤</a> 
+					<a class="nav-link" href="login.jsp">ë¡œê·¸ì¸</a>
+					<a class="nav-link" href="register.jsp">íšŒì›ê°€ìž…</a> 
 				</div>
 			</div>
 		</div>
@@ -34,14 +35,14 @@
 		<div class="col-lg-4" style="margin:0 auto">	
 			<div class="jumbotron" style="padding-center: 20px;">
 				<form method="post" action="registerCheck.jsp">
-					<h3 style="text-align: center;">È¸¿ø°¡ÀÔ</h3>
+					<h3 style="text-align: center;">íšŒì›ê°€ìž…</h3>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="¾ÆÀÌµð" name="userId" maxlength="20">
+						<input type="text" class="form-control" placeholder="ì•„ì´ë””" name="regId" maxlength="20">
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" placeholder="ºñ¹Ð¹øÈ£" name="userPw" maxlength="20">
+						<input type="password" class="form-control" placeholder="ë¹„ë°€ë²ˆí˜¸" name="regPw" maxlength="20">
 					</div>
-					<input type="submit" class="btn btn-primary form-control" value="·Î±×ÀÎ">
+					<input type="submit" class="btn btn-primary form-control" value="ê°€ìž…">
 				</form>
 			</div>
 		</div>	

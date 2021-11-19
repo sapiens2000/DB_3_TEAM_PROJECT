@@ -1,14 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Login</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
-
 <body>
+<%	
+	// 로그인 되어있는데 다시 url로 로그인 페이지 접속 방지
+	if(session.getAttribute("uNum") != null){ 
+		String url = request.getHeader("referer");
+		response.sendRedirect(url);
+	}
+%>	
 	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">STOCK</a>
@@ -20,28 +27,29 @@
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 				<div class="navbar-nav">
-					<a class="nav-link active" aria-current="page" href="main.html">Home</a> 
-					<a class="nav-link" href="#">�ֽ�</a> 
-					<a class="nav-link" href="#">����</a> 
-					<a class="nav-link" href="login.jsp">�α���</a>
-					<a class="nav-link" href="register.jsp">ȸ������</a> 
+					<a class="nav-link active" aria-current="page" href="main.jsp">홈</a> 
+					<a class="nav-link" href="#">주식</a> 
+					<a class="nav-link" href="#">뉴스</a> 
+					<a class="nav-link" href="login.jsp">로그인</a>
+					<a class="nav-link" href="register.jsp">회원가입</a> 
 				</div>
 			</div>
 		</div>
 	</nav>	
+	
 	<!-- Login  -->
 	<div class="login_container">		
 		<div class="col-lg-4" style="margin:0 auto">	
 			<div class="jumbotron" style="padding-center: 20px;">
 				<form method="post" action="loginCheck.jsp">
-					<h3 style="text-align: center;">�α���</h3>
+					<h3 style="text-align: center;">로그인</h3>
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="���̵�" name="userId" maxlength="20">
+						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20">
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" placeholder="��й�ȣ" name="userPw" maxlength="20">
+						<input type="password" class="form-control" placeholder="비밀번호" name="userPw" maxlength="20">
 					</div>
-					<input type="submit" class="btn btn-primary form-control" value="�α���">
+					<input type="submit" class="btn btn-primary form-control" value="로그인">
 				</form>
 			</div>
 		</div>	
