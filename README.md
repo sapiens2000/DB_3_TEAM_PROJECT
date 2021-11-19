@@ -1,4 +1,4 @@
-# DB_3_TEAM_PROEJCT
+# DB_3_TEAM_PROJECT
 **Build Environment**
 
 [![Java 7+](https://img.shields.io/badge/Java-7%2B-informational)](http://java.oracle.com)
