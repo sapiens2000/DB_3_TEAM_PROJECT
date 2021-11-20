@@ -11,6 +11,7 @@
 <%
 	// No Login Session
 	if(session.getAttribute("uNum") == null){ 
+		out.println("<script>alert('로그인이 필요합니다.');</script>");
 		out.println("<script>location.href='main.jsp';</script>");	
 	}
 %>

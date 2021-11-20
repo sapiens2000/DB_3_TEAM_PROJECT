@@ -12,8 +12,7 @@
 <%	
 	// 로그인 되어있는데 다시 url로 로그인 페이지 접속 방지
 	if(session.getAttribute("uNum") != null){ 
-		String url = request.getHeader("referer");
-		response.sendRedirect(url);
+		out.println("<script>location.href='main.jsp';</script>");
 	}
 %>	
 	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -40,7 +39,7 @@
 	<!-- Login  -->
 	<div class="login_container">		
 		<div class="col-lg-4" style="margin:0 auto">	
-			<div class="jumbotron" style="padding-center: 20px;">
+			<div class="jumbotron" style="padding-top: 20px;">
 				<form method="post" action="loginCheck.jsp">
 					<h3 style="text-align: center;">로그인</h3>
 					<div class="form-group">

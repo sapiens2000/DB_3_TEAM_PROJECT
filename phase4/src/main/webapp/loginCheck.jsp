@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Login Check</title>
 </head>
 <body>
@@ -23,7 +23,7 @@
 	}
 	// Try login
 	else{
-		Oracle orcl = new Oracle();
+		Oracle orcl = Oracle.getInstance();
 		
 		String userId = request.getParameter("userId"); 
 		String userPw = request.getParameter("userPw"); 
