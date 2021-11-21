@@ -44,8 +44,15 @@
 			out.println("<script>location.href='login.jsp';</script>");
 			break;
 		default: // Success
-			out.println("<script>alert('로그인 되었습니다.');</script>");
-			session.setAttribute("uNum", result);
+			// 관리자 로그인
+			if(userId.equals("admin")){
+				out.println("<script>alert('관리자 로그인.');</script>");	
+				session.setAttribute("uNum", -1);
+			}
+			else	{
+				out.println("<script>alert('로그인 되었습니다.');</script>");
+				session.setAttribute("uNum", result);
+			}
 			out.println("<script>location.href='main.jsp';</script>");
 			break;		
 		}

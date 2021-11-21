@@ -11,7 +11,6 @@
 </head>
 <body>
 <%
-		
 		if(request.getParameter("regId") == null || request.getParameter("regPw") == null || 
 			request.getParameter("regGender") == null || request.getParameter("regEmail") == null || 
 			request.getParameter("regPhone") == null || request.getParameter("regAge") == null){
@@ -23,8 +22,8 @@
 			
 			user.setUserId(request.getParameter("regId"));
 			user.setUserPw(request.getParameter("regPw"));
-			user.setCurrent_total_asset(9700000);
-			user.setCash(9700000);
+			user.setCurrent_total_asset(10000000);
+			user.setCash(10000000);
 			user.setEmail(request.getParameter("regEmail"));
 			user.setGender(request.getParameter("regGender"));
 			user.setPhone_num(request.getParameter("regPhone"));
@@ -47,7 +46,6 @@
 				break;
 			}
 		}
-		
 %>
 
 

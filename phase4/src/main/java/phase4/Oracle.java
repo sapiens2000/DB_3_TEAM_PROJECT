@@ -161,7 +161,7 @@ public class Oracle {
 		String sql = "SELECT RANK, USER_ID, Ucurrent_total_asset " + 
 					 "FROM RANKING, USERS " + 
 					 "WHERE USER_ID = Ruser_id " + 
-					 "ORDER BY RANK ASC ";
+					 "ORDER BY RANK ";
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -216,12 +216,17 @@ public class Oracle {
 	public void updateRanking(UserBean user, int rank) {
 		String sql = "SELECT * " + 
 					 "FROM RANKING, USERS " +
-					 "WHERE User_id = Ruser_id "
-					 "ORDER BY ";
+					 "WHERE User_id = Ruser_id " + 
+					 "ORDER BY Ucurrent_total_asset ";
 		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		
-
 	}
 	
 	public void commit() {

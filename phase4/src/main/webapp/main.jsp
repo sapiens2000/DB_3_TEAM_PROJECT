@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <title>Main</title>
 <head>
+	<!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">										
     <title>Home</title>
@@ -18,11 +19,21 @@
 	if(session.getAttribute("uNum") == null){%>
 		<jsp:include page="NavBar/navbar.jsp"/>
 <%
+	} 
+	// Admin
+	else if((int)session.getAttribute("uNum") == -1){ %>
+		<jsp:include page="NavBar/navbar-admin.jsp"/>		
+<%
 	} else{ 
 %>
 		<jsp:include page="NavBar/navbar-login.jsp"/>
 <% 
 	}
-%>
+%>	
+
+	
+
+
+
 </body>
 </html>
