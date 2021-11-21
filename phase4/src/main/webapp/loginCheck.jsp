@@ -46,7 +46,7 @@
 		default: // Success
 			out.println("<script>alert('로그인 되었습니다.');</script>");
 			session.setAttribute("uNum", result);
-			out.println("<script>location.href='main2.jsp';</script>");
+			out.println("<script>location.href='main.jsp';</script>");
 			break;		
 		}
 	}	

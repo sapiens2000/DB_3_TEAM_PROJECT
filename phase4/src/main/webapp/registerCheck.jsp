@@ -23,8 +23,8 @@
 			
 			user.setUserId(request.getParameter("regId"));
 			user.setUserPw(request.getParameter("regPw"));
-			user.setCurrent_total_asset(10000000);
-			user.setCash(10000000);
+			user.setCurrent_total_asset(9700000);
+			user.setCash(9700000);
 			user.setEmail(request.getParameter("regEmail"));
 			user.setGender(request.getParameter("regGender"));
 			user.setPhone_num(request.getParameter("regPhone"));
@@ -42,7 +42,7 @@
 				out.println("<script>window.history.back();</script>");
 				break;
 			case 0: // Success
-				out.println("<script>alert('회원가입 성공.');</script>");
+				out.println("<script>alert('회원가입 성공.');</script>");			
 				out.println("<script>location.href='main.jsp';</script>");
 				break;
 			}

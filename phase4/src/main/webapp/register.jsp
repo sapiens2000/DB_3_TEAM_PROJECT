@@ -10,26 +10,7 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="#">STOCK</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-				aria-controls="navbarNavAltMarkup" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-				<div class="navbar-nav">
-					<a class="nav-link active" aria-current="page" href="main.jsp">홈</a> 
-					<a class="nav-link" href="#">주식</a> 
-					<a class="nav-link" href="#">뉴스</a> 
-					<a class="nav-link" href="login.jsp">로그인</a>
-					<a class="nav-link" href="register.jsp">회원가입</a> 
-				</div>
-			</div>
-		</div>
-	</nav>	
+	<jsp:include page="NavBar/navbar.jsp"/>
 	<!-- Register  -->
 	<div class="Register_container">		
 		<div class="col-lg-4" style="margin:0 auto">	

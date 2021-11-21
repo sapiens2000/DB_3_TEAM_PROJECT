@@ -20,6 +20,7 @@ public class Oracle {
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 	
+	
 	private Oracle() {
 		// connect 
 		try {		
@@ -46,6 +47,7 @@ public class Oracle {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+        
 	}
 	
 	public static Oracle getInstance() {
@@ -79,9 +81,9 @@ public class Oracle {
 	}
 	
 	
+	// 동시성 제어 필요
 	public int register(UserBean user) {
 		try {	
-			int uNum;
 			String userId = user.getUserId();
 			String sql = "SELECT User_id " +
 						 "FROM USERS " +
@@ -95,52 +97,145 @@ public class Oracle {
 				}else {
 					return -2;  // error
 				}
-			}else {
-				sql = "SELECT COUNT(Unum) " +
-						  "FROM USERS ";
+			}else {				
+				user.setuNum(getUnum() + 1);
+				
+				try {
+					sql = "INSERT INTO USERS VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) "; 
+
 					pstmt = conn.prepareStatement(sql);
-					rs = pstmt.executeQuery(); 
+					pstmt.setString(1, user.getUserId());
+					pstmt.setString(2, user.getUserPw());
+					pstmt.setInt(3, user.getuNum());
+					pstmt.setInt(4, user.getCurrent_total_asset());
+					pstmt.setInt(5, user.getCash());
+					pstmt.setInt(6, user.getAge());
+					pstmt.setString(7, user.getGender());
+					pstmt.setString(8, user.getEmail());
+					pstmt.setString(9, user.getPhone_num());
 					
-					// new user num
-					if(rs.next()) {
-						uNum = rs.getInt(1) + 1;
-					}else {
-						return -2;
-					}
-					user.setuNum(uNum);
+					rs = pstmt.executeQuery();
+					commit();
+										
+					// Add to Ranking 
+					addRanking(user);
 					
-					try {
-						sql = "INSERT INTO USERS VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) "; 
-	
-						pstmt = conn.prepareStatement(sql);
-						pstmt.setString(1, user.getUserId());
-						pstmt.setString(2, user.getUserPw());
-						pstmt.setInt(3, user.getuNum());
-						pstmt.setInt(4, user.getCurrent_total_asset());
-						pstmt.setInt(5, user.getCash());
-						pstmt.setInt(6, user.getAge());
-						pstmt.setString(7, user.getGender());
-						pstmt.setString(8, user.getEmail());
-						pstmt.setString(9, user.getPhone_num());
-						
-						rs = pstmt.executeQuery();
-						commit();
-						
-						return 0; // Success
-					}catch(Exception e) {
-						e.printStackTrace();
-					}
-				}		
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, user.getUserId());
+					pstmt.setInt(2, user.getuNum());
+					
+					return 0; // Success
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}		
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return -2; // error
 	}
 	
+	public int getUnum() {
+		String sql = "SELECT COUNT(Unum) " +
+			  	 "FROM USERS ";
+		int uNum = 0;
+		try {
+		pstmt = conn.prepareStatement(sql);
+		rs = pstmt.executeQuery(); 
+		
+			// new user num
+			if(rs.next()) {
+				uNum = rs.getInt(1);
+				return uNum;
+			}
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		
+		// error
+		return -1;
+	}
+	
+	public ResultSet getRanking() {
+		String sql = "SELECT RANK, USER_ID, Ucurrent_total_asset " + 
+					 "FROM RANKING, USERS " + 
+					 "WHERE USER_ID = Ruser_id " + 
+					 "ORDER BY RANK ASC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	// When User do Registration, add data to ranking table.
+	public void addRanking(UserBean user) {
+		String sql = "SELECT COUNT(*) " + 
+				 	 "FROM RANKING, USERS " + 
+				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset >= " + user.getCurrent_total_asset() + " " ;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				// New user's ranking
+				int rank = rs.getInt(1);
+				
+				sql = "INSERT INTO RANKING VALUES(?, ?) ";
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, user.getUserId());
+				pstmt.setInt(2, rank);
+
+				rs = pstmt.executeQuery();		
+				
+				// 랭킹 정보 업데이트 
+				//updateRanking(user, rank);
+								
+				commit();
+			
+			}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
+	// After insert data to ranking, need update db
+	public void updateRanking(UserBean user, int rank) {
+		String sql = "SELECT * " + 
+					 "FROM RANKING, USERS " +
+					 "WHERE User_id = Ruser_id "
+					 "ORDER BY ";
+		
+		
+		
+
+	}
 	
 	public void commit() {
 		try {
 			conn.commit();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void rollback() {
+		try {
+			conn.rollback();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

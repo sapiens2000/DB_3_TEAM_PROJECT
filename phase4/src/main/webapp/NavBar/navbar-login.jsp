@@ -23,8 +23,10 @@
 					<a class="nav-link active" aria-current="page" href="main2.jsp">홈</a> 
 					<a class="nav-link" href="#">주식</a> 
 					<a class="nav-link" href="#">뉴스</a>
+					<a class="nav-link" href="ranking.jsp">랭킹</a>
 					<a class="nav-link" href="logout.jsp">로그아웃</a>
 					<a class="nav-link" href="myPage.jsp">마이페이지</a> 
+					
 				</div>
 			</div>
 		</div>
