@@ -4,15 +4,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Register</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<title>Register</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<style>
+		.register_container {
+		  display: flex;
+		  flex-direction: column;
+		  justify-content: center;
+		  min-height: 80vh;
+		}	
+	</style>
 </head>
-
 <body>
 	<jsp:include page="NavBar/navbar.jsp"/>
 	<!-- Register  -->
-	<div class="Register_container">		
+	<div class="register_container">		
 		<div class="col-lg-4" style="margin:0 auto">	
 			<div class="jumbotron" style="padding-top: 20px;">
 				<form method="post" action="registerCheck.jsp">
