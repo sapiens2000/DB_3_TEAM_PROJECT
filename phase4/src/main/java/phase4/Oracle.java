@@ -152,7 +152,6 @@ public class Oracle {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		}
-		
 		// error
 		return -1;
 	}
@@ -167,9 +166,10 @@ public class Oracle {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery(); 
 			
-			if(rs.next())
+			if(rs.next()) {
 				rs.beforeFirst();
 				return rs;
+			}
 			
 		} catch (SQLException e) {
 		// TODO Auto-generated catch block
@@ -209,7 +209,7 @@ public class Oracle {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
 	
 	// After insert data to ranking, need update db
@@ -227,6 +227,82 @@ public class Oracle {
 			e.printStackTrace();
 		}
 		
+		
+		
+	}
+	
+	public ResultSet getUsers() {
+		String sql = "SELECT Unum, User_id " + 
+				 	 "FROM USERS " +
+				 	 "ORDER BY Unum ASC ";
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public boolean deleteUser(String userId) {
+		// delete ranking -> ...users
+		String sql = "DELETE RANKING WHERE RUSER_ID = '" + userId +"' " ;		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		sql = "DELETE USERS WHERE USER_ID = '" + userId + "' " ;	
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			this.commit();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		return false;
+	}
+	
+	public boolean updateUser(UserBean User) { 
+		// 유저는 id, 성별 수정 금지 시킬것
+		
+		String sql = "UPDATE USERS " +
+					 "SET " +
+					 "USER_ID = '" + User.getUserId() + "', " +
+					 "UPassword = '" + User.getUserPw() + "', " +
+					 "UCash = '" + User.getCash() + "', " +
+					 "UEmail = '" + User.getEmail() + "', " +
+					 "UCELL_PHONE_NUMBER = '" + User.getPhone_num() + "' " +
+					 "WHERE USER_ID = '" + User.getUserId() + "', ";
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			this.commit();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		return false;
 	}
 	
 	public void commit() {
@@ -241,6 +317,17 @@ public class Oracle {
 	public void rollback() {
 		try {
 			conn.rollback();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void cursorClose() {
+		try {
+
+			pstmt.close();
+			rs.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
