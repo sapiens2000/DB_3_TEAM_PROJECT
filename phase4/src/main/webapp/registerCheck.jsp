@@ -11,6 +11,7 @@
 </head>
 <body>
 <%
+
 		if(request.getParameter("regId") == null || request.getParameter("regPw") == null || 
 			request.getParameter("regGender") == null || request.getParameter("regEmail") == null || 
 			request.getParameter("regPhone") == null || request.getParameter("regAge") == null){
@@ -46,6 +47,7 @@
 				break;
 			}
 		}
+
 %>
 
 

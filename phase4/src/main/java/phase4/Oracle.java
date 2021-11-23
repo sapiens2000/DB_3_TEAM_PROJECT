@@ -7,10 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
 public class Oracle {
 	
-	// Áßº¹ ¿¬°á ¹æÁö¸¦ À§ÇÑ ½Ì±ÛÅæ ÆĞÅÏ
+	// ì¤‘ë³µ ì—°ê²° ë°©ì§€ë¥¼ ìœ„í•œ ì‹±ê¸€í†¤ íŒ¨í„´
 	private static Oracle instance;
 	
 	// Need modification according to your oracle env
@@ -21,7 +20,6 @@ public class Oracle {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	
 	
 	private Oracle() {
 		// connect 
@@ -49,7 +47,7 @@ public class Oracle {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        
+
 	}
 	
 	public static Oracle getInstance() {
@@ -82,7 +80,7 @@ public class Oracle {
 		return -4; // error
 	}
 	
-	// µ¿½Ã¼º Á¦¾î ÇÊ¿ä
+	// ë™ì‹œì„± ì œì–´ í•„ìš”
 	public int register(UserBean user) {
 		try {	
 			String userId = user.getUserId();
@@ -94,10 +92,11 @@ public class Oracle {
 			
 			if(rs.next()) {
 				if(rs.getString(1).equals(userId)) {
-					return -1;	// ÀÌ¹Ì Á¸ÀçÇÏ´Â id
+					return -1;	// ì´ë¯¸ ì¡´ì¬í•˜ëŠ” id
 				}else {
 					return -2;  // error
 				}
+
 			}else {				
 				user.setuNum(getUnum() + 1);
 				
@@ -130,12 +129,13 @@ public class Oracle {
 					e.printStackTrace();
 				}
 			}		
+
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return -2; // error
 	}
-	
+
 	public int getUnum() {
 		String sql = "SELECT COUNT(Unum) " +
 			  	 "FROM USERS ";
@@ -201,7 +201,7 @@ public class Oracle {
 
 				rs = pstmt.executeQuery();		
 				
-				// ·©Å· Á¤º¸ ¾÷µ¥ÀÌÆ® 
+				// ë­í‚¹ ì •ë³´ ì—…ë°ì´íŠ¸ 
 				//updateRanking(user, rank);
 								
 				commit();
@@ -310,7 +310,7 @@ public class Oracle {
 	}
 	
 	public boolean updateUser(UserBean User) { 
-		// À¯Àú´Â id, ¼ºº° ¼öÁ¤ ±İÁö ½ÃÅ³°Í		
+		// ìœ ì €ëŠ” id, ì„±ë³„ ìˆ˜ì • ê¸ˆì§€ ì‹œí‚¬ê²ƒ		
 		String sql = "UPDATE USERS " +
 					 "SET " +
 					 "USER_ID = '" + User.getUserId() + "', " +
@@ -380,7 +380,7 @@ public class Oracle {
 		}
 		return numOfUsers;
 	}
-	
+
 	public void commit() {
 		try {
 			conn.commit();
@@ -409,7 +409,7 @@ public class Oracle {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void close() {
 		try {
 			conn.close();

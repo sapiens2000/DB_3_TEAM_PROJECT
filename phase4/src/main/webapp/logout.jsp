@@ -14,7 +14,6 @@
 	out.println("<script>alert('로그아웃 되었습니다.');</script>");	
 	// 메인페이지로.
 	out.println("<script>location.href='main.jsp';</script>");
-
 %>
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

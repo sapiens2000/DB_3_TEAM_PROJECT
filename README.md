@@ -1,17 +1,17 @@
-# DB_3_TEAM_PROEJCT
+# DB_3_TEAM_PROJECT
 **Build Environment**
 
-[![Java ](https://img.shields.io/badge/Java-%20-informational)](http://java.oracle.com)
-[![Tomcat 8.5](https://img.shields.io/badge/Tomcat-8.5-informational)](https://tomcat.apache.org/download-80.cgi)
-[![Oracle 19c](https://img.shields.io/badge/Oracle-19c-informational)](https://www.oracle.com/database/technologies)
-[![AppVeyor CI Build Status (Windows)](https://img.shields.io/appveyor/build/parrt/antlr4?label=Windows)](https://ci.appveyor.com/project/parrt/antlr4) 
-
+[![Java 7+](https://img.shields.io/badge/Java-7%2B-informational)](http://java.oracle.com)
+[![Tomcat 8.5+](https://img.shields.io/badge/Tomcat-8.5%2B-informational)](https://tomcat.apache.org/download-80.cgi)
+[![Oracle 11c+](https://img.shields.io/badge/Oracle-11c%2B-informational)](https://www.oracle.com/database/technologies)
+[![ Build Status (Windows)](https://img.shields.io/appveyor/build/parrt/antlr4?label=Windows)](https://www.microsoft.com/ko-kr/windows)
+[![ Build Status (MAC)](https://img.shields.io/badge/Mac-issue-yellow)](https://support.apple.com/ko-kr/HT201260)
 
 This Repository is Database (COMP322) Project of 3 TEAM
 
 
 
-# PHASE
+## Progress
 
 * [Phase 1](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase1/Phase1.md)
 * [Phase 2](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase2/Phase2.md)

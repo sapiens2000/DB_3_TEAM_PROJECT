@@ -16,6 +16,7 @@
 		out.println("<script>location.href='main.jsp';</script>");	
 	}
 %>
+
 	<jsp:include page="NavBar/navbar-login.jsp"/>
 	
 	<div class="myPage_container">		
@@ -34,16 +35,6 @@
 			</div>
 		</div>	
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 </body>
 </html>
