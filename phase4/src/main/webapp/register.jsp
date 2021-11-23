@@ -34,7 +34,7 @@
 						<input type="email" class="form-control" placeholder="이메일" name="regEmail" maxlength="30">
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" placeholder="전화번호" name="regPhone" maxlength="13">
+						<input type="tel" class="form-control" placeholder="전화번호" name="regPhone" maxlength="13">
 					</div>
 					<div class="form-group">
 						<input type="number" class="form-control" placeholder="나이" name="regAge" maxlength="3">

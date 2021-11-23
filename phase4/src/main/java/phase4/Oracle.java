@@ -67,24 +67,15 @@ public class Oracle {
 						 "WHERE User_id = '" + userId +"' ";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery(); 
-			
+							
 			if(rs.next()) {
-				sql = "SELECT Upassword, Unum " +
-					  "FROM USERS " +
-					  "WHERE User_id = '" + userId +"' and Upassword = '" + userPw + "' ";
-				
-				pstmt = conn.prepareStatement(sql);
-				rs = pstmt.executeQuery(); 
-				
-				if(rs.next()) {
-					if(rs.getString(1).equals(userPw)) {						
-						return Integer.parseInt(rs.getString(2)); // return uNum
-					}else
-						return -2; // Wrong passWd
-				}
+				if(rs.getString(2).equals(userPw)) {						
+					return Integer.parseInt(rs.getString(3)); // return uNum
+				}else
+					return -2; // Wrong passWd
 			}
-			return -3; // No Id
-			
+			else
+				return -3; // No Id					
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -236,9 +227,7 @@ public class Oracle {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+				
 	}
 	
 	public ResultSet getUsers() {
@@ -257,6 +246,38 @@ public class Oracle {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
+	}
+	
+	public UserBean getUserData(String userId) {
+		UserBean user = new UserBean();
+		
+		String sql = "SELECT * " + 
+			 	 	 "FROM USERS " +
+			 	 	 "WHERE User_id = '" + userId + "' ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				
+				user.setUserId(rs.getString(1));
+				user.setUserPw(rs.getString(2));
+				user.setuNum(rs.getInt(3));
+				user.setCurrent_total_asset(rs.getInt(4));
+				user.setCash(rs.getInt(5));
+				user.setAge(rs.getInt(6));
+				user.setGender(rs.getString(7));
+				user.setEmail(rs.getString(8));
+				user.setPhone_num(rs.getString(9));
+				
+				return user;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 	
@@ -289,8 +310,7 @@ public class Oracle {
 	}
 	
 	public boolean updateUser(UserBean User) { 
-		// 유저는 id, 성별 수정 금지 시킬것
-		
+		// 유저는 id, 성별 수정 금지 시킬것		
 		String sql = "UPDATE USERS " +
 					 "SET " +
 					 "USER_ID = '" + User.getUserId() + "', " +
@@ -298,7 +318,7 @@ public class Oracle {
 					 "UCash = '" + User.getCash() + "', " +
 					 "UEmail = '" + User.getEmail() + "', " +
 					 "UCELL_PHONE_NUMBER = '" + User.getPhone_num() + "' " +
-					 "WHERE USER_ID = '" + User.getUserId() + "', ";
+					 "WHERE USER_ID = '" + User.getUserId() + "' ";
 		
 		
 		try {
