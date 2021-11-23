@@ -1,0 +1,59 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="phase4.Oracle" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page language="java" import="java.text.*, java.sql.*" %>
+<% request.setCharacterEncoding("utf-8"); %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>My page</title>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script> $( function() { $( "#datepicker" ).datepicker();
+$("#datepicker").datepicker({ numberOfMonths: 1 , showWeek: false ,
+	firstDay: 1 , dateFormat:"yymmdd" , prevText: '이전 달' ,
+	nextText: '다음 달' , monthNames: ['1월', '2월', '3월', '4월',
+		'5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'] ,
+		monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월',
+			'7월', '8월', '9월', '10월', '11월', '12월'] ,
+			dayNames: ['일', '월', '화', '수', '목', '금', '토'] ,
+			dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'] ,
+			dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'] ,
+			showMonthAfterYear: true , yearSuffix: '년' }); });
+} );</script>
+
+
+</head>
+<body>
+<%
+	// No Login Session
+	if(session.getAttribute("uNum") == null){ 
+		out.println("<script>alert('로그인이 필요합니다.');</script>");
+		out.println("<script>location.href='main.jsp';</script>");	
+	}
+%>
+	<jsp:include page="NavBar/navbar-login.jsp"/>
+	
+
+<!-- 사이드 바 메뉴-->
+<div class="col-md-3">
+  <!-- 패널 타이틀1 -->
+<div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Panel Title</h3>
+    </div>
+    <!-- 사이드바 메뉴목록1 -->
+    <ul class="list-group">
+      <li class="list-group-item"><a href="User_info.jsp">User info</a></li>
+      <li class="list-group-item"><a href="Trans_history.jsp">Trans history</a></li>
+      <li class="list-group-item"><a href="Asset.jsp">Asset</a></li>
+      <li class="list-group-item"><a href="Asset_of_stock.jsp">Asset of stock</a></li>
+    </ul>
+</div>
+</div>
+
+
+</body>
+</html>
