@@ -66,7 +66,10 @@
 				    </li>
 				    <li class="nav-item">
 				        <a class="nav-link" href="ranking.jsp">랭킹</a>
-				    </li>					
+				    </li>	
+				    <li class="nav-item">
+						<a class="nav-link" href="logout.jsp">로그아웃</a>
+					</li>				
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			            관리자 메뉴

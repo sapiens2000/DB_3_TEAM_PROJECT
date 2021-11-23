@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 
 public class Oracle {
 	
@@ -62,24 +64,32 @@ public class Oracle {
 		try {			
 			String sql = "SELECT  User_id, Upassword, Unum " +
 						 "FROM USERS " +
-						 "WHERE User_id = '" + userId +"' and Upassword = '" + userPw +"' ";
+						 "WHERE User_id = '" + userId +"' ";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery(); 
 			
 			if(rs.next()) {
-				if(rs.getString(2).equals(userPw)) {
-					return Integer.parseInt(rs.getString(3)); // return uNum
-				}else
-					return -1; // Wrong passWd
+				sql = "SELECT Upassword, Unum " +
+					  "FROM USERS " +
+					  "WHERE User_id = '" + userId +"' and Upassword = '" + userPw + "' ";
+				
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery(); 
+				
+				if(rs.next()) {
+					if(rs.getString(1).equals(userPw)) {						
+						return Integer.parseInt(rs.getString(2)); // return uNum
+					}else
+						return -2; // Wrong passWd
+				}
 			}
-			return -2; // No Id
+			return -3; // No Id
 			
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return -3; // error
+		return -4; // error
 	}
-	
 	
 	// 동시성 제어 필요
 	public int register(UserBean user) {
@@ -303,6 +313,52 @@ public class Oracle {
 			
 		}
 		return false;
+	}
+	
+	public ArrayList<Integer> getUsersByAge(){
+		ArrayList<Integer> numOfUsers = new ArrayList<Integer>();
+		String sql = "";
+		int index = 1;
+					
+		while(index <= 5) {
+			sql = "SELECT COUNT(*) " +
+				  "FROM USERS " + 
+				  "WHERE UAge >= " + index*10 + "AND UAGE < " + (index+1)*10 + " ";
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()){
+					numOfUsers.add(rs.getInt(1));					
+				}else
+					numOfUsers.add(0);
+				
+			}catch(SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			index++;
+		}
+				
+		sql = "SELECT COUNT(*) " +
+			  "FROM USERS " + 
+			  "WHERE UAge >= " + index*10 + " ";
+			
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				numOfUsers.add(rs.getInt(1));					
+			}else
+				numOfUsers.add(0);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return numOfUsers;
 	}
 	
 	public void commit() {

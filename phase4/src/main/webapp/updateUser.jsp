@@ -9,7 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="#">STOCK</a>
 			<button class="navbar-toggler" type="button"
@@ -32,6 +32,9 @@
 				    <li class="nav-item">
 				    	<a class="nav-link" href="ranking.jsp">랭킹</a>				
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="logout.jsp">로그아웃</a>
+					</li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			            관리자 메뉴
@@ -46,11 +49,6 @@
 			</div>
 		</div>
 	</nav>
-
-
-
-
-
 
 <% 
 	Oracle orcl = Oracle.getInstance();
