@@ -27,32 +27,17 @@
 		<jsp:include page="NavBar/navbar.jsp"/>
 <%
 	} else if((int)session.getAttribute("uNum") == -1){ %>
-		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="#">STOCK</a>
-				<button class="navbar-toggler" type="button"
-					data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-					aria-controls="navbarNavAltMarkup" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-					<ul class="navbar-nav">
-						<li class="nav-item">
-					    	<a class="nav-link active" aria-current="page" href="main.jsp">홈</a>
-					    </li>
-					    <li class="nav-item">
-					        <a class="nav-link" href="#">주식</a>
-					    </li>
-					    <li class="nav-item">
-					        <a class="nav-link" href="#">뉴스</a>
-					    </li>	
-					    <li class="nav-item">
-					    	<a class="nav-link" href="ranking.jsp">랭킹</a>				
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="logout.jsp">로그아웃</a>
-						</li>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	        <div class="container px-5">
+	            <a class="navbar-brand" href="#!">STOCK</a>
+	            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+	            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
+					    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
+					    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
+					    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
+						<li class="nav-item"><a class="nav-link" href="logout.jsp">로그아웃</a></li>
 						<li class="nav-item dropdown">
 				        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 				            관리자 메뉴
@@ -63,10 +48,10 @@
 				            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
 				          	</ul>
 				        </li>
-					</ul>
-				</div>
-			</div>
-		</nav>	
+	                </ul>
+	            </div>
+	        </div>
+    	</nav> 
 <%
 	}else{
 %>
@@ -117,7 +102,10 @@
 			</div>
 		</main>
 	</div>
-	
+	<!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
+    </footer>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="resource/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>

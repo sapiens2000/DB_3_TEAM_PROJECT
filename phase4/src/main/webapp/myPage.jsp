@@ -23,18 +23,17 @@
 		<div class="col-lg-4" style="margin:0 auto">	
 			<div class="jumbotron" style="padding-top: 20px;">
 				<form method="post" action="loginCheck.jsp">
-					<h3 style="text-align: center;">내정보</h3>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="아이디" name="userId" maxlength="20">
-					</div>
-					<div class="form-group">
-						<input type="password" class="form-control" placeholder="비밀번호" name="userPw" maxlength="20">
-					</div>
-					<input type="submit" class="btn btn-primary form-control" value="로그인">
+					<h3 style="text-align: center;">내 정보</h3>
+					
+					
+					<input type="submit" class="btn btn-primary form-control" value="저장">
 				</form>
 			</div>
 		</div>	
 	</div>
-
+	
+	<footer class="py-5 bg-dark">
+        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
+    </footer>
 </body>
 </html>

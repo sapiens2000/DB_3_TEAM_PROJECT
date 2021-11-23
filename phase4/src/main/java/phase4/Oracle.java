@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Oracle {
 	
-	// 중복 연결 방지를 위한 싱글톤 패턴
+	// 싱글톤 패턴
 	private static Oracle instance;
 	
 	// Need modification according to your oracle env
@@ -80,7 +80,7 @@ public class Oracle {
 		return -4; // error
 	}
 	
-	// 동시성 제어 필요
+	// unum을 세션으로 활용
 	public int register(UserBean user) {
 		try {	
 			String userId = user.getUserId();
@@ -92,7 +92,7 @@ public class Oracle {
 			
 			if(rs.next()) {
 				if(rs.getString(1).equals(userId)) {
-					return -1;	// 이미 존재하는 id
+					return -1;	// id 중복
 				}else {
 					return -2;  // error
 				}
@@ -201,7 +201,7 @@ public class Oracle {
 
 				rs = pstmt.executeQuery();		
 				
-				// 랭킹 정보 업데이트 
+				// after add, update old ranking
 				//updateRanking(user, rank);
 								
 				commit();
@@ -310,7 +310,7 @@ public class Oracle {
 	}
 	
 	public boolean updateUser(UserBean User) { 
-		// 유저는 id, 성별 수정 금지 시킬것		
+		// �쑀���뒗 id, �꽦蹂� �닔�젙 湲덉� �떆�궗寃�		
 		String sql = "UPDATE USERS " +
 					 "SET " +
 					 "USER_ID = '" + User.getUserId() + "', " +
@@ -319,8 +319,7 @@ public class Oracle {
 					 "UEmail = '" + User.getEmail() + "', " +
 					 "UCELL_PHONE_NUMBER = '" + User.getPhone_num() + "' " +
 					 "WHERE USER_ID = '" + User.getUserId() + "' ";
-		
-		
+			
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
