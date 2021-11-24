@@ -11,7 +11,7 @@
 </head>
 <body>
 <%
-		
+
 		if(request.getParameter("regId") == null || request.getParameter("regPw") == null || 
 			request.getParameter("regGender") == null || request.getParameter("regEmail") == null || 
 			request.getParameter("regPhone") == null || request.getParameter("regAge") == null){
@@ -42,12 +42,12 @@
 				out.println("<script>window.history.back();</script>");
 				break;
 			case 0: // Success
-				out.println("<script>alert('회원가입 성공.');</script>");
+				out.println("<script>alert('회원가입 성공.');</script>");			
 				out.println("<script>location.href='main.jsp';</script>");
 				break;
 			}
 		}
-		
+
 %>
 
 

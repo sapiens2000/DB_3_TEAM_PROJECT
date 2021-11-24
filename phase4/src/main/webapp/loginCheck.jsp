@@ -31,22 +31,29 @@
 		int result = orcl.login(userId, userPw);
 		
 		switch(result){		
-		case -1: // Wrong Pw
+		case -2: // Wrong Pw
 			out.println("<script>alert('비밀번호가 다릅니다.');</script>");
 			out.println("<script>location.href='login.jsp';</script>");
 			break;
-		case -2: // No matching id
+		case -3: // No matching id
 			out.println("<script>alert('아이디가 존재하지 않습니다.');</script>");
 			out.println("<script>location.href='login.jsp';</script>");
 			break;
-		case -3:
+		case -4:
 			out.println("<script>alert('예기치 못한 에러.');</script>");
 			out.println("<script>location.href='login.jsp';</script>");
 			break;
 		default: // Success
-			out.println("<script>alert('로그인 되었습니다.');</script>");
-			session.setAttribute("uNum", result);
-			out.println("<script>location.href='main2.jsp';</script>");
+			// 관리자 로그인 (-1)
+			if(userId.equals("admin")){
+				out.println("<script>alert('관리자 로그인.');</script>");	
+				session.setAttribute("uNum", -1);
+			}
+			else	{
+				out.println("<script>alert('로그인 되었습니다.');</script>");
+				session.setAttribute("uNum", result);
+			}
+			out.println("<script>location.href='main.jsp';</script>");
 			break;		
 		}
 	}	

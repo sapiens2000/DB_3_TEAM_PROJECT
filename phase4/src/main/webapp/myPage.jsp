@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="phase4.UserBean" %>
 <% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
@@ -16,25 +17,23 @@
 	}
 %>
 
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-			<div class="container-fluid">
-				<a class="navbar-brand" href="#">STOCK</a>
-				<button class="navbar-toggler" type="button"
-					data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-					aria-controls="navbarNavAltMarkup" aria-expanded="false"
-					aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-					<div class="navbar-nav">
-						<a class="nav-link active" aria-current="page" href="main2.jsp">홈</a> 
-						<a class="nav-link" href="#">주식</a> 
-						<a class="nav-link" href="#">뉴스</a>
-						<a class="nav-link" href="logout.jsp">로그아웃</a>
-						<a class="nav-link" href="myPage.jsp">마이페이지</a> 
-					</div>
-				</div>
+	<jsp:include page="NavBar/navbar-login.jsp"/>
+	
+	<div class="myPage_container">		
+		<div class="col-lg-4" style="margin:0 auto">	
+			<div class="jumbotron" style="padding-top: 20px;">
+				<form method="post" action="loginCheck.jsp">
+					<h3 style="text-align: center;">내 정보</h3>
+					
+					
+					<input type="submit" class="btn btn-primary form-control" value="저장">
+				</form>
 			</div>
-	</nav>
+		</div>	
+	</div>
+	
+	<footer class="py-5 bg-dark">
+        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
+    </footer>
 </body>
 </html>
