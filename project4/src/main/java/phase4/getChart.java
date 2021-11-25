@@ -42,4 +42,3 @@ public class getChart extends HttpServlet {
 	}
 
 }
-

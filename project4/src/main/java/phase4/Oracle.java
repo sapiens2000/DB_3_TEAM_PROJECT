@@ -292,6 +292,92 @@ public class Oracle {
 		return dataList;
 	}
 	
+	public ResultSet getChangeRate() {
+		String sql = "SELECT ROWNUM, Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+					 "FROM STOCK, CHART " +
+					 "WHERE Scode = Ccode " +
+					 "ORDER BY Cstart_date DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public ResultSet foreignRatePerRoe() {
+		
+		String sql = "SELECT Sname, Sforeign_rate, Sper, Sroe " +
+					 "FROM STOCK " + 
+					 "ORDER BY Sforeign_rate DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public ResultSet getNewsInChart(String company) {
+		
+		String sql = "SELECT N.Ntitle, N.Nurl " +
+				 	 "FROM NEWS N " + 
+				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
+	
+	try {
+		pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		rs = pstmt.executeQuery(); 
+		
+		if(rs.next())
+			rs.beforeFirst();
+			return rs;
+		
+	} catch (SQLException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	}
+	return null;
+		
+	}
+	
+	public ResultSet getAllDataForChart(String company) {
+		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Chigh_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
+					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
+					 "FROM STOCK S, CHART C, SECTOR SE " +
+					 "WHERE S.Scode = C.Ccode AND SE.Sname ='" + company + "' " +
+					 "ORDER BY C.Cstart_date DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
 	public void commit() {
 		try {
 			conn.commit();
