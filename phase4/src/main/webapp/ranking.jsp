@@ -41,7 +41,7 @@
 	           <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
+				    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
 				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
 					<li class="nav-item dropdown">
@@ -70,7 +70,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
+                    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                 </ul>
@@ -143,10 +143,8 @@
 			</div>
 		</main>
 	</div>
-	<!-- Footer-->
-    <footer class="py-5 bg-dark">
-        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
-    </footer>
+
+
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="resource/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>

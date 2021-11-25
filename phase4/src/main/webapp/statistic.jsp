@@ -10,9 +10,25 @@
 <title>Statistic</title>
 	<link href="resource/css/styles.css" rel="stylesheet" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+	<!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+    <link href="resource/css/main-styles.css" rel="stylesheet" />
+    <link href="resource/css/team-styles.css" rel="stylesheet" />
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" ></script>
   	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+	
+	<style>
+	.row {
+	    display: flex;
+	    flex-wrap: wrap;
+	    margin-right: -.75rem;
+	    margin-left: -.75rem;
+	}
+	</style>
+
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,7 +38,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
+				    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
 				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
 					<li class="nav-item dropdown">
@@ -48,6 +64,8 @@
 	int userNum = orcl.getUserNum();
 	int maleNum = orcl.getUserByGender("M");
 	int femaleNum = orcl.getUserByGender("F");
+	int companyNum = orcl.getCompanyNum();
+	int sectorNum = orcl.getSectorNum();
 %>	
 
 	<div class="content">
@@ -59,23 +77,61 @@
 			           Several Statistics & Charts.
 			       </div>
 				</div>
-				<div class="card-body">
-				    <!-- heading -->
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<div>
-						<h4 class="mb-0">USERS</h4>
-						</div>
-						<div class="icon-shape icon-md bg-light-primary text-primary rounded-1">
-							<i class="bi bi-people fs-4"></i>
-						</div>
-					</div>
-					<!-- user number -->
-					<div>
-						<h1 class="fw-bold"><%=userNum%></h1>
-						<p class="mb-0"><span class="text-dark me-2"></span>Users</p>
-					</div>
-				</div>
-
+				<div class="row">
+					<div class="col-xl-3 col-md-6 mb-4">
+	                     <div class="card border-left-info shadow h-100 py-2">
+	                         <div class="card-body">
+	                             <div class="row no-gutters align-items-center">
+	                                 <div class="col mr-2">
+	                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">COMPANYS
+	                                     </div>
+	                                     <div class="row no-gutters align-items-center">
+	                                         <div class="col-auto">
+	                                             <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"><%=companyNum%></div>
+	                                         </div>
+	                                     </div>
+	                                 </div>
+	                                 <div class="col-auto">
+	                                     <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+	                                 </div>
+	                             </div>
+	                         </div>
+	                     </div>
+	                </div>
+	                <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                SECTORS</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><%=sectorNum%></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+	                <div class="col-xl-3 col-md-6 mb-4">
+		                <div class="card border-left-primary shadow h-100 py-2">
+		                    <div class="card-body">
+		                        <div class="row no-gutters align-items-center">
+		                            <div class="col mr-2">
+		                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+		                                    USERS</div>
+		                                <div class="h5 mb-0 font-weight-bold text-gray-800"><%=userNum%></div>
+		                            </div>
+		                            <div class="col-auto">
+		                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+	                </div>
+                </div>
+                
 				<div class="col-lg-6" style="float: right; margin-left: 10px">
 		        	<div class="card mb-4">
 				    	<div class="card-header">

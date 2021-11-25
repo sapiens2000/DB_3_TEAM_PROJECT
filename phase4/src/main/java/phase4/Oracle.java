@@ -230,6 +230,26 @@ public class Oracle {
 				
 	}
 	
+	public ResultSet getStock() {
+		String sql = "SELECT * " + 
+					 "FROM STOCK "; 
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
 	public ResultSet getUsers() {
 		String sql = "SELECT Unum, User_id " + 
 				 	 "FROM USERS " +
@@ -415,6 +435,41 @@ public class Oracle {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	
+	public int getCompanyNum() {
+		String sql = "SELECT COUNT(*) " +
+				 	 "FROM STOCK ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;		
+	}
+	
+	public int getSectorNum() {
+		String sql = "SELECT COUNT(*) " +
+				 	 "FROM (SELECT DISTINCT(Sector_name) " +
+				 	 "FROM SECTOR) ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;		
 	}
 
 	public void commit() {
