@@ -54,7 +54,6 @@
 				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
 				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
-					<li class="nav-item"><a class="nav-link" href="logout.jsp">로그아웃</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			            관리자 메뉴
@@ -63,6 +62,8 @@
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
 			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
+			            	<li><hr class="dropdown-divider" /></li>
+                        	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
 			          	</ul>
 			        </li>
                 </ul>
@@ -114,10 +115,7 @@
             </div>
         </div>
     </div>
-    <!-- Footer-->
-    <footer class="py-5 bg-dark">
-        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
-    </footer>
+	
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="resource/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>

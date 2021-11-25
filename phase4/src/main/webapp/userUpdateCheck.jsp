@@ -27,7 +27,7 @@
 	}else{
 		out.println("<script>alert('수정실패.');</script>");
 	}
-	out.println("<script>history.back();</script>");
+	out.println("<script>location.href='userManagement.jsp';</script>");
 %>
 </body>
 </html>

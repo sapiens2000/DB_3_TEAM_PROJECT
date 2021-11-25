@@ -25,7 +25,6 @@
 				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
 				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
-					<li class="nav-item"><a class="nav-link" href="logout.jsp">로그아웃</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			            관리자 메뉴
@@ -34,26 +33,49 @@
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
 			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
+			            	<li><hr class="dropdown-divider" /></li>
+                        	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
 			          	</ul>
 			        </li>
                 </ul>
             </div>
         </div>
-    </nav> 
+    </nav>  
 		
 <%
 	Oracle orcl = Oracle.getInstance();
 	ArrayList<Integer> numOfUsers = orcl.getUsersByAge();
-%>		
+	int userNum = orcl.getUserNum();
+	int maleNum = orcl.getUserByGender("M");
+	int femaleNum = orcl.getUserByGender("F");
+%>	
+
 	<div class="content">
 		<main>
 			<div class="container-fluid px-4">			
-				<h2 class="mt-4"> Statistics</h2>
+				<h2 class="mt-4">Statistics</h2>
 				<div class="card mb-4">
 			       <div class="card-body">
-			           Several Charts.
+			           Several Statistics & Charts.
 			       </div>
 				</div>
+				<div class="card-body">
+				    <!-- heading -->
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<div>
+						<h4 class="mb-0">USERS</h4>
+						</div>
+						<div class="icon-shape icon-md bg-light-primary text-primary rounded-1">
+							<i class="bi bi-people fs-4"></i>
+						</div>
+					</div>
+					<!-- user number -->
+					<div>
+						<h1 class="fw-bold"><%=userNum%></h1>
+						<p class="mb-0"><span class="text-dark me-2"></span>Users</p>
+					</div>
+				</div>
+
 				<div class="col-lg-6" style="float: right; margin-left: 10px">
 		        	<div class="card mb-4">
 				    	<div class="card-header">
@@ -70,6 +92,15 @@
 							나이대별 유저 수
 		              		</div>
 		              	<div class="card-body"><canvas id="myPieChart" width="109%" height="50"></canvas></div>
+		         	</div>
+				</div>
+				<div class="col-lg-6" style="margin-right: 10px">
+		        	<div class="card mb-4">
+		            	<div class="card-header">
+		                	<i class="fas fa-chart-pie me-1"></i>
+							유저 성비
+		              		</div>
+		              	<div class="card-body"><canvas id="myPieChart2" width="109%" height="50"></canvas></div>
 		         	</div>
 				</div>		
 			</div>
@@ -141,6 +172,20 @@
 		      		 <%=numOfUsers.get(4)%>,
 		      		 <%=numOfUsers.get(5)%>],
 		      backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745', '#77bf00', '#9B50E7'],
+		    }],
+		  },
+		});
+		
+		// Pie Chart2
+		var ctx = document.getElementById("myPieChart2");
+		var myPieChart2 = new Chart(ctx, {
+		  type: 'pie',
+		  data: {
+		    labels: ["남자", "여자"],
+		    datasets: [{
+		    	data: [<%=maleNum%>, 
+		      		 	<%=femaleNum%>],
+		      backgroundColor: ['#007bff', '#dc3545'],
 		    }],
 		  },
 		});

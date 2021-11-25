@@ -20,7 +20,6 @@
 				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
 				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
-					<li class="nav-item"><a class="nav-link" href="logout.jsp">로그아웃</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			            관리자 메뉴
@@ -29,6 +28,8 @@
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
 			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
+			            	<li><hr class="dropdown-divider" /></li>
+                        	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
 			          	</ul>
 			        </li>
                 </ul>

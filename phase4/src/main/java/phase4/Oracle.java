@@ -183,7 +183,7 @@ public class Oracle {
 	public void addRanking(UserBean user) {
 		String sql = "SELECT COUNT(*) " + 
 				 	 "FROM RANKING, USERS " + 
-				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset >= " + user.getCurrent_total_asset() + " " ;
+				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset > " + user.getCurrent_total_asset() + " " ;
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -247,6 +247,25 @@ public class Oracle {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int getUserNum() {
+		String sql = "SELECT COUNT(*)" + 
+			 	 	 "FROM USERS " +
+			 	 	 "ORDER BY Unum ASC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	public UserBean getUserData(String userId) {
@@ -378,6 +397,24 @@ public class Oracle {
 			e.printStackTrace();
 		}
 		return numOfUsers;
+	}
+	
+	public int getUserByGender(String gender) {
+		String sql = "SELECT COUNT(*) " +
+					 "FROM USERS " + 
+					 "WHERE Usex='" + gender +"' ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	public void commit() {

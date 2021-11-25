@@ -2,30 +2,43 @@
     pageEncoding="UTF-8"%>
 <%@ page import="phase4.Oracle" %>
 <%@ page import="phase4.UserBean" %>
+<% request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Update User</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Setting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<!-- Show icon -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 	<style>
-	.container {
-		  display: flex;
-		  flex-direction: column;
-		  justify-content: center;
-		  min-height: 80vh;
-	}		
-	</style>	
+	.card {
+		border: 0;
+	    border-radius: .5rem;
+	    box-shadow: 0 2px 4px rgba(0,0,20,.08),0 1px 2px rgba(0,0,20,.08);
+	}
+	.card{
+	    word-wrap: break-word;
+	    background-clip: border-box;
+	    background-color: #fff;
+	    border: 1px solid rgba(0,0,0,.125);
+	    border-radius: .375rem;
+	    display: flex;
+	    flex-direction: column;
+	    min-width: 0;
+	    position: relative;
+	}
+	</style>
 </head>
 <body>
-<% 
+<%
 	Oracle orcl = Oracle.getInstance();
-	UserBean user = new UserBean();	
+	UserBean user = new UserBean();
+		
+	String userId = session.getAttribute("userId").toString();
 	
-	String userId = request.getParameter("userId");
 	user = orcl.getUserData(userId);
-	
 %>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
@@ -33,32 +46,32 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
-				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
-					<li class="nav-item dropdown">
-			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-			            관리자 메뉴
-			          	</a>
-			          	<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
-			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
-			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
-			            	<li><hr class="dropdown-divider" /></li>
-                        	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
-			          	</ul>
-			        </li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                 </ul>
+                <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="userSetting.jsp">설정</a></li>
+                        <li><a class="dropdown-item" href="history.jsp">거래내역</a></li>
+                        <li><a class="dropdown-item" href="curAssets.jsp">보유자산</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        <li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
+                    </ul>
+                </li>
+            	</ul>
             </div>
         </div>
-    </nav>
-    
-	<div class="container">
+    </nav> 
+    <div class="container">
 		<div class="row justify-content-center">
 	        <div class="col-lg-5">
 	            <div class="card shadow-lg border-0 rounded-lg mt-5">
-	                <div class="card-header"><h3 class="text-center font-weight-light my-4">Update User</h3></div>
+	                <div class="card-header"><h3 class="text-center font-weight-light my-4">Setting</h3></div>
 	                <div class="card-body">
 	                    <form method="post" action="userUpdateCheck.jsp">
 	                        <div class="form-floating mb-3">
@@ -66,19 +79,19 @@
 	                            <label for="updateId">Id</label>
 	                        </div>
 	                        <div class="form-floating mb-3">
-	                            <input class="form-control" name="updatePw" type="password" placeholder="Password" value="<%=user.getUserPw()%>">
+	                            <input class="form-control" name="updatePw" type="password" placeholder="Password" value="<%=user.getUserPw()%>" required>
 	                            <label for="updatePw">Password</label>
 	                        </div>
 	                        <div class="form-floating mb-3">
-	                            <input class="form-control" name="updateEmail" type="email" placeholder="Email" value="<%=user.getEmail()%>">
+	                            <input class="form-control" name="updateEmail" type="email" placeholder="Email" value="<%=user.getEmail()%>" required>
 	                            <label for="updateEmail">Email</label>
 	                        </div>
 	                        <div class="form-floating mb-3">
-	                            <input class="form-control" name="updatePhone" type="tel" placeholder="Phone" value="<%=user.getPhone_num()%>">
+	                            <input class="form-control" name="updatePhone" type="tel" placeholder="Phone" value="<%=user.getPhone_num()%>" required>
 	                            <label for="updatePhone">Phone</label>
 	                        </div>
 	                        <div class="form-floating mb-3">
-	                            <input class="form-control" name="updateAge" type="number" placeholder="Age" value="<%=user.getAge()%>">
+	                            <input class="form-control" name="updateAge" type="number" placeholder="Age" value="<%=user.getAge()%>" required>
 	                            <label for="updateAge">Age</label>
 	                        </div>
 	                        <div class="form-floating mb-3">
@@ -86,7 +99,7 @@
 	                        	<label for="updateTotalAsset">Total Asset</label>	
 	                        </div>
 	                        <div class="form-floating mb-3">
-								<input type="number" class="form-control" placeholder="보유금액" name="updateCash" maxlength="50" value="<%=user.getCash()%>">
+								<input type="number" class="form-control" placeholder="보유금액" name="updateCash" maxlength="50" value="<%=user.getCash()%>" readonly>
 								<label for="updateCash">Cash</label>
 							</div>
 	                        <div class="form-group" style="text-align: center;">
@@ -115,10 +128,8 @@
 	        </div>
 	    </div>
 	</div>
-	
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-	
+   
+	<script src="resource/js/theme.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
