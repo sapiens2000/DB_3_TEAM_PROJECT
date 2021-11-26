@@ -16,7 +16,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	
 	<!--  fonts  -->
-    <link href="resource/css/team-styles.css" rel="stylesheet" />
+    <link href="resource/css/styles.css" rel="stylesheet" />
 
 </head>
 
@@ -116,6 +116,7 @@
 					},
 					rangeSelector: {
 						buttons: [
+							{type: 'hour',count: 1,text: '1h'},
 							{type: 'day',count: 1,text: 'Day'}, 
 							{type: 'all',count: 1,text: 'All'}
 						],

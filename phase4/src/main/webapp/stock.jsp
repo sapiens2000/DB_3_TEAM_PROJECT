@@ -33,11 +33,11 @@
 	} 
 	
 	function goToSector() {
-	    let table = document.getElementById('datatablesSimple1');
+	    let table2 = document.getElementById('datatablesSimple1');
 	
-	    for (let i = 1; i < table.rows.length; i++) {
-	    	table.rows[i].onclick = function () {
-	        	var sector = table.rows[i].cells[0].innerText;
+	    for (let i = 1; i < table2.rows.length; i++) {
+	    	table2.rows[i].onclick = function () {
+	        	var sector = table2.rows[i].cells[0].innerText;
 		        location.href = "sectorView.jsp?sector="+sector;
 	    	}
 	    }
@@ -218,7 +218,7 @@
 				
 		String sector_name = rs.getString(1);				
 		int numOfStock = rs.getInt(2);	
-		out.println("<tr>");
+		out.println("<tr onClick='goToSector()'>");
 		out.println("<td>" + sector_name + "</td>");
 		out.println("<td>" + numOfStock + "</td>");
 		out.println("</tr>");
