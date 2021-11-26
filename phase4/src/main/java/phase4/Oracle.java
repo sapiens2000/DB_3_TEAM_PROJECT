@@ -1,6 +1,5 @@
 package phase4;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -615,8 +615,7 @@ public class Oracle {
 		}	
 				
 		
-		
-		return arr.toJSONString();
+		return arr.toString();
 	}
 
 	public ResultSet getChangeRate() {

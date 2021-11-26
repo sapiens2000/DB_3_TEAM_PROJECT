@@ -4,7 +4,6 @@
 <%@ page import="phase4.Oracle" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="org.json.simple.JSONArray"%>
-
 <!DOCTYPE>
 <html>
 <head>
@@ -106,14 +105,11 @@
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
 	String data = orcl.stockChart("삼성전자");
-	
-
 %>	
 	<div id="container" style="height: 400px; min-width: 310px"></div>
 		<script>	
 			function draw(){
-				var jsondata = JSON.stringify(<%=data%>);
-
+				var jsondata = <%=data%>;
 				Highcharts.stockChart('container',{
 					title: {
 						text: '삼성전자'
@@ -130,7 +126,10 @@
 						candlestick: {
 							downColor: 'blue',
 							upColor: 'red'
-						},				
+						},
+						series: {
+							cropThreshold: 3000
+						}
 					},
 					series: [{
 						name: '삼성전자',
