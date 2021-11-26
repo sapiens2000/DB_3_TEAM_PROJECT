@@ -44,10 +44,7 @@
 		String row = "    <th scope='row'>" + rs.getInt(1) + "</th>";
 		
 		
-		String stock =	"    <td>" + 
-						"<form name=\"goToChart\" action=\"chartView.jsp\" method=\"POST\">" + 
-						"<input type=\"hidden\" name=\"stockName\" value=\"" + rs.getString(2)  +"\"></form>" + 
-						"<a href=\"#\" onclick=\"$(\"#goToChart\").submit();\" style=\"color:black\">" + rs.getString(2) + "</a></td>";
+		String stock =	"    <td><a href=\"" + "chartView.jsp" + "?company=" + rs.getString(2) + "\" id=\"a\" style=\"color:black\">" + rs.getString(2) + "</a></form></td>";
 		
 		
 		

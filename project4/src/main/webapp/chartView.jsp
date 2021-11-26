@@ -74,6 +74,18 @@ function draw3(){
 }
 
 </script>
+<script type="text/javascript">
+
+$("#buy_cnt").on("propertychange change keyup paste input", function() {
+
+    // 현재 변경된 데이터 셋팅
+    var newValue = $(this).val();
+
+    // 현재 실시간 데이터 표츌
+    alert("텍스트 :: " + newValue);
+
+ });
+</script>
 </head>
 <body>
 <%	
@@ -88,9 +100,20 @@ function draw3(){
 	} 
 %>	
 
+<script type="text/javascript">
+var el = document.getElementById('company');
+console.log(el);
+</script>
+
 <%
+
+	// 나중에 인자 받아오기
+	String companyName = "삼성전자";	
+
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
+	String para = request.getParameter("company");
+	System.out.println(para);
 %>
 
 	<select id="company">
@@ -98,9 +121,9 @@ function draw3(){
 	</select> 
 	<input type="button" id="send" value="검색"><br><br>		
 	<div id="container" style="height: 400px; min-width: 310px"></div>
-	<div class="container">
+	<div class="container" style="min-width: 1300px">
  		<div class="row">
-    		<div class="col">
+    		<div class="col" style="min-width: 416px">
 				<table class="table table-striped" >			
 					<thead>
 						<tr>
@@ -109,7 +132,7 @@ function draw3(){
 					</thead>
 					<tbody>
 <% 
-	rs = orcl.getNewsInChart("삼성전자");
+	rs = orcl.getNewsInChart(companyName);
 	
 	int i = 1;
 
@@ -127,21 +150,9 @@ function draw3(){
 					</tbody>
 				</table>
     		</div>
-    		<div class="col">
-     			<nav>
-					<div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    	<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">매수</button>
-				    	<button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">매도</button>
-				  	</div>
-				</nav>
-				<div class="tab-content" id="nav-tabContent">
-					<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">매수 페이지</div>
-					<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">매도 페이지</div>
-				</div>
-    		</div>
-    		<div class="col">
+
 <% 
-	rs = orcl.getAllDataForChart("삼성전자");
+	rs = orcl.getAllDataForChart(companyName);
 
 	String high = "";
 	String low = "";
@@ -155,6 +166,7 @@ function draw3(){
 	String per = "";
 	String pbr = "";
 	String roe = "";
+	String price_for_cal = "";
 
 	if(rs.next()){
 		
@@ -185,8 +197,146 @@ function draw3(){
 		per = "    <td>" + rs.getFloat(10) + "</td>";
 		pbr = "    <td>" + rs.getFloat(11) + "</td>";
 		roe = "    <td>" + rs.getFloat(12) + "</td>";
+		
+		price_for_cal = rs.getString(1);
 	}
-%>
+%>	
+    	
+    		<div class="col" style="min-width: 416px">
+     			<nav>
+					<div class="nav nav-tabs" id="nav-tab" role="tablist">
+				    	<button class="nav-link active" style="width:50%; color:red; font-weight:bold;" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">매수</button>
+				    	<button class="nav-link" style="width:50%; color:blue; font-weight:bold;" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">매도</button>
+				  	</div>
+				</nav>
+				<div class="tab-content" id="nav-tabContent">
+				<%
+					
+					int SQuantity = 0;
+					int UCash = 0;
+				
+					if(session.getAttribute("uNum") != null){
+						ResultSet rsForDeal;
+						
+						rsForDeal = orcl.getHoldingStock(companyName, Integer.parseInt((session.getAttribute("uNum")).toString()));
+						
+						if(rsForDeal.next()){
+							SQuantity = rsForDeal.getInt(2);
+						}
+						
+						rsForDeal = orcl.getHoldingCash(Integer.parseInt((session.getAttribute("uNum")).toString()));
+						
+						if(rsForDeal.next()){
+							UCash = rsForDeal.getInt(1);
+						}
+					}
+				
+				%>
+					<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+						<div class="container">
+						  <div class="row" style="margin: 25px 0px 15px 0px;">
+						  	<div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">보유금액</span>
+								<%	
+									// No login
+									if(session.getAttribute("uNum") == null){%>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+								<%
+									} else{ 
+								%>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="<%out.println(UCash);%>" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+								<% 
+									} 
+								%>								
+							</div>						 
+						  </div>
+						  <div class="row" style="margin: 15px 0px 15px 0px;">
+							<div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">매수가격</span>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="buy_price" placeholder="<%out.println(price_for_cal);%>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							</div>
+						  </div>
+						  <div class="row" style="margin: 15px 0px 15px 0px;">
+						    <div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">주문수량</span>
+							 	<input type="text" style="text-align:right;" class="form-control" id="buy_cnt" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							</div>
+						  </div>
+						  <div class="row" style="margin: 15px 0px 15px 0px;">
+						    <div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">주문총액</span>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="fn_total" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							</div>
+						  </div>
+						</div>
+						<div class="d-grid gap-2 col-6 mx-auto">
+							<%	
+								// No login
+								if(session.getAttribute("uNum") == null){%>
+									<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">로그인</button>
+							<%
+								} else{ 
+							%>
+									<button class="btn btn-danger" type="button" style="text-align:center;" onclick="location.href='login.jsp'">매수</button>
+							<% 
+								} 
+							%>	
+						</div>
+					</div>
+					<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+						<div class="container">
+						  <div class="row" style="margin: 25px 0px 15px 0px;">
+						  	<div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">보유수량</span>
+							 	<%	
+									// No login
+									if(session.getAttribute("uNum") == null){%>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+								<%
+									} else{ 
+								%>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="<%out.println(SQuantity);%>" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+								<% 
+									} 
+								%>
+							</div>						 
+						  </div>
+						  <div class="row" style="margin: 15px 0px 15px 0px;">
+							<div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">매도가격</span>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="<%out.println(price_for_cal);%>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							</div>
+						  </div>
+						  <div class="row" style="margin: 15px 0px 15px 0px;">
+						    <div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">판매수량</span>
+							 	<input type="text" style="text-align:right;" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							</div>
+						  </div>
+						  <div class="row" style="margin: 15px 0px 15px 0px;">
+						    <div class="input-group input-group-lg">
+								<span class="input-group-text" id="inputGroup-sizing-lg">판매총액</span>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							</div>
+						  </div>
+						</div>
+						<div class="d-grid gap-2 col-6 mx-auto">
+							<%	
+								// No login
+								if(session.getAttribute("uNum") == null){%>
+									<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">로그인</button>
+							<%
+								} else{ 
+							%>
+									<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">매도</button>
+							<% 
+								} 
+							%>
+						</div>
+					</div>
+				</div>
+    		</div>
+    		<div class="col"  style="min-width: 416px">
      				<div class="row">
 	     				<table class="table table-striped" >			
 							<thead>
