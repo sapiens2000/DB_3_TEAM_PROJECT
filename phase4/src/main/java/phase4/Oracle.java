@@ -1,11 +1,18 @@
 package phase4;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 public class Oracle {
 	
@@ -471,7 +478,121 @@ public class Oracle {
 		}
 		return 0;		
 	}
+	
+	public ResultSet getNewsInChart(String company) {		
+		String sql = "SELECT N.Ntitle, N.Nurl " +
+				 	 "FROM NEWS N " + 
+				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
+	
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// 	TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public ResultSet getAllDataForChart(String company) {
+		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Chigh_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
+					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
+					 "FROM STOCK S, CHART C, SECTOR SE " +
+					 "WHERE S.Scode = C.Ccode AND SE.Sname ='" + company + "' " +
+					 "ORDER BY C.Cstart_date DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public String stockChart(String company) {				
+		String sql = "SELECT TO_CHAR(CSTART_DATE, 'yyyy-mm-dd') AS CSTART_DATE, C.CSTART_PRICE, CHIGH_PRICE, C.CLOW_PRICE, C.CCLOSE_PRICE " + 
+			 	 	 "FROM CHART C, STOCK S " +
+			 	 	 "WHERE S.Scode = C.Ccode AND Sname = '" + company + "' " +
+			 	 	 "ORDER BY C.Cstart_date DESC ";
+		JSONArray arr = new JSONArray();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			while(rs.next()) {		
+				Date date = rs.getDate("CSTART_DATE");
+					
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+				JSONObject json = new JSONObject();
+							
+				String newDate = "";		
+				
+				try {
+					newDate = simpleDateFormat.format(date);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 
+
+				double open		= rs.getFloat("CSTART_PRICE");
+				double high		= rs.getFloat("CHIGH_PRICE");
+				double low		= rs.getFloat("CLOW_PRICE");
+				double close	= rs.getFloat("CCLOSE_PRICE");
+
+				json.put("date", newDate);
+				json.put("high", high);
+				json.put("low", low);
+				json.put("open", open);
+				json.put("close", close);
+				
+				arr.add(json);
+			}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+				
+		return arr.toJSONString();
+	}
+
+	public ResultSet getChangeRate() {
+		// get latest data.
+		String sql = "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+					 "FROM STOCK, CHART " +
+					 "WHERE Scode = Ccode AND ROWNUm = 1" +
+					 "ORDER BY Cstart_date DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	
 	public void commit() {
 		try {
 			conn.commit();

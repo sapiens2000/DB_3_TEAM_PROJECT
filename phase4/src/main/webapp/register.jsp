@@ -24,7 +24,7 @@
 		<div class="row justify-content-center">
 	        <div class="col-lg-5">
 	            <div class="card shadow-lg border-0 rounded-lg mt-5">
-	                <div class="card-header"><h3 class="text-center font-weight-light my-4">Register</h3></div>
+	                <div class="card-header"><h3 class="text-center font-weight-light my-4">Sing Up</h3></div>
 	                <div class="card-body">
 	                    <form method="post" action="registerCheck.jsp">
 	                        <div class="form-floating mb-3">
@@ -49,7 +49,7 @@
 	                        </div>
 	                        <div class="form-group" style="text-align: center;">
 								<div class="btn-group" data-toggle="buttons">
-									<label class="btn btn-primary active">
+									<label class="btn btn-primary">
 										<input type="radio" name="regGender" autocomplete="off" value="M" >남자
 									</label>
 									<label class="btn btn-primary active">
@@ -58,7 +58,7 @@
 								</div>
 							</div>
 	                        <div class="d-flex align-items-center mt-4 mb-0">
-	                            <input type="submit" class="btn btn-primary justify-content-between form-control" value="가입">
+	                            <input type="submit" class="btn btn-primary justify-content-between form-control" value="Submit">
 	                        </div>
 	                    </form>
 	                </div>

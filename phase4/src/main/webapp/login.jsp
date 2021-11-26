@@ -6,7 +6,11 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Login</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
+	<!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+	<link href="resource/css/team-styles.css" rel="stylesheet" />
 	<style>
 		.login_container {
 		  display: flex;
@@ -29,7 +33,7 @@
 		<div class="row justify-content-center">
 	        <div class="col-lg-5">
 	            <div class="card shadow-lg border-0 rounded-lg mt-5">
-	                <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+	                <div class="card-header"><h3 class="text-center font-weight-light my-4">Sign In</h3></div>
 	                <div class="card-body">
 	                    <form method="post" action="loginCheck.jsp">
 	                        <div class="form-floating mb-3">
@@ -41,12 +45,12 @@
 	                            <label for="inputPassword">Password</label>
 	                        </div>
 	                        <div class="d-flex align-items-center mt-4 mb-0">
-	                            <input type="submit" class="btn btn-primary justify-content-between form-control" value="로그인">
+	                            <input type="submit" class="btn btn-primary justify-content-between form-control" value="Go">
 	                        </div>
 	                    </form>
 	                </div>
 	                <div class="card-footer text-center py-3">
-	                    <div class="small"><a href="register.jsp">Sign up</a></div>
+	                    <div class="small"><a href="register.jsp">No Account</a></div>
 	                </div>
 	            </div>
 	        </div>

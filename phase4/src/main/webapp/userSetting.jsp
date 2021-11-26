@@ -120,7 +120,7 @@
 								</div>
 							</div>
 	                        <div class="d-flex align-items-center mt-4 mb-0">
-	                            <input type="submit" class="btn btn-primary justify-content-between form-control" value="수정">
+	                            <input type="submit" class="btn btn-primary justify-content-between form-control" value="Save">
 	                        </div>
 	                    </form>
 	                </div>
