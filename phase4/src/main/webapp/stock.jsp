@@ -10,7 +10,7 @@
 	<title>STOCK</title>
 	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 	<link href="resource/css/styles.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" ></script>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
 	
 	<!-- Google fonts-->
@@ -28,7 +28,17 @@
 	    	table.rows[i].onclick = function () {
 	        	var sname = table.rows[i].cells[0].innerText;
 		        location.href = "chartView.jsp?sname="+sname;
-
+	    	}
+	    }
+	} 
+	
+	function goToSector() {
+	    let table = document.getElementById('datatablesSimple1');
+	
+	    for (let i = 1; i < table.rows.length; i++) {
+	    	table.rows[i].onclick = function () {
+	        	var sector = table.rows[i].cells[0].innerText;
+		        location.href = "sectorView.jsp?sector="+sector;
 	    	}
 	    }
 	} 
@@ -42,13 +52,12 @@
 	if(session.getAttribute("uNum") == null){%>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#!">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
                     <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                     <li class="nav-item"><a class="nav-link" href="login.jsp">로그인</a></li>
                     <li class="nav-item"><a class="nav-link" href="register.jsp">회원가입</a></li>
@@ -62,13 +71,12 @@
 	else if((int)session.getAttribute("uNum") == -1){ %>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#!">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
 				    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -91,13 +99,12 @@
 %>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#!">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
                     <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -119,7 +126,6 @@
 <% 
 	}
 %>	
-
 	<div class="content">
 		<main>
 			<div class="container-fluid px-4">
@@ -188,13 +194,47 @@
 %>			                
 			                </tbody>
 			            </table>
-			        </div>
+			        </div>			    		   			 			    
 			    </div>
+				<div class="card mb-4">
+			       <div class="card-header">
+			           <i class="fas fa-table me-1"></i>
+			           SECTOR
+			        </div>			
+					<div class="card-body">
+			            <table id="datatablesSimple1">
+			                <thead>
+			                    <tr>
+							    	<th scope="col">SECTOR</th>
+							    	<th scope="col">NUM OF STOCKS</th>
+			                    </tr>
+			                </thead>		           
+			                <tbody>
+<% 
+	orcl = Oracle.getInstance();
+	rs = orcl.getSector();
+	
+	while(rs.next()){
+				
+		String sector_name = rs.getString(1);				
+		int numOfStock = rs.getInt(2);	
+		out.println("<tr>");
+		out.println("<td>" + sector_name + "</td>");
+		out.println("<td>" + numOfStock + "</td>");
+		out.println("</tr>");
+	}
+%>			                
+			                </tbody>
+			            </table>
+			        </div>
+				</div>
 			</div>
 		</main>
 	</div>
 
-		
+	
+	
+	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="resource/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>

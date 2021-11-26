@@ -14,7 +14,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>STOCK CHART</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	
 	<!--  fonts  -->
     <link href="resource/css/team-styles.css" rel="stylesheet" />
@@ -27,13 +27,12 @@
 	if(session.getAttribute("uNum") == null){%>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
                     <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                     <li class="nav-item"><a class="nav-link" href="login.jsp">로그인</a></li>
                     <li class="nav-item"><a class="nav-link" href="register.jsp">회원가입</a></li>
@@ -47,13 +46,12 @@
 	else if((int)session.getAttribute("uNum") == -1){ %>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#!">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
 				    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -76,13 +74,12 @@
 %>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#!">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
                     <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -116,15 +113,14 @@
 		<script>	
 			function draw(){
 				var jsondata = JSON.stringify(<%=data%>);
-				console.log(jsondata);
-				
+
 				Highcharts.stockChart('container',{
 					title: {
 						text: '삼성전자'
 					},
 					rangeSelector: {
 						buttons: [
-							{type: 'day',count: 1,text: '1d'}, 
+							{type: 'day',count: 1,text: 'Day'}, 
 							{type: 'all',count: 1,text: 'All'}
 						],
 						selected: 2,
@@ -134,21 +130,18 @@
 						candlestick: {
 							downColor: 'blue',
 							upColor: 'red'
-						},
-						series: {
-							cropThreshold: 3000
-						}				
+						},				
 					},
 					series: [{
 						name: '삼성전자',
 						type: 'candlestick',
 						data: jsondata,
 						tooltip: {
-							valueDecimals: 8
+							valueDecimals: 2
 						}
 					}]
 				});
-
+				console.log(jsondata);
 			}
 			draw();
 		</script>

@@ -257,6 +257,51 @@ public class Oracle {
 		return null;	// error
 	}
 	
+	// get sector and num of stocks in that.
+	public ResultSet getSector() {
+		String sql = "SELECT SECTOR_NAME, COUNT(*) " +
+					 "FROM SECTOR " + 
+					 "GROUP BY SECTOR_NAME ";
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	// overload : get stock in sector
+	public ResultSet getSector(String sector) {
+		String sql = "SELECT S2.Sname" +
+					 "FROM SECTOR S1, STOCK S2" +
+					 "WHERE S1.SNAME = S2.SNAME AND SECTOR_NAME = '" + sector + "' " ;
+				
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
 	public ResultSet getUsers() {
 		String sql = "SELECT Unum, User_id " + 
 				 	 "FROM USERS " +
@@ -522,11 +567,12 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public String stockChart(String company) {				
+	public String stockChart(String company) {					
 		String sql = "SELECT TO_CHAR(CSTART_DATE, 'yyyy-mm-dd') AS CSTART_DATE, C.CSTART_PRICE, CHIGH_PRICE, C.CLOW_PRICE, C.CCLOSE_PRICE " + 
 			 	 	 "FROM CHART C, STOCK S " +
 			 	 	 "WHERE S.Scode = C.Ccode AND Sname = '" + company + "' " +
-			 	 	 "ORDER BY C.Cstart_date DESC ";
+			 	 	 "ORDER BY C.Cstart_date ASC ";
+		
 		JSONArray arr = new JSONArray();
 		
 		try {
@@ -540,9 +586,10 @@ public class Oracle {
 				JSONObject json = new JSONObject();
 							
 				String newDate = "";		
-				
+				Date datelong = null;
 				try {
 					newDate = simpleDateFormat.format(date);
+					datelong = simpleDateFormat.parse(newDate);
 				}
 				catch(Exception e) {
 					e.printStackTrace();
@@ -554,7 +601,7 @@ public class Oracle {
 				double low		= rs.getFloat("CLOW_PRICE");
 				double close	= rs.getFloat("CCLOSE_PRICE");
 
-				json.put("date", newDate);
+				json.put("date", datelong.getTime());
 				json.put("high", high);
 				json.put("low", low);
 				json.put("open", open);
@@ -567,15 +614,20 @@ public class Oracle {
 			e.printStackTrace();
 		}	
 				
+		
+		
 		return arr.toJSONString();
 	}
 
 	public ResultSet getChangeRate() {
-		// get latest data.
+		// get latest data		
 		String sql = "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+					 "FROM " + 
+					 "(SELECT * " + 
 					 "FROM STOCK, CHART " +
-					 "WHERE Scode = Ccode AND ROWNUm = 1" +
-					 "ORDER BY Cstart_date DESC ";
+					 "WHERE Scode = Ccode " +
+					 "ORDER BY Cstart_date DESC) " + 
+					 "WHERE ROWNUM = 1 ";
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
