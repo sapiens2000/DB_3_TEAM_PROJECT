@@ -378,6 +378,49 @@ public class Oracle {
 		return null;	// error
 	}
 	
+	public ResultSet getHoldingStock(String company, int Unum) {
+		String sql = "SELECT DISTINCT S.Sname, I.Quantity " +
+					 "FROM USERS U, INTEREST I, STOCK S " +
+					 "WHERE U.Unum = I.In_unum " +
+					 "	AND I.In_Scode = S.Scode " +
+					 "	AND U.Unum = " + Unum + " " +
+					 "  AND S.Sname = '" + company + "'";
+				
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public ResultSet getHoldingCash(int Unum) {
+		String sql = "SELECT Ucash  " +
+					 "FROM USERS " +
+					 "WHERE Unum = " + Unum;
+				
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
 	public void commit() {
 		try {
 			conn.commit();
