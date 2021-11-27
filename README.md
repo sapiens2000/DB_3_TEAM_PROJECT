@@ -16,8 +16,14 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [JSoup](https://jsoup.org/)
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)
 
+## Summary
+* Phase1
 
+* Phase2
 
+* Phase3
+
+* Phase4
 
 
 ## Progress
