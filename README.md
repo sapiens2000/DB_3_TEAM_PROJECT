@@ -21,10 +21,10 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [JSoup](https://jsoup.org/)
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)
 
-** Data Set **
+**Data Set**
 
 * [KRX 데이터](http://data.krx.co.kr/contents/MDC/MAIN/main/index.cmd), [키움 API](https://www.kiwoom.com/h/customer/download/VOpenApiInfoView) 
-를 활용해 코스피 상장 종목들의 한 달간의 데이터를 받아옴.
+를 활용해 코스피 상장 종목들의 한 달간의 주가 데이터를 받아옴. (2021 11 24 기준)
 
 
 
