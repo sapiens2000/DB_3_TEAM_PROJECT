@@ -7,6 +7,11 @@
 [![ Build Status (Windows)](https://img.shields.io/appveyor/build/parrt/antlr4?label=Windows)](https://www.microsoft.com/ko-kr/windows)
 [![ Build Status (MAC)](https://img.shields.io/badge/Mac-issue-yellow)](https://support.apple.com/ko-kr/HT201260)
 
+** Additional Libs
+JSON simple
+JSoup
+orai18n
+
 This Repository is Database (COMP322) Project of 3 TEAM
 
 
@@ -17,6 +22,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [Phase 2](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase2/Phase2.md)
 * [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase3/Phase3.md)
 * [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4/Phase4.md)
+
 
 ## Contributors
 
