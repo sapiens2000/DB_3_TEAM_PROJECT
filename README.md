@@ -1,4 +1,4 @@
-# DB_3_TEAM_PROJECT
+# 주식박사
 
 This Repository is Database (COMP322) Project of 3 TEAM
 
@@ -16,8 +16,24 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [JSoup](https://jsoup.org/)
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)
 
+## 프로젝트 소개
+** 배경
+주식 투자에 대한 열풍으로 투자를 시작하는 사람은 많지만 정작 수익을 내는 사람은 많지 않아서 실제 투자를 하기전 간단하게 체험해 볼 수 있는 서비스의 필요성을 느껴
+프로젝트 주제로 삼게 되었음.
+
+** 주요 기능
+*** 1. 주식 정보 조회
+기본적인 정보부터 시작하여 사용자가 원하는 조건을 토대로 다양한 검색방법 제공.
+
+*** 2. 모의투자
+주식을 가상으로 사고 팔 수 있음.
+
+*** 3. 랭킹
+DB에 등록된 사용자들은 자산을 바탕으로 랭킹이 매겨짐. 랭킹 정보 조회 가능.
+
 ## Summary
 * Phase1
+
 
 * Phase2
 
