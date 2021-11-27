@@ -8,9 +8,9 @@
 [![ Build Status (MAC)](https://img.shields.io/badge/Mac-issue-yellow)](https://support.apple.com/ko-kr/HT201260)
 
 **Additional Libs**
-* JSON simple(https://code.google.com/archive/p/json-simple/)
-* JSoup
-* orai18n(for ojdbc8)
+* [JSON simple](https://code.google.com/archive/p/json-simple/)
+* [JSoup](https://jsoup.org/)
+* [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)
 
 This Repository is Database (COMP322) Project of 3 TEAM
 
