@@ -48,7 +48,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4/Phase4.md) : Web Service
 ![Main](https://user-images.githubusercontent.com/33113480/143677736-3a323103-5b2b-4fa9-9434-91ea6fa6616e.JPG)
 
-세부 기능은 보고서 및 소스 참고.
+세부 결과 및 보고서는 소스 참고.
 
 ## Contributors
 
