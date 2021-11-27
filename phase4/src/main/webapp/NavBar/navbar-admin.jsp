@@ -12,15 +12,13 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
-            <a class="navbar-brand" href="#!">STOCK</a>
+            <a class="navbar-brand" href="#!">주식박사</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">뉴스</a></li>	
+				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
-					<li class="nav-item"><a class="nav-link" href="logout.jsp">로그아웃</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 			            관리자 메뉴
@@ -29,6 +27,8 @@
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
 			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
+			            	<li><hr class="dropdown-divider" /></li>
+                        	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
 			          	</ul>
 			        </li>
                 </ul>

@@ -5,7 +5,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 public class Oracle {
 	
@@ -123,7 +130,7 @@ public class Oracle {
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, user.getUserId());
 					pstmt.setInt(2, user.getuNum());
-					
+
 					return 0; // Success
 				}catch(Exception e) {
 					e.printStackTrace();
@@ -183,7 +190,8 @@ public class Oracle {
 	public void addRanking(UserBean user) {
 		String sql = "SELECT COUNT(*) " + 
 				 	 "FROM RANKING, USERS " + 
-				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset >= " + user.getCurrent_total_asset() + " " ;
+				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset > " + user.getCurrent_total_asset() + " " ;
+
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -230,6 +238,71 @@ public class Oracle {
 				
 	}
 	
+	public ResultSet getStock() {
+		String sql = "SELECT * " + 
+					 "FROM STOCK "; 
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	// get sector and num of stocks in that.
+	public ResultSet getSector() {
+		String sql = "SELECT SECTOR_NAME, COUNT(*) " +
+					 "FROM SECTOR " + 
+					 "GROUP BY SECTOR_NAME ";
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	// overload : get stock in sector
+	public ResultSet getSector(String sector) {
+		String sql = "SELECT ROWNUM, S2.Sname" +
+					 "FROM SECTOR S1, STOCK S2" +
+					 "WHERE S1.SNAME = S2.SNAME AND SECTOR_NAME = '" + sector + "' " ;
+				
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
 	public ResultSet getUsers() {
 		String sql = "SELECT Unum, User_id " + 
 				 	 "FROM USERS " +
@@ -247,6 +320,25 @@ public class Oracle {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int getUserNum() {
+		String sql = "SELECT COUNT(*)" + 
+			 	 	 "FROM USERS " +
+			 	 	 "ORDER BY Unum ASC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	public UserBean getUserData(String userId) {
@@ -379,7 +471,179 @@ public class Oracle {
 		}
 		return numOfUsers;
 	}
+	
+	public int getUserByGender(String gender) {
+		String sql = "SELECT COUNT(*) " +
+					 "FROM USERS " + 
+					 "WHERE Usex='" + gender +"' ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int getCompanyNum() {
+		String sql = "SELECT COUNT(*) " +
+				 	 "FROM STOCK ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;		
+	}
+	
+	public int getSectorNum() {
+		String sql = "SELECT COUNT(*) " +
+				 	 "FROM (SELECT DISTINCT(Sector_name) " +
+				 	 "FROM SECTOR) ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;		
+	}
+	
+	public ResultSet getNewsInChart(String company) {		
+		String sql = "SELECT N.Ntitle, N.Nurl " +
+				 	 "FROM NEWS N " + 
+				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
+	
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// 	TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public ResultSet getAllDataForChart(String company) {
+		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Chigh_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
+					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
+					 "FROM STOCK S, CHART C, SECTOR SE " +
+					 "WHERE S.Scode = C.Ccode AND SE.Sname ='" + company + "' " +
+					 "ORDER BY C.Cstart_date DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public String stockChart(String company) {					
+		String sql = "SELECT TO_CHAR(CSTART_DATE, 'yyyy-mm-dd') AS CSTART_DATE, C.CSTART_PRICE, CHIGH_PRICE, C.CLOW_PRICE, C.CCLOSE_PRICE " + 
+			 	 	 "FROM CHART C, STOCK S " +
+			 	 	 "WHERE S.Scode = C.Ccode AND Sname = '" + company + "' " +
+			 	 	 "ORDER BY C.Cstart_date ASC ";
+		
+		JSONArray arr = new JSONArray();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			while(rs.next()) {		
+				Date date = rs.getDate("CSTART_DATE");
+					
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+				JSONObject json = new JSONObject();
+							
+				String newDate = "";		
+				Date datelong = null;
+				try {
+					newDate = simpleDateFormat.format(date);
+					datelong = simpleDateFormat.parse(newDate);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 
+
+				double open		= rs.getFloat("CSTART_PRICE");
+				double high		= rs.getFloat("CHIGH_PRICE");
+				double low		= rs.getFloat("CLOW_PRICE");
+				double close	= rs.getFloat("CCLOSE_PRICE");
+
+				json.put("date", datelong.getTime());
+				json.put("open", open);
+				json.put("high", high);
+				json.put("close", close);
+				json.put("low", low);
+				
+				arr.add(json);
+			}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+				
+		
+		return arr.toString();
+	}
+
+	public ResultSet getChangeRate() {
+		// get latest data		
+		String sql = "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+					 "FROM " + 
+					 "(SELECT * " + 
+					 "FROM STOCK, CHART " +
+					 "WHERE Scode = Ccode " +
+					 "ORDER BY Cstart_date DESC) " + 
+					 "WHERE ROWNUM = 1 ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+		
 	public void commit() {
 		try {
 			conn.commit();
