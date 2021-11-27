@@ -37,13 +37,13 @@ This Repository is Database (COMP322) Project of 3 TEAM
 ## Summary
 
 * [Phase 1](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase1/Phase1.md) : Conceptual Design -> ERD
-![3조_ER.pdf](https://github.com/sapiens2000/DB_3_TEAM_PROJECT/files/7611594/3._ER.pdf)
+![erd](https://user-images.githubusercontent.com/33113480/143677997-8ac3320a-750b-4f85-a89d-5641dfe24066.JPG)
 
 * [Phase 2](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase2/Phase2.md) : Logical Design -> ERD to Relation Diagram
 ![relation_phase2_최종](https://user-images.githubusercontent.com/33113480/143677847-57727783-9e01-4a66-8ca0-913f51633a0e.jpg)
 
 * [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase3/Phase3.md) : Console Program (Java)
-![team3_phase3_시스템구조.pdf](https://github.com/sapiens2000/DB_3_TEAM_PROJECT/files/7611591/team3_phase3_.pdf)
+![system](https://user-images.githubusercontent.com/33113480/143678034-690e52ce-d291-44f2-a88d-0a22e880745e.JPG)
 
 * [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4/Phase4.md) : Web Service
 ![Main](https://user-images.githubusercontent.com/33113480/143677736-3a323103-5b2b-4fa9-9434-91ea6fa6616e.JPG)
