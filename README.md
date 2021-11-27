@@ -1,4 +1,8 @@
 # DB_3_TEAM_PROJECT
+
+This Repository is Database (COMP322) Project of 3 TEAM
+
+
 **Build Environment**
 
 [![Java 7+](https://img.shields.io/badge/Java-7%2B-informational)](http://java.oracle.com)
@@ -12,7 +16,7 @@
 * [JSoup](https://jsoup.org/)
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)
 
-This Repository is Database (COMP322) Project of 3 TEAM
+
 
 
 
