@@ -3,6 +3,11 @@
 This Repository is Database (COMP322) Project of 3 TEAM
 
 
+
+
+
+
+
 **Build Environment**
 
 [![Java 7+](https://img.shields.io/badge/Java-7%2B-informational)](http://java.oracle.com)
@@ -22,12 +27,9 @@ This Repository is Database (COMP322) Project of 3 TEAM
 프로젝트 주제로 삼게 되었음.
 
 ### 주요 기능
-* 주식 정보 조회
-기본적인 정보부터 시작하여 사용자가 원하는 조건을 토대로 다양한 검색방법 제공.
-* 모의투자
-주식을 가상으로 사고 팔 수 있음.
-* 랭킹
-DB에 등록된 사용자들은 자산을 바탕으로 랭킹이 매겨짐. 랭킹 정보 조회 가능.
+* 주식 정보 조회 :기본적인 정보부터 시작하여 사용자가 원하는 조건을 토대로 다양한 검색방법 제공.
+* 모의투자 : 원하는 주식을 가상으로 사고 팔 수 있음.
+* 랭킹 : DB에 등록된 사용자들은 자산을 바탕으로 랭킹이 매겨짐. 랭킹 정보 조회 가능.
 
 ## Summary
 * Phase1 : Conceptual Design - ERD
