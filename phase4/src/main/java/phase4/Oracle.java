@@ -130,7 +130,7 @@ public class Oracle {
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, user.getUserId());
 					pstmt.setInt(2, user.getuNum());
-					
+
 					return 0; // Success
 				}catch(Exception e) {
 					e.printStackTrace();
@@ -191,6 +191,7 @@ public class Oracle {
 		String sql = "SELECT COUNT(*) " + 
 				 	 "FROM RANKING, USERS " + 
 				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset > " + user.getCurrent_total_asset() + " " ;
+
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -642,8 +643,7 @@ public class Oracle {
 		}
 		return null;	// error
 	}
-	
-	
+		
 	public void commit() {
 		try {
 			conn.commit();

@@ -11,4 +11,5 @@ window.addEventListener('DOMContentLoaded', event => {
     if (datatablesSimple1) {
         new simpleDatatables.DataTable(datatablesSimple1);
     }
+
 });

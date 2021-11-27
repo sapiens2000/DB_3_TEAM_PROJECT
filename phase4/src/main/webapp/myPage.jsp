@@ -45,6 +45,7 @@ $("#datepicker").datepicker({ numberOfMonths: 1 , showWeek: false ,
 			</div>
 		</div>	
 	</div>
+<<<<<<< HEAD
 	<!-- 사이드 바 메뉴-->
 	<div class="col-md-3">
 	  <!-- 패널 타이틀1 -->
@@ -61,6 +62,9 @@ $("#datepicker").datepicker({ numberOfMonths: 1 , showWeek: false ,
 	    </ul>
 	</div>
 	</div>
+=======
+	
+>>>>>>> main
 	<footer class="py-5 bg-dark">
         <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
     </footer>

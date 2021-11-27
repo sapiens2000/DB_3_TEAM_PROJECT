@@ -23,12 +23,27 @@
     <link href="resource/css/team-styles.css" rel="stylesheet" />
     <!-- Show icon -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <%	
 	// No login
 	if(session.getAttribute("uNum") == null){%>
-		<jsp:include page="NavBar/navbar.jsp"/>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+       <div class="container px-5">
+           <a class="navbar-brand" href="#!">주식박사</a>
+           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+           <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                   <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
+                   <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
+                   <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
+                   <li class="nav-item"><a class="nav-link" href="login.jsp">로그인</a></li>
+                   <li class="nav-item"><a class="nav-link" href="register.jsp">회원가입</a></li>
+               </ul>
+           </div>
+       </div>
+   	</nav> 
 <%
 	} 
 	// Admin
@@ -171,13 +186,13 @@
         </div>
     </section>
 	
-	
 	<!-- Footer-->
     <footer class="py-5 bg-dark">
         <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
     </footer>
-    
+   
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

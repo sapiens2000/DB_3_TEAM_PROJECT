@@ -50,16 +50,18 @@
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
 			            	<li><hr class="dropdown-divider" /></li>
                         	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
+
 			          	</ul>
 			        </li>
                 </ul>
             </div>
         </div>
     </nav>  
-		
+	
 <%
 	Oracle orcl = Oracle.getInstance();
 	ArrayList<Integer> numOfUsers = orcl.getUsersByAge();
+
 	int userNum = orcl.getUserNum();
 	int maleNum = orcl.getUserByGender("M");
 	int femaleNum = orcl.getUserByGender("F");
@@ -129,8 +131,7 @@
 		                    </div>
 		                </div>
 	                </div>
-                </div>
-                
+                </div>         
 				<div class="col-lg-6" style="float: right; margin-left: 10px">
 		        	<div class="card mb-4">
 				    	<div class="card-header">
@@ -230,7 +231,6 @@
 		    }],
 		  },
 		});
-		
 		// Pie Chart2
 		var ctx = document.getElementById("myPieChart2");
 		var myPieChart2 = new Chart(ctx, {
@@ -244,11 +244,9 @@
 		    }],
 		  },
 		});
+=
 	</script>
-	<!-- Footer-->
-    <footer class="py-5 bg-dark">
-        <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
-    </footer>
+    
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="resource/js/scripts.js"></script>
 

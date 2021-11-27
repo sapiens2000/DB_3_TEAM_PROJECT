@@ -18,7 +18,6 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <link href="resource/css/main-styles.css" rel="stylesheet" />
     <link href="resource/css/team-styles.css" rel="stylesheet" />
-    
 	<style>
 		.content {
 		  display: flex;
@@ -141,7 +140,6 @@
 			</div>
 		</main>
 	</div>
-
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="resource/js/scripts.js"></script>
