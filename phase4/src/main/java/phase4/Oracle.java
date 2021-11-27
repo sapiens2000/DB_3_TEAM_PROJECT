@@ -282,7 +282,7 @@ public class Oracle {
 	
 	// overload : get stock in sector
 	public ResultSet getSector(String sector) {
-		String sql = "SELECT S2.Sname" +
+		String sql = "SELECT ROWNUM, S2.Sname" +
 					 "FROM SECTOR S1, STOCK S2" +
 					 "WHERE S1.SNAME = S2.SNAME AND SECTOR_NAME = '" + sector + "' " ;
 				
@@ -602,10 +602,10 @@ public class Oracle {
 				double close	= rs.getFloat("CCLOSE_PRICE");
 
 				json.put("date", datelong.getTime());
-				json.put("high", high);
-				json.put("low", low);
 				json.put("open", open);
+				json.put("high", high);
 				json.put("close", close);
+				json.put("low", low);
 				
 				arr.add(json);
 			}			

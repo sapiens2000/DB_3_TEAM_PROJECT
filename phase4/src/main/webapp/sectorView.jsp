@@ -75,6 +75,7 @@
 	}
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
+	String sector = request.getParameter("sector");
 %>	
 	<div class="content">
 		<main>
@@ -82,38 +83,35 @@
 				<h2 class="mt-4">SECTOR</h2>
 				<div class="card mb-4">
 			       <div class="card-body">
-			       	Stocks in <%=request.getParameter("sector")%>
+			       	Stocks in <%=sector%>
 			       </div>
 				</div>
 			    <h1 class="mt-4"></h1>
 			    <div class="card mb-4">
 			        <div class="card-header">
 			            <i class="fas fa-table me-1"></i>
-			            STOCKS
+			            <%=sector%>
 			        </div>
 			        <div class="card-body">
 			            <table id="datatablesSimple">
 			                <thead>
 			                    <tr>
 			                        <th>#</th>
-			                        <th></th>
-			                        <th>T</th>
+			                        <th>STOCK</th>
 			                    </tr>
 			                </thead>		           
 			                <tbody>
 <% 
-	rs = orcl.getRanking();
+	rs = orcl.getSector();
 
 	while(rs.next()){
 		
 		int row = rs.getInt(1);
-		String userId = rs.getString(2);
-		int total_asset = rs.getInt(3);
+		String sname = rs.getString(2);
 		
 				out.println("<tr>");
 				out.println("<td>" + row + "</td>");	
 				out.println("<td>" + sname + "</td>");
-				out.println("<td>" + total_asset + "</td>");
 				out.println("</tr>");
 	}
 %>			                

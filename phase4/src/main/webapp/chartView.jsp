@@ -110,13 +110,19 @@
 		<script>	
 			function draw(){
 				var jsondata = <%=data%>;
+				var chartdata = [];
+				
+				jsondata.forEach(function(item) {
+					chartdata.push([item.date, item.open, item.high, item.low, item.close]);
+              	});
+				
+				
 				Highcharts.stockChart('container',{
 					title: {
 						text: '삼성전자'
 					},
 					rangeSelector: {
 						buttons: [
-							{type: 'hour',count: 1,text: '1h'},
 							{type: 'day',count: 1,text: 'Day'}, 
 							{type: 'all',count: 1,text: 'All'}
 						],
@@ -135,14 +141,13 @@
 					series: [{
 						name: '삼성전자',
 						type: 'candlestick',
-						data: jsondata,
+						data: chartdata,
 						tooltip: {
-							valueDecimals: 2
+							valueDecimals: 5
 						}
 					}]
 				});
-				console.log(jsondata);
-			}
+			}				
 			draw();
 		</script>
 	<div class="container">
