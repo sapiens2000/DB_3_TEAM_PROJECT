@@ -12,16 +12,16 @@ Sname : 주식명
 
 *STOCK*
 
-Scode : 주식코드
-Sname : 주식명
-Smarket: 시장구분 1 = 코스피, 10 = 코스닥
-Smarket_cap : 시가총액
-Sforeign_rate : 외국인 소진율
-Supdate_date : 주식 정보 업데이트 날짜
-Ssector_name : 업종명
-PER : PER 정보
-PBR : PBR 정보
-ROE : ROE 정보
+Scode : 주식코드   
+Sname : 주식명   
+Smarket: 시장구분 1 = 코스피, 10 = 코스닥   
+Smarket_cap : 시가총액   
+Sforeign_rate : 외국인 소진율   
+Supdate_date : 주식 정보 업데이트 날짜   
+Ssector_name : 업종명   
+PER : PER 정보   
+PBR : PBR 정보   
+ROE : ROE 정보   
 
 *CHART*
 
