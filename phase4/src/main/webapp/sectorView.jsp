@@ -7,12 +7,47 @@
 <head>
 <meta charset="UTF-8">
 <title>SECTOR</title>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<link href="resource/css/styles.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" ></script>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+<!-- Google fonts-->
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+<link href="resource/css/main-styles.css" rel="stylesheet" />
+<link href="resource/css/team-styles.css" rel="stylesheet" />
+<script type="text/Javascript">
+	function goToChart() {
+	    let table = document.getElementById('datatablesSimple');
+	
+	    for (let i = 1; i < table.rows.length; i++) {
+	    	table.rows[i].onclick = function () {
+	        	var sname = table.rows[i].cells[1].innerText;
+		        location.href = "chartView.jsp?sname="+sname;
+	    	}
+	    }
+	} 
+</script>
 </head>
 <body>
 <%	
 	// No login
 	if(session.getAttribute("uNum") == null){%>
-		<jsp:include page="NavBar/navbar.jsp"/>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container px-5">
+            <a class="navbar-brand" href="#!">주식박사</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
+                    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>
+                    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.jsp">로그인</a></li>
+                    <li class="nav-item"><a class="nav-link" href="register.jsp">회원가입</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav> 
 <%
 	} 
 	// Admin
@@ -102,14 +137,14 @@
 			                </thead>		           
 			                <tbody>
 <% 
-	rs = orcl.getSector();
+	rs = orcl.getSector(sector);
+
 
 	while(rs.next()){
 		
 		int row = rs.getInt(1);
 		String sname = rs.getString(2);
-		
-				out.println("<tr>");
+				out.println("<tr onClick='goToChart()'>");
 				out.println("<td>" + row + "</td>");	
 				out.println("<td>" + sname + "</td>");
 				out.println("</tr>");
@@ -122,8 +157,11 @@
 			</div>
 		</main>
 	</div>
-
-
-
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="resource/js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+    <script src="resource/js/datatables-simple-demo.js"></script>
+	
 </body>
 </html>

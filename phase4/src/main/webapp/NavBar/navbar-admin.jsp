@@ -17,7 +17,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>	
+				    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,7 +25,6 @@
 			          	</a>
 			          	<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
-			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
 			            	<li><hr class="dropdown-divider" /></li>
                         	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
@@ -36,7 +35,7 @@
         </div>
     </nav> 
 	
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 	
 </body>
 </html>

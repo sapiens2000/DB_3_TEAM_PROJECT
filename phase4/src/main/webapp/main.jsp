@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">										
     <title>Main</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="resource/assets/img/favicon.ico" />
     <!-- Google fonts-->
@@ -22,8 +22,7 @@
     <link href="resource/css/main-styles.css" rel="stylesheet" />
     <link href="resource/css/team-styles.css" rel="stylesheet" />
     <!-- Show icon -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </head>
 <body>
 <%	
@@ -31,7 +30,7 @@
 	if(session.getAttribute("uNum") == null){%>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
        <div class="container px-5">
-           <a class="navbar-brand" href="#!">주식박사</a>
+           <a class="navbar-brand" href="#">주식박사</a>
            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -63,7 +62,6 @@
 			          	</a>
 			          	<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
-			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
 			            	<li><hr class="dropdown-divider" /></li>
                         	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
@@ -190,8 +188,7 @@
     <footer class="py-5 bg-dark">
         <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
     </footer>
-   
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

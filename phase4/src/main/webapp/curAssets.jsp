@@ -1,21 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="phase4.Oracle" %>
+<%@ page import="java.sql.ResultSet" %>
+<% request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-	<title>Insert title here</title>
 	<!-- Required meta tags -->
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Current Asset</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <title>My Asset</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+	
+	<link href="resource/css/styles.css" rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </head>
 <body>
 <%	
-	// 로그인 되어있는데 다시 url로 로그인 페이지 접속 방지
-	if(session.getAttribute("uNum") != null){ 
+	// need login
+	if(session.getAttribute("uNum") == null){ 
+		out.println("<script>alert('로그인이 필요합니다.')</script>");
 		out.println("<script>location.href='main.jsp';</script>");
 	}
 %>	
@@ -45,7 +53,61 @@
             	</ul>
             </div>
         </div>
-    </nav> 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    </nav>       
+    <div class="content">
+		<main>
+			<div class="container-fluid px-4">
+				<h2 class="mt-4">MY ASSET</h2>
+				<div class="card mb-4">
+			       <div class="card-body">
+			       	Check your assets.
+			       </div>
+				</div>
+			    <h1 class="mt-4"></h1>
+			    <div class="card mb-4">
+			        <div class="card-header">
+			            <i class="fas fa-table me-1"></i>
+			            ASSET
+			        </div>
+			        <div class="card-body">
+			            <table id="datatablesSimple">
+			                <thead>
+			                    <tr>
+			                        <th>#</th>
+			                        <th>SNAME</th>
+			                        <th>VOLUME</th>
+			                    </tr>
+			                </thead>		           
+			                <tbody>
+<% 
+	Oracle orcl = Oracle.getInstance();
+	ResultSet rs = orcl.getRanking();
+
+	while(rs.next()){
+		
+		int row = rs.getInt(1);
+		String userId = rs.getString(2);
+		int total_asset = rs.getInt(3);
+		
+				out.println("<tr>");
+				out.println("<td>" + row + "</td>");	
+				out.println("<td>" + userId + "</td>");
+				out.println("<td>" + total_asset + "</td>");
+				out.println("</tr>");
+	}
+%>			                
+			                </tbody>
+			            </table>
+			        </div>
+			    </div>
+			</div>
+		</main>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+    <script src="resource/js/datatables-simple-demo.js"></script>
+    
+    
 </body>
 </html>

@@ -46,7 +46,6 @@
 			          	</a>
 			          	<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
-			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
 			            	<li><hr class="dropdown-divider" /></li>
                         	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
@@ -244,10 +243,8 @@
 		    }],
 		  },
 		});
-=
-	</script>
-    
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	</script>   
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="resource/js/scripts.js"></script>
 
 </body>

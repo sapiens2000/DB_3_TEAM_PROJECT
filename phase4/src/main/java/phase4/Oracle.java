@@ -210,7 +210,7 @@ public class Oracle {
 				rs = pstmt.executeQuery();		
 				
 				// after add, update old ranking
-				//updateRanking(user, rank);
+				updateRanking(user, rank);
 								
 				commit();
 			
@@ -283,8 +283,8 @@ public class Oracle {
 	
 	// overload : get stock in sector
 	public ResultSet getSector(String sector) {
-		String sql = "SELECT ROWNUM, S2.Sname" +
-					 "FROM SECTOR S1, STOCK S2" +
+		String sql = "SELECT ROWNUM, S2.Sname " +
+					 "FROM SECTOR S1, STOCK S2 " +
 					 "WHERE S1.SNAME = S2.SNAME AND SECTOR_NAME = '" + sector + "' " ;
 				
 		try {
@@ -402,7 +402,7 @@ public class Oracle {
 	}
 	
 	public boolean updateUser(UserBean User) { 
-		// �쑀���뒗 id, �꽦蹂� �닔�젙 湲덉� �떆�궗寃�		
+		// update user.
 		String sql = "UPDATE USERS " +
 					 "SET " +
 					 "USER_ID = '" + User.getUserId() + "', " +
@@ -547,10 +547,10 @@ public class Oracle {
 	}
 	
 	public ResultSet getAllDataForChart(String company) {
-		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Chigh_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
+		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Cclose_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
 					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
 					 "FROM STOCK S, CHART C, SECTOR SE " +
-					 "WHERE S.Scode = C.Ccode AND SE.Sname ='" + company + "' " +
+					 "WHERE S.Scode = C.Ccode AND S.Sname = SE.Sname AND SE.Sname ='" + company + "' " +
 					 "ORDER BY C.Cstart_date DESC ";
 		
 		try {
@@ -596,7 +596,6 @@ public class Oracle {
 					e.printStackTrace();
 				}
 
-
 				double open		= rs.getFloat("CSTART_PRICE");
 				double high		= rs.getFloat("CHIGH_PRICE");
 				double low		= rs.getFloat("CLOW_PRICE");
@@ -621,13 +620,62 @@ public class Oracle {
 
 	public ResultSet getChangeRate() {
 		// get latest data		
-		String sql = "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+		String sql = "SELECT Sname, Cstart_date, ROUND((Cclose_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
 					 "FROM " + 
 					 "(SELECT * " + 
 					 "FROM STOCK, CHART " +
 					 "WHERE Scode = Ccode " +
-					 "ORDER BY Cstart_date DESC) " + 
-					 "WHERE ROWNUM = 1 ";
+					 "AND Cstart_date = " +
+					 "(SELECT CSTART_DATE " +
+					 "FROM " +
+					 "(SELECT CSTART_DATE " +
+					 "FROM STOCK, CHART " + 
+					 "WHERE Scode = Ccode " +
+					 "GROUP BY CSTART_DATE " +
+					 "ORDER BY CSTART_DATE DESC) " +
+					 "WHERE ROWNUM = 1) " +				 
+					 "ORDER BY Cstart_date DESC) ";
+
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public ResultSet getTransaction(String userId, String start, String end) {
+		String sql;
+		
+		if(start == null & end == null) { // all
+			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
+				  "FROM TRANSACTION_LIST, HISTORY, USERS " +
+				  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' ";
+		}else if(start == null & end != null) { // until end date
+			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
+				  "FROM TRANSACTION_LIST, HISTORY, USERS " +
+				  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' " + 
+				  "AND Twhen <= '" + end + "' ";
+		}else if(start != null & end == null){ // after start date
+			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
+					  "FROM TRANSACTION_LIST, HISTORY, USERS " +
+					  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' " + 
+					  "AND Twhen >= '" + start + "' ";
+		}else { // between start and end date
+			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
+				  "FROM TRANSACTION_LIST, HISTORY, USERS " +
+				  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' " + 
+				  "AND Twhen BETWEEN '" + start + "' AND '" + end + "' ";
+		}
+		
+		
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -642,6 +690,26 @@ public class Oracle {
 		e.printStackTrace();
 		}
 		return null;	// error
+		
+	}
+	
+	public ResultSet getHoldingStock(String userId) {
+		// get latest data		
+		String sql = "";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}		
+		return null;	// error										
 	}
 		
 	public void commit() {

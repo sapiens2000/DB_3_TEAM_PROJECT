@@ -9,12 +9,15 @@
 <head>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
-	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>STOCK CHART</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-	
+	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+	<link href="resource/css/styles.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+
 	<!--  fonts  -->
     <link href="resource/css/styles.css" rel="stylesheet" />
 
@@ -58,7 +61,6 @@
 			          	</a>
 			          	<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 			            	<li><a class="dropdown-item" href="userManagement.jsp">회원관리</a></li>
-			            	<li><a class="dropdown-item" href="dataManagement.jsp">데이터관리</a></li>
 			            	<li><a class="dropdown-item" href="statistic.jsp">통계</a></li>
 			            	<li><hr class="dropdown-divider" /></li>
                         	<li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
@@ -104,7 +106,9 @@
 <%
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
-	String data = orcl.stockChart("삼성전자");
+	String company = request.getParameter("sname");
+	String data = orcl.stockChart(company);
+
 %>	
 	<div id="container" style="height: 400px; min-width: 310px"></div>
 		<script>	
@@ -119,7 +123,7 @@
 				
 				Highcharts.stockChart('container',{
 					title: {
-						text: '삼성전자'
+						text: '<%=company%>'
 					},
 					rangeSelector: {
 						buttons: [
@@ -139,7 +143,7 @@
 						}
 					},
 					series: [{
-						name: '삼성전자',
+						name: '<%=company%>',
 						type: 'candlestick',
 						data: chartdata,
 						tooltip: {
@@ -150,7 +154,7 @@
 			}				
 			draw();
 		</script>
-	<div class="container">
+	<div class="container" >
  		<div class="row">
     		<div class="col">
 				<table class="table table-striped" >			
@@ -161,7 +165,7 @@
 					</thead>
 					<tbody>
 <% 
-	rs = orcl.getNewsInChart("삼성전자");
+	rs = orcl.getNewsInChart((company));
 	
 	if(rs.next()){
 		int i = 1;
@@ -194,7 +198,8 @@
     		</div>
     		<div class="col">
 <% 
-	rs = orcl.getAllDataForChart("삼성전자");
+	rs = orcl.getAllDataForChart(company);
+
 	String high = "";
 	String low = "";
 	String change = "";
@@ -321,5 +326,7 @@
      			</div>
     		</div>
 		</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+    <script src="resource/js/scripts.js"></script>
 </body>
 </html>
