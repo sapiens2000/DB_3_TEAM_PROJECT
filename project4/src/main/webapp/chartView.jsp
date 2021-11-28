@@ -238,13 +238,18 @@ var sname = getParameters('sname');
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">주문수량</span>
-							 	<input type="text" style="text-align:right;" class="form-control" id="buy_cnt" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							 	<input type="text" style="text-align:right;" class="form-control" id="buy_cnt" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							 		<script type="text/javascript">
+							 			$("#buy_cnt").keyup(function(){
+							 				$("#buy_total").val( parseInt($("#buy_cnt").val() || 0) * parseInt($("#buy_price").val()) );
+							 			});
+							 		</script>
 							</div>
 						  </div>
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">주문총액</span>
-							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="buy_total" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="buy_total" value="0" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>							 	
 							</div>
 						  </div>
 						</div>
@@ -263,6 +268,11 @@ var sname = getParameters('sname');
 								<script type="text/javascript">																
 										$(function () {
 											$("#buy_button").click(function() {
+												
+												if(parseInt($("#buy_cnt").val() || 0 ) == 0){
+													alert("매수 수량을 입력해주세요.");
+													return;
+												}
 												
 												$.ajax({
 												      type:'POST',
@@ -334,13 +344,18 @@ var sname = getParameters('sname');
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">판매수량</span>
-							 	<input type="text" style="text-align:right;" class="form-control" id="sell_cnt" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							 	<input type="text" style="text-align:right;" class="form-control" id="sell_cnt" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							 		<script type="text/javascript">
+							 			$("#sell_cnt").keyup(function(){
+							 				$("#sell_total").val( parseInt($("#sell_cnt").val() || 0) * parseInt($("#sell_price").val()) );
+							 			});
+							 		</script>
 							</div>
 						  </div>
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">판매총액</span>
-							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="sell_total" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="sell_total" value="0" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
 							</div>
 						  </div>
 						</div>
@@ -359,6 +374,11 @@ var sname = getParameters('sname');
 									<script type="text/javascript">																
 										$(function () {
 											$("#sell_button").click(function() {
+												
+												if(parseInt($("#sell_cnt").val() || 0 ) == 0){
+													alert("매도 수량을 입력해주세요.");
+													return;
+												}
 												
 												$.ajax({
 												      type:'POST',
