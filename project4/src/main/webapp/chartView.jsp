@@ -13,79 +13,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>STOCK CHART</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script type="text/javascript">
 
-var chartdata = [];
-
-$(function () {
-	$("#send").click(function() {
-	
-		console.log("click");
-		$.ajax({
-			url:"./AjaxPostServlet",
-			type:"post",
-			datatype:"json",
-			data:{company:$("#company").val()},
-			
-			success:function(json){
-				$.each(json, function(i, item){
-					chartdata.push([item.date, item.open, item.high, item.low, item.close]);
-				});
-				draw3();
-				console.log("call draw3");
-			},
-			error:function(){
-				alert("error");
-			}
-		});
-	});
-});
-
-function draw3(){
-	console.log("in draw3");
-	Highcharts.stockChart('container',{
-		title: {
-			text: $("#company").val()
-		},
-		rangeSelector: {
-			buttons: [
-				{type: 'hour',count: 1,text: '1h'}, 
-				{type: 'day',count: 1,text: '1d'}, 
-				{type: 'all',count: 1,text: 'All'}
-			],
-			selected: 2,
-			inputEnabled: true
-		},
-		plotOptions: {
-			candlestick: {
-				downColor: 'blue',
-				upColor: 'red'
-			}
-		},
-		series: [{
-			name: $("#company").val(),
-			type: 'candlestick',
-			data: chartdata,
-			tooltip: {
-				valueDecimals: 8
-			}
-		}]
-	});
-}
-
-</script>
-<script type="text/javascript">
-
-$("#buy_cnt").on("propertychange change keyup paste input", function() {
-
-    // 현재 변경된 데이터 셋팅
-    var newValue = $(this).val();
-
-    // 현재 실시간 데이터 표츌
-    alert("텍스트 :: " + newValue);
-
- });
-</script>
 </head>
 <body>
 <%	
@@ -101,26 +29,77 @@ $("#buy_cnt").on("propertychange change keyup paste input", function() {
 %>	
 
 <script type="text/javascript">
-var el = document.getElementById('company');
-console.log(el);
+
+var getParameters = function (paramName) { 
+	var returnValue;
+	var url = location.href;
+	var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&'); 
+	for (var i = 0; i < parameters.length; i++) {
+		var varName = parameters[i].split('=')[0]; 
+		if (varName.toUpperCase() == paramName.toUpperCase()) { 
+			returnValue = parameters[i].split('=')[1]; 
+			return decodeURIComponent(returnValue); 
+			} 
+		} 
+	};
+
+var sname = getParameters('sname');
+
 </script>
 
 <%
 
-	// 나중에 인자 받아오기
-	String companyName = "삼성전자";	
-
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
-	String para = request.getParameter("company");
-	System.out.println(para);
+	String companyName = request.getParameter("sname");
+	
+	String data = orcl.stockChart(companyName);
 %>
 
-	<select id="company">
-		<option value="삼성전자" selected>삼성전자</option> 
-	</select> 
-	<input type="button" id="send" value="검색"><br><br>		
 	<div id="container" style="height: 400px; min-width: 310px"></div>
+		<script>	
+			function draw(){
+				var jsondata = <%=data%>;
+				var chartdata = [];
+				
+				jsondata.forEach(function(item) {
+					chartdata.push([item.date, item.open, item.high, item.low, item.close]);
+              	});
+				
+				
+				Highcharts.stockChart('container',{
+					title: {
+						text: sname
+					},
+					rangeSelector: {
+						buttons: [
+							{type: 'day',count: 1,text: 'Day'}, 
+							{type: 'all',count: 1,text: 'All'}
+						],
+						selected: 2,
+						inputEnabled: true
+					},
+					plotOptions: {
+						candlestick: {
+							downColor: 'blue',
+							upColor: 'red'
+						},
+						series: {
+							cropThreshold: 3000
+						}
+					},
+					series: [{
+						name: sname,
+						type: 'candlestick',
+						data: chartdata,
+						tooltip: {
+							valueDecimals: 5
+						}
+					}]
+				});
+			}				
+			draw();
+		</script>
 	<div class="container" style="min-width: 1300px">
  		<div class="row">
     		<div class="col" style="min-width: 416px">
@@ -240,11 +219,11 @@ console.log(el);
 								<%	
 									// No login
 									if(session.getAttribute("uNum") == null){%>
-										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" value="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
 								<%
 									} else{ 
 								%>
-										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="<%out.println(UCash);%>" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" value="<%out.println(UCash);%>" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
 								<% 
 									} 
 								%>								
@@ -253,7 +232,7 @@ console.log(el);
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 							<div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">매수가격</span>
-							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="buy_price" placeholder="<%out.println(price_for_cal);%>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="buy_price" value="<%out.println(price_for_cal);%>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
 							</div>
 						  </div>
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
@@ -265,7 +244,7 @@ console.log(el);
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">주문총액</span>
-							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="fn_total" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="buy_total" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
 							</div>
 						  </div>
 						</div>
@@ -277,10 +256,55 @@ console.log(el);
 							<%
 								} else{ 
 							%>
-									<button class="btn btn-danger" type="button" style="text-align:center;" onclick="location.href='login.jsp'">매수</button>
+									<button class="btn btn-danger" id="buy_button" type="button" style="text-align:center;">매수</button>
 							<% 
 								} 
 							%>	
+								<script type="text/javascript">																
+										$(function () {
+											$("#buy_button").click(function() {
+												
+												$.ajax({
+												      type:'POST',
+												      url:"./AjaxPostServlet",
+												      data :{Cnt:$("#buy_cnt").val(), uNum:<%out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));%>, stockName:sname, tradeCase:1},
+												      async:true,
+												      dataType:'json',
+												      success : function(data) {
+												    	  
+												    	  var resultValue = 0;
+												    	  
+												    	  $.each(data, function(i, item){
+																resultValue = item.returnValue;
+															});
+												    	  
+												    	  console.log(resultValue);
+												    	  
+												    	  if(resultValue == 1){
+												    		  alert("매수 완료");
+												    		  window.location.reload();
+												    	  }
+												    	  else if(resultValue == -1){
+												    		  alert("잔액 부족");
+												    		  window.location.reload();
+												    	  }
+												    	  else if(resultValue == -2){
+												    		  alert("거래 불가 주식");
+												    		  window.location.reload();
+												    	  }
+												    	  else{
+												    		  alert("거래 실패");
+												    		  window.location.reload();
+												    	  }
+												      },
+												      error : function(error) {
+												        alert("error");
+												      }
+												    });
+											});
+										});																	
+									</script>
+
 						</div>
 					</div>
 					<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -291,11 +315,11 @@ console.log(el);
 							 	<%	
 									// No login
 									if(session.getAttribute("uNum") == null){%>
-										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" value="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
 								<%
 									} else{ 
 								%>
-										<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="<%out.println(SQuantity);%>" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
+										<input type="text" style="text-align:right; background-color:#FFFFFF;" value="<%out.println(SQuantity);%>" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
 								<% 
 									} 
 								%>
@@ -304,19 +328,19 @@ console.log(el);
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 							<div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">매도가격</span>
-							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" placeholder="<%out.println(price_for_cal);%>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="sell_price" value="<%out.println(price_for_cal);%>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
 							</div>
 						  </div>
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">판매수량</span>
-							 	<input type="text" style="text-align:right;" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+							 	<input type="text" style="text-align:right;" class="form-control" id="sell_cnt" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
 							</div>
 						  </div>
 						  <div class="row" style="margin: 15px 0px 15px 0px;">
 						    <div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">판매총액</span>
-							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
+							 	<input type="text" style="text-align:right; background-color:#FFFFFF;" id="sell_total" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" readonly>
 							</div>
 						  </div>
 						</div>
@@ -328,10 +352,54 @@ console.log(el);
 							<%
 								} else{ 
 							%>
-									<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">매도</button>
+									<button class="btn btn-primary" id="sell_button" type="button" style="text-align:center;">매도</button>
 							<% 
 								} 
 							%>
+									<script type="text/javascript">																
+										$(function () {
+											$("#sell_button").click(function() {
+												
+												$.ajax({
+												      type:'POST',
+												      url:"./AjaxPostServlet",
+												      data :{Cnt:$("#sell_cnt").val(), uNum:<%out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));%>, stockName:sname, tradeCase:2},
+												      async:true,
+												      dataType:'json',
+												      success : function(data) {
+												    	  
+												    	  var resultValue = 0;
+												    	  
+												    	  $.each(data, function(i, item){
+																resultValue = item.returnValue;
+															});
+												    	  
+												    	  console.log(resultValue);
+												    	  
+												    	  if(resultValue == 1){
+												    		  alert("매도 완료");
+												    		  window.location.reload();
+												    	  }
+												    	  else if(resultValue == -1){
+												    		  alert("보유 수량 부족");
+												    		  window.location.reload();
+												    	  }
+												    	  else if(resultValue == -2){
+												    		  alert("거래 불가 주식");
+												    		  window.location.reload();
+												    	  }
+												    	  else{
+												    		  alert("거래 실패");
+												    		  window.location.reload();
+												    	  }
+												      },
+												      error : function(error) {
+												        alert("error");
+												      }
+												    });
+											});
+										});																	
+									</script>					
 						</div>
 					</div>
 				</div>
