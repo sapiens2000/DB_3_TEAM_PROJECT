@@ -10,7 +10,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -20,7 +19,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>
+                    <li class="nav-item"><a class="nav-link" href="stock.jsp]">주식</a></li>
                     <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
                 </ul>
                 <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -35,10 +34,9 @@
                         <li><a class="dropdown-item" href="logout.jsp">로그아웃</a></li>
                     </ul>
                 </li>
-            	</ul>
+            	</ul>           
             </div>
         </div>
-    </nav> 
-	
+    </nav> 	
 </body>
 </html>
