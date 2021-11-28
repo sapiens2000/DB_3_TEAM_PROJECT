@@ -22,7 +22,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)   
    
 * orai18n.jar 추가 후 나오는 Tomcat Warnings 제거 방법   
-context.xml에 "<JarScanner scanManifest="false"/>" 추가
+context.xml에 &#60;JarScanner scanManifest	&#61;	&#34;false&#34;&#47;&#62; 추가
 
 **Data Set**
 
