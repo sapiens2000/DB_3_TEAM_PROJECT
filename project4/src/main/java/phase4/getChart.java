@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import phase4.GraphDto;
 import phase4.Oracle;
 
-@WebServlet("/AjaxPostServlet")
+@WebServlet("/AjaxPostSer")
 public class getChart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
@@ -28,15 +28,15 @@ public class getChart extends HttpServlet {
 		
 		Oracle orcl = Oracle.getInstance();
 		
-		String company = request.getParameter("company");
+		String company = request.getParameter("buy_cnt");
 		System.out.println(company);
 
 		PrintWriter out = response.getWriter();	
 		
-		list = orcl.stockChart(company);
-		System.out.println(list);
+//		list = orcl.stockChart(company);
+//		System.out.println(list);
 		
-		out.write(list.toString());
+//		out.write(list.toString());
 		out.flush();
 		out.close();
 	}

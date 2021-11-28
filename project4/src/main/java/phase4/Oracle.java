@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import phase4.GraphDto;
 
@@ -229,7 +230,7 @@ public class Oracle {
 
 	}
 	
-	public ArrayList<GraphDto> stockChart(String company) {
+	public String stockChart(String company) {
 		
 		ArrayList<GraphDto> dataList = new ArrayList<GraphDto>();	
 		
@@ -289,7 +290,7 @@ public class Oracle {
 //		return resultJson;
 		
 		System.out.println(dataList);
-		return dataList;
+		return dataList.toString();
 	}
 	
 	public ResultSet getChangeRate() {
@@ -419,6 +420,223 @@ public class Oracle {
 		e.printStackTrace();
 		}
 		return null;	// error
+	}
+	
+	public int buyStock(String stockName, int Unum, int amount) {
+		
+		String stockCode = "";
+		int price = 0;
+			
+		try {			
+				
+			String sql = "";
+			sql = 	"SELECT S.Scode, C.Cclose_price " +
+					"FROM CHART C, STOCK S " +
+					"WHERE S.Scode = C.Ccode AND Sname = '" + stockName + "' " +
+					"ORDER BY C.Cstart_date DESC ";
+				
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+				
+			if(rs.next()) {
+				stockCode = rs.getString(1);
+				price = rs.getInt(2);
+			}
+			else {
+				System.out.println("현재 매수가 불가합니다.");
+				return -2;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		int totalPrice = amount * price;	
+		int cash = 0;
+		
+		rs = null;
+		
+		try {			
+			
+			String sql = "";
+			sql = 	"SELECT Ucash " +
+					"FROM USERS " +
+					"WHERE Unum = " + Unum;
+
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				cash	= rs.getInt(1);
+			}
+
+			if(cash >= totalPrice) {
+				int rest = cash - totalPrice;
+				
+				sql = 	"UPDATE USERS " +
+						"SET " +
+						"Ucash = " + rest + ", " +
+						"Ucurrent_total_asset = Ucurrent_total_asset + " + totalPrice + " " + 
+						"WHERE Unum = " + Unum;
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+				int listNum = 0;
+				
+				sql = 	"SELECT MAX(Tnum) " +
+						"FROM TRANSACTION_LIST ";
+				
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+				if(rs.next()) {
+					listNum = rs.getInt(1) + 1;
+				}
+				
+				sql = 	"INSERT INTO TRANSACTION_LIST VALUES ( " + listNum + ", SYSDATE, '" + stockName + "', '매수', " + price +", " + amount + " )";
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+				
+				sql =	"INSERT INTO HISTORY VALUES ( " + Unum + ", " + listNum + " )";
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+				
+				sql = 	"UPDATE INTEREST " +
+						"SET " +
+						"Quantity = Quantity + " + amount + " " +
+						"WHERE In_unum = " + Unum + " AND In_scode = '" + stockCode + "' ";
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+				
+				commit();
+				
+				return 1;
+			}
+			else {
+				return -1;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return -3;
+	}
+	
+	public int sellStock(String Sname, int Unum, int amount) {
+		String stockCode = "";
+		int price = 0;
+		
+		ResultSet rs = null;
+		String sql = "";
+				
+		System.out.print("매도할 주식명과 수량을 입력해주세요. (주식명 - 수량) : ");	        
+			
+		try {			
+
+			sql = 	"SELECT S.Scode, C.Cclose_price " +
+					"FROM CHART C, STOCK S " +
+					"WHERE S.Scode = C.Ccode AND Sname = '" + Sname + "' " +
+					"ORDER BY C.Cstart_date DESC ";
+				
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+				
+			if(rs.next()) {
+				stockCode = rs.getString(1);
+				price = rs.getInt(2);
+			}
+			else {
+				System.out.println("현재 매도가 불가합니다.");
+				return -2;
+			}
+			
+			sql = 	"SELECT DISTINCT Sname, I.Quantity " +
+					"FROM USERS U, INTEREST I, STOCK S " +
+					"WHERE U.Unum = I.In_unum  " + 
+					"	AND I.In_Scode = S.Scode " +
+					"	AND U.Unum = " + Unum + " " +
+					"	AND S.Sname = '" + Sname + "' ";
+	
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				String checkName 		= rs.getString(1);
+				int checkSum			= rs.getInt(2);
+				
+				if(amount > checkSum) {
+					System.out.println("보유 수량이 부족합니다.");
+					return -1;
+				}
+			}
+			else {
+				System.out.println("보유 수량이 부족합니다.");
+				return -1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		int totalPrice = amount * price;	
+		int cash = 0;
+		
+		rs = null;
+		
+		try {			
+			
+			sql = "";
+			sql = 	"SELECT Ucash " +
+					"FROM USERS " +
+					"WHERE Unum = " + Unum;
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				cash	= rs.getInt(1);
+			}
+
+			sql = 	"UPDATE USERS " +
+					"SET " +
+					"Ucash = Ucash + " + totalPrice + ", " +
+					"Ucurrent_total_asset = Ucurrent_total_asset - " + totalPrice + " " + 
+					"WHERE Unum = " + Unum;
+			
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			int listNum = 0;
+			sql = 	"SELECT MAX(Tnum) " +
+					"FROM TRANSACTION_LIST ";
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				listNum = rs.getInt(1) + 1;
+			}
+			
+			sql = 	"INSERT INTO TRANSACTION_LIST VALUES ( " + listNum + ", SYSDATE, '" + Sname + "', '매도', " + price +", " + amount + " )";
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			sql =	"INSERT INTO HISTORY VALUES ( " + Unum + ", " + listNum + " )";
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			sql = 	"UPDATE INTEREST " +
+					"SET " +
+					"Quantity = Quantity - " + amount + " " +
+					"WHERE In_unum = " + Unum + " AND In_scode = '" + stockCode + "' ";
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+
+			commit();
+			
+			return 1;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return -3;
 	}
 	
 	public void commit() {
