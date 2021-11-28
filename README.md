@@ -53,13 +53,9 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase3) : Console Program (Java)
 ![system](https://user-images.githubusercontent.com/33113480/143678034-690e52ce-d291-44f2-a88d-0a22e880745e.JPG)
 
-<<<<<<< HEAD
 * [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4/Phase4.md) : Web Service
 ![Main](https://user-images.githubusercontent.com/33113480/143679109-ec8230f6-5a27-4360-b4fa-243fb520fbc6.JPG)
-=======
-* [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4) : Web Service
-![Main](https://user-images.githubusercontent.com/33113480/143677736-3a323103-5b2b-4fa9-9434-91ea6fa6616e.JPG)
->>>>>>> main
+
 
 세부 결과 및 보고서는 소스 참고.
 
