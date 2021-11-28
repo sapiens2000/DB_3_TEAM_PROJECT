@@ -33,15 +33,12 @@
 </head>
 <body>
 <%	
-//need login
-	if(session.getAttribute("uNum") == null || session.getAttribute("userId") == null){ 
+	// need login
+	if(session.getAttribute("uNum") == null){ 
 		out.println("<script>alert('로그인이 필요합니다.')</script>");
 		out.println("<script>location.href='main.jsp';</script>");
-	}	
-%>	
+	}
 
-
-<%
 	Oracle orcl = Oracle.getInstance();
 	UserBean user = new UserBean();
 		

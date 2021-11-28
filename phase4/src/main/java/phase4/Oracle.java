@@ -654,16 +654,16 @@ public class Oracle {
 	public ResultSet getTransaction(String userId, String start, String end) {
 		String sql;
 		
-		if(start == null & end == null) { // all
+		if((start == null & end == null) || (start.equals("") & end.equals(""))) { // all
 			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
 				  "FROM TRANSACTION_LIST, HISTORY, USERS " +
 				  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' ";
-		}else if(start == null & end != null) { // until end date
+		}else if(start.equals("") & !end.equals("")) { // until end date
 			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
 				  "FROM TRANSACTION_LIST, HISTORY, USERS " +
 				  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' " + 
 				  "AND Twhen <= '" + end + "' ";
-		}else if(start != null & end == null){ // after start date
+		}else if(!start.equals("") & end.equals("")){ // after start date
 			sql = "SELECT TWHEN, TNAME, TYPE, TVALUE, TVOLUME, (TVALUE*TVOLUME) AS TOTAL " +
 					  "FROM TRANSACTION_LIST, HISTORY, USERS " +
 					  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' " + 
@@ -674,8 +674,6 @@ public class Oracle {
 				  "WHERE UNUM = HUNUM AND HTNUM = TNUM AND User_id = '" + userId + "' " + 
 				  "AND Twhen BETWEEN '" + start + "' AND '" + end + "' ";
 		}
-		
-		
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
