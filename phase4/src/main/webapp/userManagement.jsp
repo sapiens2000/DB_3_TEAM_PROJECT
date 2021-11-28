@@ -43,13 +43,13 @@
 	} 
 </script>
 <body>
-<%	
-	// need login
-	if((int)session.getAttribute("uNum") != -1){ 
-		out.println("<script>alert('관리자 로그인이 필요합니다.')</script>");
-		out.println("<script>location.href='main.jsp';</script>");
-	}
-%>	
+<script>
+var id = <%=(String)session.getAttribute("uNUm")%>
+if(id == null || id != -1){
+	alert('관리자 로그인이 필요합니다.');
+	location.href = "main.jsp";
+}
+</script>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
             <a class="navbar-brand" href="#!">주식박사</a>

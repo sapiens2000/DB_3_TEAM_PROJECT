@@ -32,20 +32,14 @@
 	</style>
 </head>
 <body>
-<%	
-	// need login
-	if(session.getAttribute("uNum") == null){ 
-		out.println("<script>alert('로그인이 필요합니다.')</script>");
-		out.println("<script>location.href='main.jsp';</script>");
-	}
+<script>
+var id = <%=(String)session.getAttribute("uNum")%>
+if(id == null){
+	alert('로그인이 필요합니다.');
+	location.href = "main.jsp";
+}
+</script>
 
-	Oracle orcl = Oracle.getInstance();
-	UserBean user = new UserBean();
-		
-	String userId = session.getAttribute("userId").toString();
-	
-	user = orcl.getUserData(userId);
-%>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
             <a class="navbar-brand" href="#!">주식박사</a>
@@ -72,6 +66,14 @@
             </div>
         </div>
     </nav> 
+<% 
+	Oracle orcl = Oracle.getInstance();
+	UserBean user = new UserBean();			
+	String userId = session.getAttribute("userId").toString();
+	
+	user = orcl.getUserData(userId);	
+%>
+    
     <div class="container">
 		<div class="row justify-content-center">
 	        <div class="col-lg-5">
