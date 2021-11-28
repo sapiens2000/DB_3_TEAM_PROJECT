@@ -23,7 +23,6 @@
     <link href="resource/css/team-styles.css" rel="stylesheet" />
     <!-- Show icon -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-
 </head>
 <body>
 <%	
@@ -189,7 +188,7 @@
     <footer class="py-5 bg-dark">
         <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; TEAM 3</p></div>
     </footer>
-   
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

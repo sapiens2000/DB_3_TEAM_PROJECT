@@ -596,7 +596,6 @@ public class Oracle {
 					e.printStackTrace();
 				}
 
-
 				double open		= rs.getFloat("CSTART_PRICE");
 				double high		= rs.getFloat("CHIGH_PRICE");
 				double low		= rs.getFloat("CLOW_PRICE");

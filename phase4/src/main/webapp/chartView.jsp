@@ -9,14 +9,14 @@
 <head>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
-	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-	
+	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>STOCK CHART</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 	<link href="resource/css/styles.css" rel="stylesheet" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
 
 	<!--  fonts  -->
     <link href="resource/css/styles.css" rel="stylesheet" />
@@ -108,6 +108,7 @@
 	ResultSet rs;
 	String company = request.getParameter("sname");
 	String data = orcl.stockChart(company);
+
 %>	
 	<div id="container" style="height: 400px; min-width: 310px"></div>
 		<script>	
@@ -198,6 +199,7 @@
     		<div class="col">
 <% 
 	rs = orcl.getAllDataForChart(company);
+
 	String high = "";
 	String low = "";
 	String change = "";
@@ -324,9 +326,7 @@
      			</div>
     		</div>
 		</div>
-		
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
     <script src="resource/js/scripts.js"></script>
-
 </body>
 </html>

@@ -139,11 +139,11 @@
 <% 
 	rs = orcl.getSector(sector);
 
+
 	while(rs.next()){
 		
 		int row = rs.getInt(1);
 		String sname = rs.getString(2);
-		
 				out.println("<tr onClick='goToChart()'>");
 				out.println("<td>" + row + "</td>");	
 				out.println("<td>" + sname + "</td>");

@@ -53,8 +53,7 @@
             	</ul>
             </div>
         </div>
-    </nav> 
-       
+    </nav>       
     <div class="content">
 		<main>
 			<div class="container-fluid px-4">

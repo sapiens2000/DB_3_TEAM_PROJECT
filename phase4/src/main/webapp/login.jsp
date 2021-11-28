@@ -7,7 +7,6 @@
 	<meta charset="UTF-8">
 	<title>Login</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
-	
 	<style>
 		.login_container {
 		  display: flex;
@@ -72,6 +71,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 	<script src="resource/js/datatables-simple-demo.js"></script>
+
 	
 </body>
 </html>

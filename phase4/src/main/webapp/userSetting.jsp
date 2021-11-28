@@ -12,6 +12,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Show icon -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
 	<style>
 	.card {
 		border: 0;
@@ -39,6 +40,7 @@
 		out.println("<script>location.href='main.jsp';</script>");
 	}	
 %>	
+
 
 <%
 	Oracle orcl = Oracle.getInstance();
@@ -138,5 +140,6 @@
    
 	<script src="resource/js/theme.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

@@ -9,7 +9,6 @@
 <title>Update User</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-	
 	<style>
 	.container {
 		  display: flex;
@@ -33,7 +32,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="main.jsp">홈</a></li>
-				    <li class="nav-item"><a class="nav-link" href="#">주식</a></li>	
+				    <li class="nav-item"><a class="nav-link" href="stock.jsp">주식</a></li>	
 				    <li class="nav-item"><a class="nav-link" href="ranking.jsp">랭킹</a></li>
 					<li class="nav-item dropdown">
 			        	<a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,7 +49,7 @@
             </div>
         </div>
     </nav> 
-    
+ 
 	<div class="container">
 		<div class="row justify-content-center">
 	        <div class="col-lg-5">
@@ -111,9 +110,7 @@
 	            </div>
 	        </div>
 	    </div>
-	</div>
-	
+	</div>	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-	
 </body>
 </html>
