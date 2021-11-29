@@ -871,12 +871,10 @@ public class Oracle {
 		int price = 0;
 		
 		ResultSet rs = null;
-		String sql = "";
-				
+		String sql = "";				
 		System.out.print("매도할 주식명과 수량을 입력해주세요. (주식명 - 수량) : ");	        
 			
 		try {			
-
 			sql = 	"SELECT S.Scode, C.Cclose_price " +
 					"FROM CHART C, STOCK S " +
 					"WHERE S.Scode = C.Ccode AND Sname = '" + Sname + "' " +
@@ -1014,6 +1012,85 @@ public class Oracle {
 		e.printStackTrace();
 		}
 		return null;	// error
+	}
+	
+	public ResultSet searchStock(String Sname, String round, String Cstart_price, String Cclose_price
+			, String Chigh_price, String Clow_price, String Smarket, String Smarket_cap
+			, String Sforeign_rate, String Sper, String Sbpr, String Sroe, String Cscale) {
+		String sql = "SELECT * FROM("
+				+ "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2) AS round"
+				+ ", Cstart_price, Cclose_price, Chigh_price, Clow_price, Smarket"
+				+ ", Smarket_cap, Sforeign_rate, Sper, Spbr, Sroe, Cscale \n" +
+					 "FROM \n" + 
+					 "(SELECT * \n" + 
+					 "FROM STOCK, CHART \n" +
+					 "WHERE Scode = Ccode \n" +
+					 "ORDER BY Cstart_date DESC) \n" + 
+					 "WHERE ROWNUM = 1) \n";
+		
+		if (Sname != "") {
+			sql = sql + "WHERE Sname = \'" + Sname + "\'\n";
+		}
+		
+		if (Smarket != "") {
+			sql = sql + "AND Smarket = \'" + Smarket + "\'\n";
+		}
+		
+		if (Smarket_cap != "") {
+			sql = sql + "AND Smarket_cap = " + Smarket_cap + "\n";
+		}
+		
+		if (Sforeign_rate != "") {
+			sql = sql + "AND Sforeign_rate = " + Sforeign_rate + "\n";
+		}
+		
+		if (Sper != "") {
+			sql = sql + "AND Sper = " + Sper + "\n";
+		}
+		
+		if (Sbpr != "") {
+			sql = sql + "AND Sbpr = " + Sbpr + "\n";
+		}
+		
+		if (Sroe != "") {
+			sql = sql + "AND Sbpr = " + Sbpr + "\n";
+		}
+		
+		if (Cscale != "") {
+			sql = sql + "AND Cscale = " + Cscale + "\n";
+		}
+		
+		System.out.println(sql);
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public void insertNews() {
+		String sql = ""
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+	
 	}
 	
 	public void commit() {
