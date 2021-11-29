@@ -1078,7 +1078,7 @@ public class Oracle {
 	}
 	
 	public void insertNews() {
-		String sql = ""
+		String sql = "";
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
