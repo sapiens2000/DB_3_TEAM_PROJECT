@@ -22,13 +22,13 @@
 		
 </head>
 <body>
-<%	
-	// need login
-	if(session.getAttribute("userId") == null){
-		out.println("<script>alert('로그인이 필요합니다.')</script>");
-		out.println("<script>location.href='main.jsp';</script>");
-	}
-%>	
+<script>
+var id = <%=(String)session.getAttribute("uNUm")%>
+if(id == null){
+	alert('로그인이 필요합니다.');
+	location.href = "main.jsp";
+}
+</script>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
@@ -72,24 +72,7 @@
 			            TRANSACTION
 			        </div>		        			       		      
 			        <div class="card-body">				       
-			        		<div class="form-group" style="margin-bottom: 16px; text-align: right;">
-								<div class="btn-group" data-toggle="buttons" style="float: left;">
-									<label class="btn btn-primary">
-										<input type="radio" name="historyBuy" autocomplete="on" onclick="test" value="buy">매수
-									</label>
-									<script>
-									 function test(){									  
-								        var btn = document.getElementsByName("historyBuy");
-								             if(btn.checked){
-								                 btn.checked = false;
-								             }
-								        }
-									 }
-									</script>
-									<label class="btn btn-primary active">
-										<input type="radio" name="historySell" autocomplete="on" value="sell">매도
-									</label>
-								</div>
+			        		<div class="form-group" style="margin-bottom: 16px; text-align: left">
 								<input class="form-control" name="startDate" type="text" id="startDate" placeholder="START DATE" 
 								style="width: 150px; float: left; margin-left: 20px;" readonly>
 									<script>

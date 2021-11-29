@@ -19,7 +19,10 @@ This Repository is Database (COMP322) Project of 3 TEAM
 **Additional Libs**
 * [JSON simple](https://code.google.com/archive/p/json-simple/)
 * [JSoup](https://jsoup.org/)
-* [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)
+* [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)   
+   
+* orai18n.jar 추가 후 나오는 Tomcat Warnings 제거 방법   
+톰캣 xml 파일 중 context.xml에 &#60;JarScanner scanManifest	&#61;	&#34;false&#34;&#47;&#62; 추가
 
 **Data Set**
 
@@ -53,7 +56,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [Phase 3](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase3) : Console Program (Java)
 ![system](https://user-images.githubusercontent.com/33113480/143678034-690e52ce-d291-44f2-a88d-0a22e880745e.JPG)
 
-* [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4/Phase4.md) : Web Service
+* [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4) : Web Service
 ![Main](https://user-images.githubusercontent.com/33113480/143679109-ec8230f6-5a27-4360-b4fa-243fb520fbc6.JPG)
 
 
