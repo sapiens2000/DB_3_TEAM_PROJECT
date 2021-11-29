@@ -8,20 +8,17 @@
 <!DOCTYPE>
 <html>
 <head>
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://code.highcharts.com/stock/highstock.js"></script>
-	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>STOCK CHART</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-	<link href="resource/css/styles.css" rel="stylesheet" />
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://code.highcharts.com/stock/highstock.js"></script>
+	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 
-	<!--  fonts  -->
-    <link href="resource/css/styles.css" rel="stylesheet" />
-	
 </head>
 <body>
 <%	
@@ -103,9 +100,7 @@
 <% 
 	}
 %>	
-
-
-<script type="text/javascript">
+<script>
 var getParameters = function (paramName) { 
 	var returnValue;
 	var url = location.href;
@@ -119,6 +114,7 @@ var getParameters = function (paramName) {
 		} 
 	};
 var sname = getParameters('sname');
+console.log(sname);
 </script>
 
 <%
@@ -580,5 +576,7 @@ var sname = getParameters('sname');
      			</div>
     		</div>
 		</div>
+	</div>
+</div>
 </body>
 </html>

@@ -844,7 +844,7 @@ public class Oracle {
 					rs = pstmt.executeQuery();
 				}
 				
-				sql = 	"UPDATE HOLDINGSTOCKT " +
+				sql = 	"UPDATE HOLDINGSTOCK " +
 						"SET " +
 						"Quantity = Quantity + " + amount + " " +
 						"WHERE Hs_unum = " + Unum + " AND Hs_scode = '" + stockCode + "' ";
@@ -994,6 +994,26 @@ public class Oracle {
 		}
 		
 		return -3;
+	}
+	
+	public ResultSet getAsset(int Unum) {
+		String sql = "SELECT ROWNUM, Sname, Quantity, Item_assets " + 
+					 "FROM USERS, HOLDINGSTOCK, STOCK " +
+					 "WHERE UNUM = HS_UNUM AND SCODE = HS_SCODE AND Unum = " + Unum + " ";
+			
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
 	}
 	
 	public void commit() {

@@ -18,13 +18,13 @@
 	
 </head>
 <body>
-<script>
-var id = <%=(String)session.getAttribute("uNUm")%>
-if(id == null){
-	alert('로그인이 필요합니다.');
-	location.href = "main.jsp";
-}
-</script>
+<%	
+	// need login
+	if(session.getAttribute("uNum") == null){ 
+		out.println("<script>alert('로그인이 필요합니다.');</script>");
+		out.println("<script>location.href='main.jsp';</script>");
+	}
+%>	
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
@@ -74,23 +74,26 @@ if(id == null){
 			                        <th>#</th>
 			                        <th>SNAME</th>
 			                        <th>VOLUME</th>
+			                        <th>TOTAL</th>
 			                    </tr>
 			                </thead>		           
 			                <tbody>
 <% 
 	Oracle orcl = Oracle.getInstance();
-	ResultSet rs = orcl.getRanking();
+	ResultSet rs = orcl.getAsset(Integer.parseInt(session.getAttribute("uNum").toString()));
 
 	while(rs.next()){
 		
 		int row = rs.getInt(1);
-		String userId = rs.getString(2);
-		int total_asset = rs.getInt(3);
+		String sname = rs.getString(2);
+		int quantity = rs.getInt(3);
+		int item_asset = rs.getInt(4);
 		
 				out.println("<tr>");
 				out.println("<td>" + row + "</td>");	
-				out.println("<td>" + userId + "</td>");
-				out.println("<td>" + total_asset + "</td>");
+				out.println("<td>" + sname + "</td>");
+				out.println("<td>" + quantity + "</td>");
+				out.println("<td>" + item_asset + "</td>");
 				out.println("</tr>");
 	}
 %>			                
