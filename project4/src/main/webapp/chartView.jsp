@@ -265,57 +265,56 @@ console.log(sname);
 									<button class="btn btn-danger" id="buy_button" type="button" style="text-align:center;">매수</button>
 							<% 
 								} 
-							%>	
+							%>
 								<script type="text/javascript">																
-										$(function () {
-											$("#buy_button").click(function() {
-												
-												if(parseInt($("#buy_cnt").val() || 0 ) == 0){
-													alert("매수 수량을 입력해주세요.");
-													return;
-												}
-												
-												$.ajax({
-												      type:'POST',
-												      url:"./AjaxPostServlet",
-												      data :{Cnt:$("#buy_cnt").val(), uNum:<%out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));%>, stockName:sname, tradeCase:1},
-												      async:true,
-												      dataType:'json',
-												      success : function(data) {
-												    	  
-												    	  var resultValue = 0;
-												    	  
-												    	  $.each(data, function(i, item){
-																resultValue = item.returnValue;
-															});
-												    	  
-												    	  console.log(resultValue);
-												    	  
-												    	  if(resultValue == 1){
-												    		  alert("매수 완료");
-												    		  window.location.reload();
-												    	  }
-												    	  else if(resultValue == -1){
-												    		  alert("잔액 부족");
-												    		  window.location.reload();
-												    	  }
-												    	  else if(resultValue == -2){
-												    		  alert("거래 불가 주식");
-												    		  window.location.reload();
-												    	  }
-												    	  else{
-												    		  alert("거래 실패");
-												    		  window.location.reload();
-												    	  }
-												      },
-												      error : function(error) {
-												        alert("error");
-												      }
-												    });
-												
-											});
-										});																	
-									</script>
+									$(function () {
+										$("#buy_button").click(function() {
+											
+											if(parseInt($("#buy_cnt").val() || 0 ) == 0){
+												alert("매수 수량을 입력해주세요.");
+												return;
+											}
+										
+											$.ajax({
+												  type:'POST',
+												  url:"./AjaxPostServlet",
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:sname, tradeCase:1},
+												  async:true,
+												  dataType:'json',
+												  success : function(data) {
+													  
+													  var resultValue = 0;
+													  
+													  $.each(data, function(i, item){
+															resultValue = item.returnValue;
+														});
+													  
+													  console.log(resultValue);
+													  
+													  if(resultValue == 1){
+														  alert("매수 완료");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -1){
+														  alert("잔액 부족");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -2){
+														  alert("거래 불가 주식");
+														  window.location.reload();
+													  }
+													  else{
+														  alert("거래 실패");
+														  window.location.reload();
+													  }
+												  },
+												  error : function(error) {
+													alert("error");
+												  }
+												});
+										});
+									});																	
+								</script>
 
 						</div>
 					</div>
@@ -374,54 +373,54 @@ console.log(sname);
 								} 
 							%>
 								<script type="text/javascript">																
-										$(function () {
-											$("#sell_button").click(function() {
-												
-												if(parseInt($("#sell_cnt").val() || 0 ) == 0){
-													alert("매도 수량을 입력해주세요.");
-													return;
-												}
-												
-												$.ajax({
-												      type:'POST',
-												      url:"./AjaxPostServlet",
-												      data :{Cnt:$("#sell_cnt").val(), uNum:<%out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));%>, stockName:sname, tradeCase:2},
-												      async:true,
-												      dataType:'json',
-												      success : function(data) {
-												    	  
-												    	  var resultValue = 0;
-												    	  
-												    	  $.each(data, function(i, item){
-																resultValue = item.returnValue;
-															});
-												    	  
-												    	  console.log(resultValue);
-												    	  
-												    	  if(resultValue == 1){
-												    		  alert("매도 완료");
-												    		  window.location.reload();
-												    	  }
-												    	  else if(resultValue == -1){
-												    		  alert("보유 수량 부족");
-												    		  window.location.reload();
-												    	  }
-												    	  else if(resultValue == -2){
-												    		  alert("거래 불가 주식");
-												    		  window.location.reload();
-												    	  }
-												    	  else{
-												    		  alert("거래 실패");
-												    		  window.location.reload();
-												    	  }
-												      },
-												      error : function(error) {
-												        alert("error");
-												      }
-												    });
-											});
-										});																	
-									</script>		
+									$(function () {
+										$("#sell_button").click(function() {
+											
+											if(parseInt($("#sell_cnt").val() || 0 ) == 0){
+												alert("매도 수량을 입력해주세요.");
+												return;
+											}
+											
+											$.ajax({
+												  type:'POST',
+												  url:"./AjaxPostServlet",
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:sname, tradeCase:1},
+												  async:true,
+												  dataType:'json',
+												  success : function(data) {
+													  
+													  var resultValue = 0;
+													  
+													  $.each(data, function(i, item){
+															resultValue = item.returnValue;
+														});
+													  
+													  console.log(resultValue);
+													  
+													  if(resultValue == 1){
+														  alert("매수 완료");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -1){
+														  alert("잔액 부족");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -2){
+														  alert("거래 불가 주식");
+														  window.location.reload();
+													  }
+													  else{
+														  alert("거래 실패");
+														  window.location.reload();
+													  }
+												  },
+												  error : function(error) {
+													alert("error");
+												  }
+												});
+										});
+									});																	
+								</script>												
 						</div>
 					</div>
 				</div>
