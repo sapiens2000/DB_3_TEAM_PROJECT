@@ -294,24 +294,35 @@ public class Oracle {
 	}
 	
 	public ResultSet getChangeRate() {
-		String sql = "SELECT ROWNUM, Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
-					 "FROM STOCK, CHART " +
-					 "WHERE Scode = Ccode " +
-					 "ORDER BY Cstart_date DESC ";
+		String sql = "SELECT Sname, Cstart_date, ROUND((Cclose_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+				 "FROM " + 
+				 "(SELECT * " + 
+				 "FROM STOCK, CHART " +
+				 "WHERE Scode = Ccode " +
+				 "AND Cstart_date = " +
+				 "(SELECT CSTART_DATE " +
+				 "FROM " +
+				 "(SELECT CSTART_DATE " +
+				 "FROM STOCK, CHART " + 
+				 "WHERE Scode = Ccode " +
+				 "GROUP BY CSTART_DATE " +
+				 "ORDER BY CSTART_DATE DESC) " +
+				 "WHERE ROWNUM = 1) " +				 
+				 "ORDER BY Cstart_date DESC) ";
+
+	try {
+		pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+		rs = pstmt.executeQuery(); 
 		
-		try {
-			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = pstmt.executeQuery(); 
-			
-			if(rs.next())
-				rs.beforeFirst();
-				return rs;
-			
-		} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		}
-		return null;	// error
+		if(rs.next())
+			rs.beforeFirst();
+			return rs;
+		
+	} catch (SQLException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	}
+	return null;	// error
 	}
 	
 	public ResultSet foreignRatePerRoe() {
@@ -341,19 +352,24 @@ public class Oracle {
 				 	 "FROM NEWS N " + 
 				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
 	
-	try {
-		pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-		rs = pstmt.executeQuery(); 
+		System.out.println(sql);	
 		
-		if(rs.next())
-			rs.beforeFirst();
-			return rs;
-		
-	} catch (SQLException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-	}
-	return null;
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs != null) {
+				if(rs.next())
+					rs.beforeFirst();
+					return rs;
+			}
+			System.out.println("rs is null");
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;
 		
 	}
 	
@@ -499,6 +515,18 @@ public class Oracle {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery();
 				
+				sql =	"SELECT * " +
+						"FROM INTEREST " +
+						"WHERE In_unum = " + Unum + " AND In_scode = '" + stockCode + "' ";
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+				
+				if(!rs.next()) {
+					sql =	"INSERT INTO INTEREST VALUES ( " + Unum + ", '" + stockCode + "', 0, 0 ) ";
+					pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+					rs = pstmt.executeQuery();
+				}
+				
 				sql = 	"UPDATE INTEREST " +
 						"SET " +
 						"Quantity = Quantity + " + amount + " " +
@@ -621,6 +649,18 @@ public class Oracle {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery();
 			
+			sql =	"SELECT * " +
+					"FROM INTEREST " +
+					"WHERE In_unum = " + Unum + " AND In_scode = '" + stockCode + "' ";
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			if(!rs.next()) {
+				sql =	"INSERT INTO INTEREST VALUES ( " + Unum + ", '" + stockCode + "', 0, 0 ) ";
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery();
+			}
+			
 			sql = 	"UPDATE INTEREST " +
 					"SET " +
 					"Quantity = Quantity - " + amount + " " +
@@ -668,4 +708,3 @@ public class Oracle {
 		}
 	}
 }
-
