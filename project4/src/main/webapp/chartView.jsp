@@ -44,7 +44,7 @@ var getParameters = function (paramName) {
 	};
 
 var sname = getParameters('sname');
-
+console.log(sname);
 </script>
 
 <%
@@ -114,16 +114,17 @@ var sname = getParameters('sname');
 	rs = orcl.getNewsInChart(companyName);
 	
 	int i = 1;
-
-	while(rs.next() && i <= 8){
-		
-		String title = "    <td><a href=\"" + rs.getString(2) +"\" style=\"color:black\">" + rs.getString(1) + "</a></td>";
-		
-		out.println("<tr>");
-		out.println(title);
-		out.println("</tr>");
-		
-		i++;
+	if(rs != null){
+		while(rs.next() && i <= 8){
+			
+			String title = "    <td><a href=\"" + rs.getString(2) +"\" style=\"color:black\">" + rs.getString(1) + "</a></td>";
+			
+			out.println("<tr>");
+			out.println(title);
+			out.println("</tr>");
+			
+			i++;
+		}
 	}
 %>	
 					</tbody>
@@ -311,6 +312,7 @@ var sname = getParameters('sname');
 												        alert("error");
 												      }
 												    });
+												
 											});
 										});																	
 									</script>
@@ -371,7 +373,7 @@ var sname = getParameters('sname');
 							<% 
 								} 
 							%>
-									<script type="text/javascript">																
+								<script type="text/javascript">																
 										$(function () {
 											$("#sell_button").click(function() {
 												
@@ -419,7 +421,7 @@ var sname = getParameters('sname');
 												    });
 											});
 										});																	
-									</script>					
+									</script>		
 						</div>
 					</div>
 				</div>
