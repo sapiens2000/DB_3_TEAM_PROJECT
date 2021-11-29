@@ -25,6 +25,7 @@ if(id == null){
 	location.href = "main.jsp";
 }
 </script>
+
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
             <a class="navbar-brand" href="#!">주식박사</a>

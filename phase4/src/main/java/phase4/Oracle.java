@@ -732,6 +732,26 @@ public class Oracle {
 		e.printStackTrace();
 		}
 		return null;	// error
+		
+	}
+	
+	public ResultSet getHoldingStock(String userId) {
+		// get latest data		
+		String sql = "";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}		
+		return null;	// error										
 	}
 		
 	
