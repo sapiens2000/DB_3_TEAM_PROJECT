@@ -12,6 +12,7 @@
 	<title>STOCK CHART</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -99,30 +100,12 @@
     </nav>
 <% 
 	}
-%>	
-<script>
-var getParameters = function (paramName) { 
-	var returnValue;
-	var url = location.href;
-	var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&'); 
-	for (var i = 0; i < parameters.length; i++) {
-		var varName = parameters[i].split('=')[0]; 
-		if (varName.toUpperCase() == paramName.toUpperCase()) { 
-			returnValue = parameters[i].split('=')[1]; 
-			return decodeURIComponent(returnValue); 
-			} 
-		} 
-	};
-var sname = getParameters('sname');
-console.log(sname);
-</script>
 
-<%
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
-	String companyName = request.getParameter("sname");
+	String company = request.getParameter("sname");
 	
-	String data = orcl.stockChart(companyName);
+	String data = orcl.stockChart(company);
 %>
 
 	<div id="container" style="height: 400px; min-width: 310px"></div>
@@ -138,7 +121,7 @@ console.log(sname);
 				
 				Highcharts.stockChart('container',{
 					title: {
-						text: sname
+						text: '<%=company%>'
 					},
 					rangeSelector: {
 						buttons: [
@@ -158,7 +141,7 @@ console.log(sname);
 						}
 					},
 					series: [{
-						name: sname,
+						name: '<%=company%>',
 						type: 'candlestick',
 						data: chartdata,
 						tooltip: {
@@ -180,7 +163,7 @@ console.log(sname);
 					</thead>
 					<tbody>
 <% 
-	rs = orcl.getNewsInChart(companyName);
+	rs = orcl.getNewsInChart(company);
 	
 	int i = 1;
 	if(rs != null){
@@ -201,7 +184,7 @@ console.log(sname);
     		</div>
 
 <% 
-	rs = orcl.getAllDataForChart(companyName);
+	rs = orcl.getAllDataForChart(company);
 	String high = "";
 	String low = "";
 	String change = "";
@@ -265,7 +248,7 @@ console.log(sname);
 					if(session.getAttribute("uNum") != null){
 						ResultSet rsForDeal;
 						
-						rsForDeal = orcl.getHoldingStock(companyName, Integer.parseInt((session.getAttribute("uNum")).toString()));
+						rsForDeal = orcl.getHoldingStock(company, Integer.parseInt((session.getAttribute("uNum")).toString()));
 						
 						if(rsForDeal.next()){
 							SQuantity = rsForDeal.getInt(2);
@@ -345,7 +328,7 @@ console.log(sname);
 											$.ajax({
 												  type:'POST',
 												  url:"./AjaxPostServlet",
-												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:sname, tradeCase:1},
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:1},
 												  async:true,
 												  dataType:'json',
 												  success : function(data) {
@@ -451,7 +434,7 @@ console.log(sname);
 											$.ajax({
 												  type:'POST',
 												  url:"./AjaxPostServlet",
-												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:sname, tradeCase:1},
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:1},
 												  async:true,
 												  dataType:'json',
 												  success : function(data) {
@@ -576,7 +559,7 @@ console.log(sname);
      			</div>
     		</div>
 		</div>
-	</div>
-</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 </body>
 </html>
