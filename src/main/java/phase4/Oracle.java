@@ -5,10 +5,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 
 public class Oracle {
 	
-	// ¡ﬂ∫π ø¨∞· πÊ¡ˆ∏¶ ¿ß«— ΩÃ±€≈Ê ∆–≈œ
+	// ÔøΩÎñõÊπ≤ÔøΩÔøΩÎÑ† ÔøΩÎô£ÔøΩÍΩ©
 	private static Oracle instance;
 	
 	// Need modification according to your oracle env
@@ -19,7 +27,6 @@ public class Oracle {
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	
 	
 	private Oracle() {
 		// connect 
@@ -47,7 +54,7 @@ public class Oracle {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-        
+
 	}
 	
 	public static Oracle getInstance() {
@@ -62,26 +69,25 @@ public class Oracle {
 		try {			
 			String sql = "SELECT  User_id, Upassword, Unum " +
 						 "FROM USERS " +
-						 "WHERE User_id = '" + userId +"' and Upassword = '" + userPw +"' ";
+						 "WHERE User_id = '" + userId +"' ";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery(); 
-			
+							
 			if(rs.next()) {
-				if(rs.getString(2).equals(userPw)) {
+				if(rs.getString(2).equals(userPw)) {						
 					return Integer.parseInt(rs.getString(3)); // return uNum
 				}else
-					return -1; // Wrong passWd
+					return -2; // Wrong passWd
 			}
-			return -2; // No Id
-			
+			else
+				return -3; // No Id					
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return -3; // error
+		return -4; // error
 	}
 	
-	
-	// µøΩ√º∫ ¡¶æÓ « ø‰
+	// unumÔøΩÏì£ ÔøΩÍΩ≠ÔøΩÎÄ°ÔøΩÏëùÊø°ÔøΩ ÔøΩÏÜ¢ÔøΩÏäú
 	public int register(UserBean user) {
 		try {	
 			String userId = user.getUserId();
@@ -93,10 +99,11 @@ public class Oracle {
 			
 			if(rs.next()) {
 				if(rs.getString(1).equals(userId)) {
-					return -1;	// ¿ÃπÃ ¡∏¿Á«œ¥¬ id
+					return -1;	// id ‰ª•Î¨êÎÇ¨
 				}else {
 					return -2;  // error
 				}
+
 			}else {				
 				user.setuNum(getUnum() + 1);
 				
@@ -123,18 +130,19 @@ public class Oracle {
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, user.getUserId());
 					pstmt.setInt(2, user.getuNum());
-					
+
 					return 0; // Success
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			}		
+
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return -2; // error
 	}
-	
+
 	public int getUnum() {
 		String sql = "SELECT COUNT(Unum) " +
 			  	 "FROM USERS ";
@@ -152,7 +160,6 @@ public class Oracle {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		}
-		
 		// error
 		return -1;
 	}
@@ -161,15 +168,16 @@ public class Oracle {
 		String sql = "SELECT RANK, USER_ID, Ucurrent_total_asset " + 
 					 "FROM RANKING, USERS " + 
 					 "WHERE USER_ID = Ruser_id " + 
-					 "ORDER BY RANK ASC ";
+					 "ORDER BY RANK ";
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery(); 
 			
-			if(rs.next())
+			if(rs.next()) {
 				rs.beforeFirst();
 				return rs;
+			}
 			
 		} catch (SQLException e) {
 		// TODO Auto-generated catch block
@@ -182,7 +190,8 @@ public class Oracle {
 	public void addRanking(UserBean user) {
 		String sql = "SELECT COUNT(*) " + 
 				 	 "FROM RANKING, USERS " + 
-				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset >= " + user.getCurrent_total_asset() + " " ;
+				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset > " + user.getCurrent_total_asset() + " " ;
+
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -200,7 +209,7 @@ public class Oracle {
 
 				rs = pstmt.executeQuery();		
 				
-				// ∑©≈∑ ¡§∫∏ æ˜µ•¿Ã∆Æ 
+				// after add, update old ranking
 				//updateRanking(user, rank);
 								
 				commit();
@@ -209,18 +218,496 @@ public class Oracle {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
 	
 	// After insert data to ranking, need update db
 	public void updateRanking(UserBean user, int rank) {
 		String sql = "SELECT * " + 
 					 "FROM RANKING, USERS " +
-					 "WHERE User_id = Ruser_id "
-					 ;
+					 "WHERE User_id = Ruser_id " + 
+					 "ORDER BY Ucurrent_total_asset ";
 		
-
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
 	}
+	
+	public ResultSet getStock() {
+		String sql = "SELECT * " + 
+					 "FROM STOCK "; 
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	// get sector and num of stocks in that.
+	public ResultSet getSector() {
+		String sql = "SELECT SECTOR_NAME, COUNT(*) " +
+					 "FROM SECTOR " + 
+					 "GROUP BY SECTOR_NAME ";
+		
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	// overload : get stock in sector
+	public ResultSet getSector(String sector) {
+		String sql = "SELECT ROWNUM, S2.Sname" +
+					 "FROM SECTOR S1, STOCK S2" +
+					 "WHERE S1.SNAME = S2.SNAME AND SECTOR_NAME = '" + sector + "' " ;
+				
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public ResultSet getUsers() {
+		String sql = "SELECT Unum, User_id " + 
+				 	 "FROM USERS " +
+				 	 "ORDER BY Unum ASC ";
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public int getUserNum() {
+		String sql = "SELECT COUNT(*)" + 
+			 	 	 "FROM USERS " +
+			 	 	 "ORDER BY Unum ASC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public UserBean getUserData(String userId) {
+		UserBean user = new UserBean();
+		
+		String sql = "SELECT * " + 
+			 	 	 "FROM USERS " +
+			 	 	 "WHERE User_id = '" + userId + "' ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				
+				user.setUserId(rs.getString(1));
+				user.setUserPw(rs.getString(2));
+				user.setuNum(rs.getInt(3));
+				user.setCurrent_total_asset(rs.getInt(4));
+				user.setCash(rs.getInt(5));
+				user.setAge(rs.getInt(6));
+				user.setGender(rs.getString(7));
+				user.setEmail(rs.getString(8));
+				user.setPhone_num(rs.getString(9));
+				
+				return user;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public boolean deleteUser(String userId) {
+		// delete ranking -> ...users
+		String sql = "DELETE RANKING WHERE RUSER_ID = '" + userId +"' " ;		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		sql = "DELETE USERS WHERE USER_ID = '" + userId + "' " ;	
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			this.commit();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		return false;
+	}
+	
+	public boolean updateUser(UserBean User) { 
+		// Âç†ÏéåÔøΩÂç†ÏèôÏòôÂç†ÏéàÎÆâ id, Âç†ÏéÑÏâêÁô∞Í∑®Ïòô Âç†ÏéàÎïæÂç†ÏéåÏ†ü Áñ´ÎÄÄÎúÜÂç†ÔøΩ Âç†ÏéàÎªªÂç†ÏéÑÌÖ¢ÈáéÍªìÏòô		
+		String sql = "UPDATE USERS " +
+					 "SET " +
+					 "USER_ID = '" + User.getUserId() + "', " +
+					 "UPassword = '" + User.getUserPw() + "', " +
+					 "UCash = '" + User.getCash() + "', " +
+					 "UEmail = '" + User.getEmail() + "', " +
+					 "UCELL_PHONE_NUMBER = '" + User.getPhone_num() + "' " +
+					 "WHERE USER_ID = '" + User.getUserId() + "' ";
+			
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			this.commit();
+			return true;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		return false;
+	}
+	
+	public ArrayList<Integer> getUsersByAge(){
+		ArrayList<Integer> numOfUsers = new ArrayList<Integer>();
+		String sql = "";
+		int index = 1;
+					
+		while(index <= 5) {
+			sql = "SELECT COUNT(*) " +
+				  "FROM USERS " + 
+				  "WHERE UAge >= " + index*10 + "AND UAGE < " + (index+1)*10 + " ";
+			
+			try {
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()){
+					numOfUsers.add(rs.getInt(1));					
+				}else
+					numOfUsers.add(0);
+				
+			}catch(SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			index++;
+		}
+				
+		sql = "SELECT COUNT(*) " +
+			  "FROM USERS " + 
+			  "WHERE UAge >= " + index*10 + " ";
+			
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				numOfUsers.add(rs.getInt(1));					
+			}else
+				numOfUsers.add(0);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return numOfUsers;
+	}
+	
+	public int getUserByGender(String gender) {
+		String sql = "SELECT COUNT(*) " +
+					 "FROM USERS " + 
+					 "WHERE Usex='" + gender +"' ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int getCompanyNum() {
+		String sql = "SELECT COUNT(*) " +
+				 	 "FROM STOCK ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;		
+	}
+	
+	public int getSectorNum() {
+		String sql = "SELECT COUNT(*) " +
+				 	 "FROM (SELECT DISTINCT(Sector_name) " +
+				 	 "FROM SECTOR) ";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				return rs.getInt(1);
+			
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;		
+	}
+	
+	public ResultSet getNewsInChart(String company) {		
+		String sql = "SELECT N.Ntitle, N.Nurl " +
+				 	 "FROM NEWS N " + 
+				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
+	
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// 	TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public ResultSet getAllDataForChart(String company) {
+		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Chigh_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
+					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
+					 "FROM STOCK S, CHART C, SECTOR SE " +
+					 "WHERE S.Scode = C.Ccode AND SE.Sname ='" + company + "' " +
+					 "ORDER BY C.Cstart_date DESC ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
+	public String stockChart(String company) {					
+		String sql = "SELECT TO_CHAR(CSTART_DATE, 'yyyy-mm-dd') AS CSTART_DATE, C.CSTART_PRICE, CHIGH_PRICE, C.CLOW_PRICE, C.CCLOSE_PRICE " + 
+			 	 	 "FROM CHART C, STOCK S " +
+			 	 	 "WHERE S.Scode = C.Ccode AND Sname = '" + company + "' " +
+			 	 	 "ORDER BY C.Cstart_date ASC ";
+		
+		JSONArray arr = new JSONArray();
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery(); 
+			
+			while(rs.next()) {		
+				Date date = rs.getDate("CSTART_DATE");
+					
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+				JSONObject json = new JSONObject();
+							
+				String newDate = "";		
+				Date datelong = null;
+				try {
+					newDate = simpleDateFormat.format(date);
+					datelong = simpleDateFormat.parse(newDate);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+
+
+				double open		= rs.getFloat("CSTART_PRICE");
+				double high		= rs.getFloat("CHIGH_PRICE");
+				double low		= rs.getFloat("CLOW_PRICE");
+				double close	= rs.getFloat("CCLOSE_PRICE");
+
+				json.put("date", datelong.getTime());
+				json.put("open", open);
+				json.put("high", high);
+				json.put("close", close);
+				json.put("low", low);
+				
+				arr.add(json);
+			}			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+				
+		
+		return arr.toString();
+	}
+
+	public ResultSet getChangeRate() {
+		// get latest data		
+		String sql = "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
+					 "FROM " + 
+					 "(SELECT * " + 
+					 "FROM STOCK, CHART " +
+					 "WHERE Scode = Ccode " +
+					 "ORDER BY Cstart_date DESC) " + 
+					 "WHERE ROWNUM = 1 ";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+		
+	
+	public ResultSet searchStock(String Sname, String round, String Cstart_price, String Cclose_price
+			, String Chigh_price, String Clow_price, String Smarket, String Smarket_cap
+			, String Sforeign_rate, String Sper, String Sbpr, String Sroe, String Cscale) {
+		String sql = "SELECT * FROM("
+				+ "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2) AS round"
+				+ ", Cstart_price, Cclose_price, Chigh_price, Clow_price, Smarket"
+				+ ", Smarket_cap, Sforeign_rate, Sper, Spbr, Sroe, Cscale \n" +
+					 "FROM \n" + 
+					 "(SELECT * \n" + 
+					 "FROM STOCK, CHART \n" +
+					 "WHERE Scode = Ccode \n" +
+					 "ORDER BY Cstart_date DESC) \n" + 
+					 "WHERE ROWNUM = 1) \n";
+		
+		if (Sname != "") {
+			sql = sql + "WHERE Sname = \'" + Sname + "\'\n";
+		}
+		
+		if (Smarket != "") {
+			sql = sql + "AND Smarket = \'" + Smarket + "\'\n";
+		}
+		
+		if (Smarket_cap != "") {
+			sql = sql + "AND Smarket_cap = " + Smarket_cap + "\n";
+		}
+		
+		if (Sforeign_rate != "") {
+			sql = sql + "AND Sforeign_rate = " + Sforeign_rate + "\n";
+		}
+		
+		if (Sper != "") {
+			sql = sql + "AND Sper = " + Sper + "\n";
+		}
+		
+		if (Sbpr != "") {
+			sql = sql + "AND Sbpr = " + Sbpr + "\n";
+		}
+		
+		if (Sroe != "") {
+			sql = sql + "AND Sbpr = " + Sbpr + "\n";
+		}
+		
+		if (Cscale != "") {
+			sql = sql + "AND Cscale = " + Cscale + "\n";
+		}
+		
+		System.out.println(sql);
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}
+		return null;	// error
+	}
+	
 	
 	public void commit() {
 		try {
@@ -240,6 +727,17 @@ public class Oracle {
 		}
 	}
 	
+	public void cursorClose() {
+		try {
+
+			pstmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public void close() {
 		try {
 			conn.close();
