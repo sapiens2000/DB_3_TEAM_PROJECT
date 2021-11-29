@@ -10,8 +10,6 @@
 </head>
 <body>
 <% 
-	session.removeAttribute("uNum");
-	session.removeAttribute("userId");
 	session.invalidate();
 	out.println("<script>alert('로그아웃 되었습니다.');</script>");	
 	// 메인페이지로.
