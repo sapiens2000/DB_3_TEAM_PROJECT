@@ -62,8 +62,6 @@ This Repository is Database (COMP322) Project of 3 TEAM
 ![Main](https://user-images.githubusercontent.com/33113480/143679109-ec8230f6-5a27-4360-b4fa-243fb520fbc6.JPG)
 
 
-세부 결과 및 보고서는 소스 참고.
-
 ## Contributors
 
 * [박휘성](https://github.com/hwistar0717)
