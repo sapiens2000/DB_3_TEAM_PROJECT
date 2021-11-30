@@ -1058,7 +1058,7 @@ public class Oracle {
 	
 	public synchronized ResultSet getNewsInChart(String company) {		
 		String sql = "SELECT N.Ntitle, N.Nurl " +
-				 	 "FROM NEWS N, MENTION M " + 
+				 	 "FROM NEWS N " + 
 				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
 	
 		try {
@@ -1113,12 +1113,12 @@ public class Oracle {
 				 	 "WHERE NOT EXISTS " +
 				 	 "(SELECT Nwhen, Ntitle, Nurl, Ncompany FROM NEWS " +
 				 	 "WHERE Nurl = '" + url + "') ";			
-			
+			System.out.println(sql);
 			try {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery(); 
 								
-				
+				this.commit();
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
 				this.rollback();
