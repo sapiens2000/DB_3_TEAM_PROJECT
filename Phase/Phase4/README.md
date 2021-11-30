@@ -1,6 +1,10 @@
 # Phase 4 - Website construction (on a local machine)
 소스파일은 레포지토리 메인의 phase4 및 phase4_sql 폴더 이용할 것
 
+## System Constructure   
+![image](https://user-images.githubusercontent.com/33113480/144088537-8789da3f-5406-47e2-ad0d-5a04f3641588.png)
+   
+
 최종 테스트 환경   
    
 Window OS   
