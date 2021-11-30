@@ -11,7 +11,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 **Build Environment**
 
 [![Java 7+](https://img.shields.io/badge/Java-7%2B-informational)](http://java.oracle.com)
-[![Tomcat 8.5+](https://img.shields.io/badge/Tomcat-8.5%2B-informational)](https://tomcat.apache.org/download-80.cgi)
+[![Tomcat 8.5](https://img.shields.io/badge/Tomcat-8.5%2B-informational)](https://tomcat.apache.org/download-80.cgi)
 [![Oracle 19c](https://img.shields.io/badge/Oracle-19c-informational)](https://www.oracle.com/database/technologies)
 [![ Build Status (Windows)](https://img.shields.io/appveyor/build/parrt/antlr4?label=Windows)](https://www.microsoft.com/ko-kr/windows)
 [![ Build Status (MAC)](https://img.shields.io/badge/Mac-issue-yellow)](https://support.apple.com/ko-kr/HT201260)
@@ -22,6 +22,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)   
 
 **필수**
+* 이클립스에 프로젝트 추가 후, 본인 환경에 따라 톰캣 및 jre 버전 수정 필요   
 * orai18n.jar 추가 후 나오는 Tomcat Warnings 제거 방법   
 톰캣 xml 파일 중 context.xml에 &#60;JarScanner scanManifest	&#61;	&#34;false&#34;&#47;&#62; 추가   
 * 본인 컴퓨터의 톰캣 설치 경로의 Lib 폴더에 상기한 4개 jar 파일을 추가해 주지 않으면 실행할 때 오류가 발생함.
@@ -61,8 +62,6 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [Phase 4](https://github.com/sapiens2000/DB_3_TEAM_PROEJCT/blob/main/Phase/Phase4) : Web Service
 ![Main](https://user-images.githubusercontent.com/33113480/143679109-ec8230f6-5a27-4360-b4fa-243fb520fbc6.JPG)
 
-
-세부 결과 및 보고서는 소스 참고.
 
 ## Contributors
 
