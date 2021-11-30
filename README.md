@@ -20,9 +20,11 @@ This Repository is Database (COMP322) Project of 3 TEAM
 * [JSON simple](https://code.google.com/archive/p/json-simple/)
 * [JSoup](https://jsoup.org/)
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)   
-   
+
+**필수**
 * orai18n.jar 추가 후 나오는 Tomcat Warnings 제거 방법   
-톰캣 xml 파일 중 context.xml에 &#60;JarScanner scanManifest	&#61;	&#34;false&#34;&#47;&#62; 추가
+톰캣 xml 파일 중 context.xml에 &#60;JarScanner scanManifest	&#61;	&#34;false&#34;&#47;&#62; 추가   
+* 본인 컴퓨터의 톰캣 설치 경로의 Lib 폴더에 상기한 4개 jar 파일을 추가해 주지 않으면 실행할 때 오류가 발생함.
 
 **Data Set**
 
