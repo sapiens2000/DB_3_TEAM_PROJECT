@@ -16,7 +16,7 @@ This Repository is Database (COMP322) Project of 3 TEAM
 [![ Build Status (Windows)](https://img.shields.io/appveyor/build/parrt/antlr4?label=Windows)](https://www.microsoft.com/ko-kr/windows)
 [![ Build Status (MAC)](https://img.shields.io/badge/Mac-issue-yellow)](https://support.apple.com/ko-kr/HT201260)
 
-**Additional Libs**
+**Additional Libs (already exists in phase4/webapp/lib**
 * [JSON simple](https://code.google.com/archive/p/json-simple/)
 * [JSoup](https://jsoup.org/)
 * [orai18n(for ojdbc8)](https://www.oracle.com/database/technologies/appdev/jdbc-ucp-19-7-c-downloads.html)   
