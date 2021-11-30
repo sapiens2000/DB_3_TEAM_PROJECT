@@ -1118,13 +1118,13 @@ public class Oracle {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery(); 
 								
-				commit();
 				
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
 				this.rollback();
 				e.printStackTrace();
 			}
+			
 						
 		}
 	}
