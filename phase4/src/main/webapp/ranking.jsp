@@ -133,18 +133,20 @@
 <% 
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs = orcl.getRanking();
-
-	while(rs.next()){
-		
-		int row = rs.getInt(1);
-		String userId = rs.getString(2);
-		int total_asset = rs.getInt(3);
-		
-				out.println("<tr>");
-				out.println("<td>" + row + "</td>");	
-				out.println("<td>" + userId + "</td>");
-				out.println("<td>" + total_asset + "</td>");
-				out.println("</tr>");
+	
+	if(rs != null){
+		while(rs.next()){
+			
+			int row = rs.getInt(1);
+			String userId = rs.getString(2);
+			int total_asset = rs.getInt(3);
+			
+					out.println("<tr>");
+					out.println("<td>" + row + "</td>");	
+					out.println("<td>" + userId + "</td>");
+					out.println("<td>" + total_asset + "</td>");
+					out.println("</tr>");
+		}
 	}
 %>			                
 			                </tbody>

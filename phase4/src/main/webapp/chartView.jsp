@@ -327,7 +327,7 @@
 											$.ajax({
 												  type:'POST',
 												  url:"./AjaxPostServlet",
-												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:1},
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:'<%=company%>', tradeCase:1},
 												  async:true,
 												  dataType:'json',
 												  success : function(data) {
@@ -433,7 +433,7 @@
 											$.ajax({
 												  type:'POST',
 												  url:"./AjaxPostServlet",
-												  data :{Cnt:$("#sell_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:2},
+												  data :{Cnt:$("#sell_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:'<%=company%>', tradeCase:2},
 												  async:true,
 												  dataType:'json',
 												  success : function(data) {

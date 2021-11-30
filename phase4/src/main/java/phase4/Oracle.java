@@ -208,9 +208,7 @@ public class Oracle {
 				pstmt.setInt(2, rank);
 
 				rs = pstmt.executeQuery();		
-				
-				// after add, update old ranking
-				updateRanking(user, rank);
+			
 								
 				commit();
 			
@@ -219,20 +217,6 @@ public class Oracle {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	// After insert data to ranking, need update db
-	public synchronized void updateRanking(UserDto user, int rank) {
-		String sql = "";
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery(); 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
 	}
 	
 	public synchronized ResultSet getStock() {
@@ -854,7 +838,7 @@ public class Oracle {
 				return -2;
 			}
 			
-			sql = 	"SELECT DISTINCT Sname, I.Quantity " +
+			sql = 	"SELECT DISTINCT Sname, Quantity " +
 					"FROM USERS U, HOLDINGSTOCK HS, STOCK S " +
 					"WHERE U.Unum = HS.Hs_unum  " + 
 					"	AND Hs.Hs_Scode = S.Scode " +
@@ -944,8 +928,22 @@ public class Oracle {
 					"WHERE Hs_unum = " + Unum + " AND Hs_scode = '" + stockCode + "' ";
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery();
+			
+			
+			sql =	"SELECT QUANTITY " +
+					"FROM HOLDINGSTOCK " +
+					"WHERE Hs_unum = " + Unum + " AND Hs_scode = '" + stockCode + "' ";
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				if(rs.getInt(1) == 0){
+					sql =	"DELETE HOLDINGSTOCK WHERE Hs_unum = " + Unum + " AND Hs_scode = '" + stockCode + "' ";
+					pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+					rs = pstmt.executeQuery();
+				}
+			}
 
-			commit();
 			
 			return 1;
 			
