@@ -18,7 +18,6 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
     <link href="resource/css/main-styles.css" rel="stylesheet" />
     <!--  fonts  -->
-    <link href="resource/css/team-styles.css" rel="stylesheet" />
 
 	<script type="text/Javascript">
 	function goToChart() {
@@ -228,11 +227,74 @@
 			            </table>
 			        </div>
 				</div>
+				<h2 class="mt-4">SEARCH STOCK</h2>
+				<div class="card mb-4" >
+			       <div class="card-body" >
+			       	CHOOSE OPTIONS
+			       </div>
+				</div>
+				<form method="post" action="searchedStock.jsp">	
+					<input type="text" class="form-control" id=minPrice name="minPrice" placeholder="최소 금액" style="width: 200px; float: left">
+					<input type="text" class="form-control" id=maxPrice name="maxPrice" placeholder="최대 금액" style="width: 200px; float: left"><br></br>
+					<input type="text" class="form-control" id=marketCap name="marketCap" placeholder="시가총액(단위: 만)" style="width: 200px; float: left">
+					<div class="form-group" style="text-align: center; float: left; margin-left: 40px;">
+						<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+						  <input type="radio" class="btn-check" name="btnradio1" id="marketCapUp" value="true" autocomplete="off" checked>
+						  <label class="btn btn-outline-primary" for="marketCapUp">이상</label>			
+						  <input type="radio" class="btn-check" name="btnradio1" id="marketCapDown" value="false" autocomplete="off">
+						  <label class="btn btn-outline-primary" for="marketCapDown">이하</label>
+						</div>
+					</div>
+					<br></br>
+					<input type="text" class="form-control" id=foreign_rate name="foreign_rate" placeholder="외국인 비율" style="width: 200px; float: left">
+					<div class="form-group" style="text-align: center; float: left; margin-left: 40px;">
+						<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+						  <input type="radio" class="btn-check" name="btnradio2" id="foreignUp" value="true" autocomplete="off" checked>
+						  <label class="btn btn-outline-primary" for="foreignUp">이상</label>			
+						  <input type="radio" class="btn-check" name="btnradio2" id="foreignDown" value="false" autocomplete="off">
+						  <label class="btn btn-outline-primary" for="foreignDown">이하</label>
+						</div>
+					</div>
+					<br></br>
+					<input type="text" class="form-control" id=per name="per" placeholder="PER" style="width: 200px; float: left">
+					<div class="form-group" style="text-align: center; float: left; margin-left: 40px;">
+						<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+						  <input type="radio" class="btn-check" name="btnradio3" id="perUp" value="true" autocomplete="off" checked>
+						  <label class="btn btn-outline-primary" for="perUp">이상</label>			
+						  <input type="radio" class="btn-check" name="btnradio3" id="perDown" value="false" autocomplete="off">
+						  <label class="btn btn-outline-primary" for="perDown">이하</label>
+						</div>
+					</div>
+					<br></br>
+					<input type="text" class="form-control" id=pbr name="pbr" placeholder="PBR" style="width: 200px; float: left">
+					<div class="form-group" style="text-align: center; float: left; margin-left: 40px;">
+						<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+						  <input type="radio" class="btn-check" name="btnradio4" id="pbrUp" value="true" autocomplete="off" checked>
+						  <label class="btn btn-outline-primary" for="pbrUp">이상</label>			
+						  <input type="radio" class="btn-check" name="btnradio4" id="pbrDown" value="false"autocomplete="off">
+						  <label class="btn btn-outline-primary" for="pbrDown">이하</label>
+						</div>
+					</div>
+					<br></br>
+					<input type="text" class="form-control" id=roe name="roe" placeholder="ROE" style="width: 200px; float: left">
+					<div class="form-group" style="text-align: center; float: left; margin-left: 40px;">
+						<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+						  <input type="radio" class="btn-check" name="btnradio5" id="roeUp" value="true" autocomplete="off" checked>
+						  <label class="btn btn-outline-primary" for="roeUp">이상</label>			
+						  <input type="radio" class="btn-check" name="btnradio5" id="roeDown" value="false" autocomplete="off">
+						  <label class="btn btn-outline-primary" for="roeDown">이하</label>
+						</div>
+					</div>
+					<br></br>
+					<input type="reset" class="btn btn-primary" name="Reset" value="Reset">
+					<input type="submit" class="btn btn-primary" name="Submit" value="Summit">
+				</form>	    
 			</div>
 		</main>
 	</div>
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="resource/js/scripts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
     <script src="resource/js/datatables-simple-demo.js"></script>

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="phase4.Oracle" %>
-<%@ page import="phase4.UserBean" %>
+<%@ page import="phase4.UserDto" %>
 <% request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
 <html>
@@ -32,13 +32,13 @@
 	</style>
 </head>
 <body>
-<script>
-var id = <%=(String)session.getAttribute("uNum")%>
-if(id == null){
-	alert('로그인이 필요합니다.');
-	location.href = "main.jsp";
-}
-</script>
+<%	
+	// need login
+	if(session.getAttribute("uNum") == null){ 
+		out.println("<script>alert('로그인이 필요합니다.');</script>");
+		out.println("<script>location.href='main.jsp';</script>");
+	}
+%>	
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
@@ -67,11 +67,12 @@ if(id == null){
         </div>
     </nav> 
 <% 
-	Oracle orcl = Oracle.getInstance();
-	UserBean user = new UserBean();			
-	String userId = session.getAttribute("userId").toString();
-	
-	user = orcl.getUserData(userId);	
+if(session.getAttribute("uNum") != null){
+		Oracle orcl = Oracle.getInstance();
+		UserDto user = UserDto.getUserInstance();		
+		String userId = session.getAttribute("userId").toString();
+		
+		user = orcl.getUserData(userId);	
 %>
     
     <div class="container">
@@ -135,7 +136,7 @@ if(id == null){
 	        </div>
 	    </div>
 	</div>
-   
+<%}%>  
 	<script src="resource/js/theme.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 

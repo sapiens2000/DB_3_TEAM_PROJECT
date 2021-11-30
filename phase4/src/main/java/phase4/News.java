@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 import org.jsoup.Connection;
@@ -17,24 +16,24 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class News {
-	
 	private String url; 
+	private String company;
 	
-	public News(String sname) {
-		
-		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start="; 
+	public News(String sname) {		
+		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start=";
+		this.company = sname;
 	}
-	
-	
-	public void getNews() {
-		List<String> title = new ArrayList<>();
-		List<String> dates = new ArrayList<>();
 
+	public void getNews() {
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+		ArrayList<String> title = new ArrayList<>();
+		ArrayList<String> dates = new ArrayList<>();
+		ArrayList<String> href = new ArrayList<>();
 		
 		Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        // 현재 날짜 구하기
+        // get today 
         LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
 		try {			
 			String str = "";			
@@ -47,14 +46,22 @@ public class News {
 			// title + url			
 			//while(page num) 추가로 볼때 페이지 넘버 받아서 반복문
 			for(Element e: elem.select("a.news_tit")) {		          				
-				str = e.text() + " " + e.attr("href");
+				str = e.text();
+				str = str.replace("'", "\"");
+				
 				title.add(str);
+				str = e.attr("href");
+				href.add(str);
 			}
-						
-			elem = doc.select("span.info");		
+			
+			elem = doc.select("span.info");
+			
+			
 			// date
 			for(Element date : elem) {
 				String text = date.text();
+				if(text.contains("면"))
+					continue;
 				
 				// : ~시간 전, ~분 전
 				if(text.substring(1, text.length()).equals("시간 전") || text.substring(2, text.length()).equals("시간 전")) {
@@ -73,7 +80,10 @@ public class News {
 	            }
 				// yyyy-mm-dd 
 				else {
-	            	text.replace(".", "-");
+	            	text = text.replace(".", "-");
+	            	if(text.charAt(10) == '-') {
+	            		text = text.substring(0, 10);
+	            	}
 	            	dates.add(text);
 	            }
 	        }
@@ -81,17 +91,20 @@ public class News {
 		}catch(Exception e) {			
 			e.printStackTrace();
 		}
+		result.add(dates);
+		result.add(title);
+		result.add(href);
 		
-		
-		for(int i=0; i< title.size(); i++) {
-			System.out.println(title.get(i) + " " + dates.get(i));
-		}
-		
-					
+		Oracle orcl = Oracle.getInstance();	
+		orcl.insertNews(result, this.company);
+		orcl.commit();
+	}	
+	
+	public void setCompany(String company) {
+		this.company = company;
 	}
 	
-	public static void main(String[] args) {
-		News news = new News("삼성전자");
-		news.getNews();
+	public String getCompany() {
+		return this.company;
 	}
 }

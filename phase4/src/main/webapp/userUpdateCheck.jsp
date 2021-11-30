@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="phase4.Oracle" %>
-<%@ page import="phase4.UserBean" %>
+<%@ page import="phase4.UserDto" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,7 @@
 <% 
 	Oracle orcl = Oracle.getInstance();
 
-	UserBean user = orcl.getUserData(request.getParameter("updateId"));
+	UserDto user = orcl.getUserData(request.getParameter("updateId"));
 	
 	user.setUserPw(request.getParameter("updatePw"));
 	user.setCash(Integer.parseInt(request.getParameter("updateCash")));
@@ -27,7 +27,7 @@
 	}else{
 		out.println("<script>alert('수정실패.');</script>");
 	}
-	out.println("<script>location.href='userManagement.jsp';</script>");
+	out.println("<script>history.back();</script>");
 %>
 </body>
 </html>

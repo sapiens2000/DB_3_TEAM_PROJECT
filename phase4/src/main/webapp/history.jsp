@@ -22,13 +22,13 @@
 		
 </head>
 <body>
-<script>
-var id = <%=(String)session.getAttribute("uNUm")%>
-if(id == null){
-	alert('로그인이 필요합니다.');
-	location.href = "main.jsp";
-}
-</script>
+<%	
+	// need login
+	if(session.getAttribute("uNum") == null){ 
+		out.println("<script>alert('로그인이 필요합니다.');</script>");
+		out.println("<script>location.href='main.jsp';</script>");
+	}
+%>	
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container px-5">
@@ -139,43 +139,45 @@ if(id == null){
 			                </thead>		           
 			                <tbody>
 <% 
-	Oracle orcl = Oracle.getInstance();
-	String userId = session.getAttribute("userId").toString();
-	
-	String start;
-	String end;
-	
-	try{
-		start = request.getParameter("start").toString();
-	} catch(Exception e){ // Null Event
-		start = null;
-	} 
-	
-	try{
-		end = request.getParameter("end").toString();
-	} catch(Exception e){ // Null Event
-		end = null;
-	} 
-	
-	
-	ResultSet rs = orcl.getTransaction(userId, start, end);
-
-	while(rs.next()){	
-		String date = rs.getString(1);
-		String company = rs.getString(2);
-		String type = rs.getString(3);
-		int value = rs.getInt(4);
-		int volume = rs.getInt(5);
-		int total = rs.getInt(6);
+	if(session.getAttribute("uNum") != null){
+		Oracle orcl = Oracle.getInstance();
+		String userId = session.getAttribute("userId").toString();
 		
-		out.println("<tr>");
-		out.println("<td>" + date + "</td>");	
-		out.println("<td>" + company + "</td>");
-		out.println("<td>" + type + "</td>");
-		out.println("<td>" + value + "</td>");
-		out.println("<td>" + volume + "</td>");
-		out.println("<td>" + total + "</td>");
-		out.println("</tr>");
+		String start;
+		String end;
+		
+		try{
+			start = request.getParameter("start").toString();
+		} catch(Exception e){ // Null Event
+			start = null;
+		} 
+		
+		try{
+			end = request.getParameter("end").toString();
+		} catch(Exception e){ // Null Event
+			end = null;
+		} 
+		
+		
+		ResultSet rs = orcl.getTransaction(userId, start, end);
+	
+		while(rs.next()){	
+			String date = rs.getString(1);
+			String company = rs.getString(2);
+			String type = rs.getString(3);
+			int value = rs.getInt(4);
+			int volume = rs.getInt(5);
+			int total = rs.getInt(6);
+			
+			out.println("<tr>");
+			out.println("<td>" + date + "</td>");	
+			out.println("<td>" + company + "</td>");
+			out.println("<td>" + type + "</td>");
+			out.println("<td>" + value + "</td>");
+			out.println("<td>" + volume + "</td>");
+			out.println("<td>" + total + "</td>");
+			out.println("</tr>");
+		}
 	}
 %>			                
 			                </tbody>
@@ -185,10 +187,10 @@ if(id == null){
 			</div>
 		</main>
 	</div>
-     
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
     <script src="resource/js/datatables-simple-demo.js"></script>
 
 </body>
-</html>
+</html> 

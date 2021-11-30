@@ -8,23 +8,20 @@
 <!DOCTYPE>
 <html>
 <head>
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://code.highcharts.com/stock/highstock.js"></script>
-	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>STOCK CHART</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-	<link href="resource/css/styles.css" rel="stylesheet" />
+
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-	<!--  fonts  -->
-    <link href="resource/css/styles.css" rel="stylesheet" />
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://code.highcharts.com/stock/highstock.js"></script>
+	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 	
 </head>
 <body>
-
 <%	
 	// No login
 	if(session.getAttribute("uNum") == null){%>
@@ -103,15 +100,14 @@
     </nav>
 <% 
 	}
-%>		
 
-<%
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
 	String company = request.getParameter("sname");
+	int click = 0;
 	String data = orcl.stockChart(company);
+%>
 
-%>	
 	<div id="container" style="height: 400px; min-width: 310px"></div>
 		<script>	
 			function draw(){
@@ -156,9 +152,9 @@
 			}				
 			draw();
 		</script>
-	<div class="container" >
+	<div class="container" style="min-width: 1300px">
  		<div class="row">
-    		<div class="col">
+    		<div class="col" style="min-width: 416px">
 				<table class="table table-striped" >			
 					<thead>
 						<tr>
@@ -167,10 +163,10 @@
 					</thead>
 					<tbody>
 <% 
-	rs = orcl.getNewsInChart((company));
+	rs = orcl.getNewsInChart(company, click);
 	
-	if(rs.next()){
-		int i = 1;
+	int i = 1;
+	if(rs != null){
 		while(rs.next() && i <= 8){
 			
 			String title = "    <td><a href=\"" + rs.getString(2) +"\" style=\"color:black\">" + rs.getString(1) + "</a></td>";
@@ -178,17 +174,17 @@
 			out.println("<tr>");
 			out.println(title);
 			out.println("</tr>");
-			
 			i++;
 		}
 	}
 %>	
-					</tbody>
+
+				    </tbody>
 				</table>
     		</div>
+
 <% 
 	rs = orcl.getAllDataForChart(company);
-
 	String high = "";
 	String low = "";
 	String change = "";
@@ -202,7 +198,6 @@
 	String pbr = "";
 	String roe = "";
 	String price_for_cal = "";
-
 	if(rs.next()){
 		
 		high = "    <td>" + rs.getInt(1) + "</td>";
@@ -235,8 +230,9 @@
 		
 		price_for_cal = rs.getString(1);
 	}
-%>		
-			<div class="col" style="min-width: 416px">
+%>	
+    	
+    		<div class="col" style="min-width: 416px">
      			<nav>
 					<div class="nav nav-tabs" id="nav-tab" role="tablist">
 				    	<button class="nav-link active" style="width:50%; color:red; font-weight:bold;" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">매수</button>
@@ -244,28 +240,28 @@
 				  	</div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
-<%
+				<%
 					
-	int SQuantity = 0;
-	int UCash = 0;
-
-	if(session.getAttribute("uNum") != null){
-		ResultSet rsForDeal;
-		
-		rsForDeal = orcl.getHoldingStock(company, Integer.parseInt(session.getAttribute("uNum").toString()));
-		
-		if(rsForDeal.next()){
-			SQuantity = rsForDeal.getInt(2);
-		}
-		
-		rsForDeal = orcl.getHoldingCash(Integer.parseInt((session.getAttribute("uNum")).toString()));
-		
-		if(rsForDeal.next()){
-			UCash = rsForDeal.getInt(1);
-		}
-	}
+					int SQuantity = 0;
+					int UCash = 0;
 				
-%>
+					if(session.getAttribute("uNum") != null){
+						ResultSet rsForDeal;
+						
+						rsForDeal = orcl.getHoldingStock(company, Integer.parseInt((session.getAttribute("uNum")).toString()));
+						
+						if(rsForDeal.next()){
+							SQuantity = rsForDeal.getInt(2);
+						}
+						
+						rsForDeal = orcl.getHoldingCash(Integer.parseInt((session.getAttribute("uNum")).toString()));
+						
+						if(rsForDeal.next()){
+							UCash = rsForDeal.getInt(1);
+						}
+					}
+				
+				%>
 					<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 						<div class="container">
 						  <div class="row" style="margin: 25px 0px 15px 0px;">
@@ -310,9 +306,8 @@
 						</div>
 						<div class="d-grid gap-2 col-6 mx-auto">
 							<%	
-								String check = (String)session.getAttribute("uNum");
 								// No login
-								if(check == null){%>
+								if(session.getAttribute("uNum") == null){%>
 									<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">로그인</button>
 							<%
 								} else{ 
@@ -320,57 +315,56 @@
 									<button class="btn btn-danger" id="buy_button" type="button" style="text-align:center;">매수</button>
 							<% 
 								} 
-							%>	
+							%>
 								<script type="text/javascript">																
-										$(function () {
-											$("#buy_button").click(function() {
-												
-												if(parseInt($("#buy_cnt").val() || 0 ) == 0){
-													alert("매수 수량을 입력해주세요.");
-													return;
-												}
-												
-												$.ajax({
-												      type:'POST',
-												      url:"./AjaxPostServlet",
-												      data :{Cnt:$("#buy_cnt").val(), uNum:<%out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));%>, stockName:sname, tradeCase:1},
-												      async:true,
-												      dataType:'json',
-												      success : function(data) {
-												    	  
-												    	  var resultValue = 0;
-												    	  
-												    	  $.each(data, function(i, item){
-																resultValue = item.returnValue;
-															});
-												    	  
-												    	  console.log(resultValue);
-												    	  
-												    	  if(resultValue == 1){
-												    		  alert("매수 완료");
-												    		  window.location.reload();
-												    	  }
-												    	  else if(resultValue == -1){
-												    		  alert("잔액 부족");
-												    		  window.location.reload();
-												    	  }
-												    	  else if(resultValue == -2){
-												    		  alert("거래 불가 주식");
-												    		  window.location.reload();
-												    	  }
-												    	  else{
-												    		  alert("거래 실패");
-												    		  window.location.reload();
-												    	  }
-												      },
-												      error : function(error) {
-												        alert("error");
-												      }
-												    });
-												
-											});
-										});																	
-									</script>
+									$(function () {
+										$("#buy_button").click(function() {
+											
+											if(parseInt($("#buy_cnt").val() || 0 ) == 0){
+												alert("매수 수량을 입력해주세요.");
+												return;
+											}
+										
+											$.ajax({
+												  type:'POST',
+												  url:"./AjaxPostServlet",
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:1},
+												  async:true,
+												  dataType:'json',
+												  success : function(data) {
+													  
+													  var resultValue = 0;
+													  
+													  $.each(data, function(i, item){
+															resultValue = item.returnValue;
+														});
+													  
+													  console.log(resultValue);
+													  
+													  if(resultValue == 1){
+														  alert("매수 완료");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -1){
+														  alert("잔액 부족");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -2){
+														  alert("거래 불가 주식");
+														  window.location.reload();
+													  }
+													  else{
+														  alert("거래 실패");
+														  window.location.reload();
+													  }
+												  },
+												  error : function(error) {
+													alert("error");
+												  }
+												});
+										});
+									});																	
+								</script>
 
 						</div>
 					</div>
@@ -380,8 +374,8 @@
 						  	<div class="input-group input-group-lg">
 								<span class="input-group-text" id="inputGroup-sizing-lg">보유수량</span>
 							 	<%	
-								// No login
-									if(check == null){%>
+									// No login
+									if(session.getAttribute("uNum") == null){%>
 										<input type="text" style="text-align:right; background-color:#FFFFFF;" value="0" class="form-control" aria-label="aaaaaaa" aria-describedby="inputGroup-sizing-lg" readonly>
 								<%
 									} else{ 
@@ -417,65 +411,66 @@
 						  </div>
 						</div>
 						<div class="d-grid gap-2 col-6 mx-auto">
-						<%	
-							// No login
-							if(check == null){%>
-								<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">로그인</button>
-						<%
-							} else{ 
-						%>
-								<button class="btn btn-primary" id="sell_button" type="button" style="text-align:center;">매도</button>
-						<% 
-							} 
-						%>
-							<script type="text/javascript">																
-								$(function () {
-									$("#sell_button").click(function() {
-										
-										if(parseInt($("#sell_cnt").val() || 0 ) == 0){
-											alert("매도 수량을 입력해주세요.");
-											return;
-										}
-										
-										$.ajax({
-										      type:'POST',
-										      url:"./AjaxPostServlet",
-										      data :{Cnt:$("#sell_cnt").val(), uNum:<%out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));%>, stockName:sname, tradeCase:2},
-										      async:true,
-										      dataType:'json',
-										      success : function(data) {									    	  
-										    	  var resultValue = 0;
-										    	  
-										    	  $.each(data, function(i, item){
-														resultValue = item.returnValue;
-													});
-										    	  
-										    	  console.log(resultValue);
-										    	  
-										    	  if(resultValue == 1){
-										    		  alert("매도 완료");
-										    		  window.location.reload();
-										    	  }
-										    	  else if(resultValue == -1){
-										    		  alert("보유 수량 부족");
-										    		  window.location.reload();
-										    	  }
-										    	  else if(resultValue == -2){
-										    		  alert("거래 불가 주식");
-										    		  window.location.reload();
-										    	  }
-										    	  else{
-										    		  alert("거래 실패");
-										    		  window.location.reload();
-										    	  }
-										      },
-										      error : function(error) {
-										        alert("error");
-										      }
-										    });
-									});
-								});																	
-							</script>		
+							<%	
+								// No login
+								if(session.getAttribute("uNum") == null){%>
+									<button class="btn btn-primary" type="button" style="text-align:center;" onclick="location.href='login.jsp'">로그인</button>
+							<%
+								} else{ 
+							%>
+									<button class="btn btn-primary" id="sell_button" type="button" style="text-align:center;">매도</button>
+							<% 
+								} 
+							%>
+								<script type="text/javascript">																
+									$(function () {
+										$("#sell_button").click(function() {
+											
+											if(parseInt($("#sell_cnt").val() || 0 ) == 0){
+												alert("매도 수량을 입력해주세요.");
+												return;
+											}
+											
+											$.ajax({
+												  type:'POST',
+												  url:"./AjaxPostServlet",
+												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:1},
+												  async:true,
+												  dataType:'json',
+												  success : function(data) {
+													  
+													  var resultValue = 0;
+													  
+													  $.each(data, function(i, item){
+															resultValue = item.returnValue;
+														});
+													  
+													  console.log(resultValue);
+													  
+													  if(resultValue == 1){
+														  alert("매수 완료");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -1){
+														  alert("잔액 부족");
+														  window.location.reload();
+													  }
+													  else if(resultValue == -2){
+														  alert("거래 불가 주식");
+														  window.location.reload();
+													  }
+													  else{
+														  alert("거래 실패");
+														  window.location.reload();
+													  }
+												  },
+												  error : function(error) {
+													alert("error");
+												  }
+												});
+										});
+									});																	
+								</script>												
 						</div>
 					</div>
 				</div>
@@ -564,7 +559,7 @@
      			</div>
     		</div>
 		</div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
-    <script src="resource/js/scripts.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 </body>
 </html>

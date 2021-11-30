@@ -43,11 +43,11 @@ public class BuyStock extends HttpServlet {
 			result = orcl.sellStock(company, uNum, buyCnt);
 		}
 		
-		System.out.println("result is " + result);
-		
+//		System.out.println("result is " + result);
+//		
 		String returnValue = "[{\"returnValue\":" + result + "}]";
-		
-		System.out.println(returnValue);
+//		
+//		System.out.println(returnValue);
 		
 		PrintWriter out = response.getWriter();	
 
