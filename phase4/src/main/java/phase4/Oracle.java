@@ -223,10 +223,7 @@ public class Oracle {
 	
 	// After insert data to ranking, need update db
 	public synchronized void updateRanking(UserDto user, int rank) {
-		String sql = "SELECT * " + 
-					 "FROM RANKING, USERS " +
-					 "WHERE User_id = Ruser_id " + 
-					 "ORDER BY Ucurrent_total_asset ";
+		String sql = "";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -1120,8 +1117,6 @@ public class Oracle {
 			// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			sql = "INSERT INTO MENTION ()";
 			
 			try {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
