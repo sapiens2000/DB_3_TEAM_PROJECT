@@ -102,7 +102,6 @@ public class News {
 		
 		Oracle orcl = Oracle.getInstance();	
 		orcl.insertNews(result, this.company);
-		orcl.commit();
 	}	
 	
 	public void setCompany(String company) {

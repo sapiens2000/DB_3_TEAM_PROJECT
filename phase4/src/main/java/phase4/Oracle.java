@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.eclipse.jdt.internal.compiler.ast.ThisReference;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -138,6 +139,7 @@ public class Oracle {
 			}		
 
 		}catch (SQLException e) {
+			this.rollback();
 			e.printStackTrace();
 		}
 		return -2; // error
@@ -158,7 +160,7 @@ public class Oracle {
 			}
 		} catch (SQLException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+			e.printStackTrace();
 		}
 		// error
 		return -1;
@@ -209,14 +211,14 @@ public class Oracle {
 
 				rs = pstmt.executeQuery();		
 			
-								
-				commit();
 			
 			}			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			this.rollback();
 			e.printStackTrace();
 		}
+		this.commit();
 	}
 	
 	public synchronized ResultSet getStock() {
@@ -376,9 +378,11 @@ public class Oracle {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			this.rollback();
 			e.printStackTrace();
 			
 		}
+		this.commit();
 		return false;
 	}
 	
@@ -401,9 +405,11 @@ public class Oracle {
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			this.rollback();
 			e.printStackTrace();
 			
 		}
+		this.commit();
 		return false;
 	}
 	
@@ -726,6 +732,7 @@ public class Oracle {
 				return -2;
 			}
 		} catch (SQLException e) {
+			this.rollback();
 			e.printStackTrace();
 		}
 
@@ -797,7 +804,7 @@ public class Oracle {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery();
 				
-				commit();
+				this.commit();
 				
 				return 1;
 			}
@@ -806,9 +813,9 @@ public class Oracle {
 			}
 			
 		} catch (SQLException e) {
+			this.rollback();
 			e.printStackTrace();
 		}
-		
 		return -3;
 	}
 	
@@ -862,6 +869,7 @@ public class Oracle {
 				return -1;
 			}
 		} catch (SQLException e) {
+			this.rollback();
 			e.printStackTrace();
 		}
 
@@ -944,10 +952,11 @@ public class Oracle {
 				}
 			}
 
-			
+			this.commit();
 			return 1;
 			
 		} catch (SQLException e) {
+			this.rollback();
 			e.printStackTrace();
 		}
 		
@@ -1113,21 +1122,10 @@ public class Oracle {
 				
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
+				this.rollback();
 				e.printStackTrace();
 			}
-			
-			try {
-				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-				rs = pstmt.executeQuery(); 
-								
-				commit();
-				
-			} catch (SQLException e) {
-			// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
+						
 		}
 	}
 		
