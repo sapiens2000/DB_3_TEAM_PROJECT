@@ -9,9 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
 
 
 public class Oracle {
@@ -57,7 +57,7 @@ public class Oracle {
 
 	}
 	
-	public static Oracle getInstance() {
+	public static synchronized Oracle getInstance() {
 		if(instance == null) {
 			instance = new Oracle();
 		}
@@ -88,7 +88,7 @@ public class Oracle {
 	}
 	
 	// unum을 세션으로 활용
-	public int register(UserBean user) {
+	public synchronized int register(UserDto user) {
 		try {	
 			String userId = user.getUserId();
 			String sql = "SELECT User_id " +
@@ -143,9 +143,9 @@ public class Oracle {
 		return -2; // error
 	}
 
-	public int getUnum() {
+	public synchronized int getUnum() {
 		String sql = "SELECT COUNT(Unum) " +
-			  	 "FROM USERS ";
+			  	 	 "FROM USERS ";
 		int uNum = 0;
 		try {
 		pstmt = conn.prepareStatement(sql);
@@ -164,7 +164,7 @@ public class Oracle {
 		return -1;
 	}
 	
-	public ResultSet getRanking() {
+	public synchronized ResultSet getRanking() {
 		String sql = "SELECT RANK, USER_ID, Ucurrent_total_asset " + 
 					 "FROM RANKING, USERS " + 
 					 "WHERE USER_ID = Ruser_id " + 
@@ -187,7 +187,7 @@ public class Oracle {
 	}
 	
 	// When User do Registration, add data to ranking table.
-	public void addRanking(UserBean user) {
+	public synchronized void addRanking(UserDto user) {
 		String sql = "SELECT COUNT(*) " + 
 				 	 "FROM RANKING, USERS " + 
 				 	 "WHERE USER_ID = Ruser_id AND Ucurrent_total_asset > " + user.getCurrent_total_asset() + " " ;
@@ -222,7 +222,7 @@ public class Oracle {
 	}
 	
 	// After insert data to ranking, need update db
-	public void updateRanking(UserBean user, int rank) {
+	public synchronized void updateRanking(UserDto user, int rank) {
 		String sql = "SELECT * " + 
 					 "FROM RANKING, USERS " +
 					 "WHERE User_id = Ruser_id " + 
@@ -238,7 +238,7 @@ public class Oracle {
 				
 	}
 	
-	public ResultSet getStock() {
+	public synchronized ResultSet getStock() {
 		String sql = "SELECT * " + 
 					 "FROM STOCK "; 
 		
@@ -259,7 +259,7 @@ public class Oracle {
 	}
 	
 	// get sector and num of stocks in that.
-	public ResultSet getSector() {
+	public synchronized ResultSet getSector() {
 		String sql = "SELECT SECTOR_NAME, COUNT(*) " +
 					 "FROM SECTOR " + 
 					 "GROUP BY SECTOR_NAME ";
@@ -282,7 +282,7 @@ public class Oracle {
 	}
 	
 	// overload : get stock in sector
-	public ResultSet getSector(String sector) {
+	public synchronized ResultSet getSector(String sector) {
 		String sql = "SELECT ROWNUM, S2.Sname " +
 					 "FROM SECTOR S1, STOCK S2 " +
 					 "WHERE S1.SNAME = S2.SNAME AND SECTOR_NAME = '" + sector + "' " ;
@@ -303,7 +303,7 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public ResultSet getUsers() {
+	public synchronized ResultSet getUsers() {
 		String sql = "SELECT Unum, User_id " + 
 				 	 "FROM USERS " +
 				 	 "ORDER BY Unum ASC ";
@@ -322,7 +322,7 @@ public class Oracle {
 		return null;
 	}
 	
-	public int getUserNum() {
+	public synchronized int getUserNum() {
 		String sql = "SELECT COUNT(*)" + 
 			 	 	 "FROM USERS " +
 			 	 	 "ORDER BY Unum ASC ";
@@ -341,8 +341,8 @@ public class Oracle {
 		return 0;
 	}
 	
-	public UserBean getUserData(String userId) {
-		UserBean user = new UserBean();
+	public synchronized UserDto getUserData(String userId) {
+		UserDto user = UserDto.getUserInstance();
 		
 		String sql = "SELECT * " + 
 			 	 	 "FROM USERS " +
@@ -373,7 +373,7 @@ public class Oracle {
 		return null;
 	}
 	
-	public boolean deleteUser(String userId) {
+	public synchronized boolean deleteUser(String userId) {
 		// delete ranking -> ...users
 		String sql = "DELETE RANKING WHERE RUSER_ID = '" + userId +"' " ;		
 		try {
@@ -401,21 +401,21 @@ public class Oracle {
 		return false;
 	}
 	
-	public boolean updateUser(UserBean User) { 
+	public synchronized boolean updateUser(UserDto User) { 
 		// update user.
 		String sql = "UPDATE USERS " +
 					 "SET " +
 					 "USER_ID = '" + User.getUserId() + "', " +
 					 "UPassword = '" + User.getUserPw() + "', " +
 					 "UCash = '" + User.getCash() + "', " +
+					 "UAge = " + User.getAge() + ", " + 
 					 "UEmail = '" + User.getEmail() + "', " +
 					 "UCELL_PHONE_NUMBER = '" + User.getPhone_num() + "' " +
 					 "WHERE USER_ID = '" + User.getUserId() + "' ";
-			
+
 		try {
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
-			this.commit();
 			return true;
 
 		} catch (SQLException e) {
@@ -490,7 +490,7 @@ public class Oracle {
 		return 0;
 	}
 	
-	public int getCompanyNum() {
+	public synchronized int getCompanyNum() {
 		String sql = "SELECT COUNT(*) " +
 				 	 "FROM STOCK ";
 		try {
@@ -507,7 +507,7 @@ public class Oracle {
 		return 0;		
 	}
 	
-	public int getSectorNum() {
+	public synchronized int getSectorNum() {
 		String sql = "SELECT COUNT(*) " +
 				 	 "FROM (SELECT DISTINCT(Sector_name) " +
 				 	 "FROM SECTOR) ";
@@ -525,7 +525,7 @@ public class Oracle {
 		return 0;		
 	}
 	
-	public ResultSet getNewsInChart(String company) {		
+	public ResultSet getNewsInChart(String company, int page) {		
 		String sql = "SELECT N.Ntitle, N.Nurl " +
 				 	 "FROM NEWS N " + 
 				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
@@ -534,9 +534,13 @@ public class Oracle {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery(); 
 			
-			if(rs.next())
+			if(rs.next()) {
 				rs.beforeFirst();
 				return rs;
+			}
+			else {
+				News news = new News(company, page);
+			}
 			
 		} catch (SQLException e) {
 		// 	TODO Auto-generated catch block
@@ -545,7 +549,7 @@ public class Oracle {
 		return null;
 		
 	}
-	
+		
 	public ResultSet getAllDataForChart(String company) {
 		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Cclose_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
 					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
@@ -619,22 +623,9 @@ public class Oracle {
 	}
 
 	public ResultSet getChangeRate() {
-		// get latest data		
-		String sql = "SELECT Sname, Cstart_date, ROUND((Cclose_price - Cstart_price) / Cstart_price * 100, 2), Cstart_price, Cclose_price, Chigh_price, Clow_price " +
-					 "FROM " + 
-					 "(SELECT * " + 
-					 "FROM STOCK, CHART " +
-					 "WHERE Scode = Ccode " +
-					 "AND Cstart_date = " +
-					 "(SELECT CSTART_DATE " +
-					 "FROM " +
-					 "(SELECT CSTART_DATE " +
-					 "FROM STOCK, CHART " + 
-					 "WHERE Scode = Ccode " +
-					 "GROUP BY CSTART_DATE " +
-					 "ORDER BY CSTART_DATE DESC) " +
-					 "WHERE ROWNUM = 1) " +				 
-					 "ORDER BY Cstart_date DESC) ";
+		// get latest data
+		String sql = "SELECT * " +
+					 "FROM LATESTCHANGERATE ";
 
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -714,6 +705,25 @@ public class Oracle {
 		return null;	// error
 	}
 	
+	public ResultSet getHoldingStock(String userId) {
+		// get latest data		
+		String sql = "";
+		
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next())
+				rs.beforeFirst();
+				return rs;
+			
+		} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		}		
+		return null;	// error										
+	}
+	
 	public ResultSet getHoldingCash(int Unum) {
 		String sql = "SELECT Ucash  " +
 					 "FROM USERS " +
@@ -734,27 +744,7 @@ public class Oracle {
 		return null;	// error
 		
 	}
-	
-	public ResultSet getHoldingStock(String userId) {
-		// get latest data		
-		String sql = "";
-		
-		try {
-			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = pstmt.executeQuery(); 
 			
-			if(rs.next())
-				rs.beforeFirst();
-				return rs;
-			
-		} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		}		
-		return null;	// error										
-	}
-		
-	
 	public int buyStock(String stockName, int Unum, int amount) {
 		
 		String stockCode = "";
@@ -1014,52 +1004,69 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public ResultSet searchStock(String Sname, String round, String Cstart_price, String Cclose_price
-			, String Chigh_price, String Clow_price, String Smarket, String Smarket_cap
-			, String Sforeign_rate, String Sper, String Sbpr, String Sroe, String Cscale) {
-		String sql = "SELECT * FROM("
-				+ "SELECT Sname, Cstart_date, ROUND((Chigh_price - Cstart_price) / Cstart_price * 100, 2) AS round"
-				+ ", Cstart_price, Cclose_price, Chigh_price, Clow_price, Smarket"
-				+ ", Smarket_cap, Sforeign_rate, Sper, Spbr, Sroe, Cscale \n" +
-					 "FROM \n" + 
-					 "(SELECT * \n" + 
-					 "FROM STOCK, CHART \n" +
-					 "WHERE Scode = Ccode \n" +
-					 "ORDER BY Cstart_date DESC) \n" + 
-					 "WHERE ROWNUM = 1) \n";
+	public synchronized ResultSet searchStock(SearchOption option) {
+		String sql = "SELECT S.Sname, CHANGERATE, CCLOSE_PRICE, SMARKET_CAP, SFOREIGN_RATE, SPER, SPBR, SROE " +
+					 "FROM LATESTCHANGERATE L, STOCK S " +
+					 "WHERE S.Sname = L.Sname "; 
 		
-		if (Sname != "") {
-			sql = sql + "WHERE Sname = \'" + Sname + "\'\n";
+		
+		// two
+		
+		
+		if(!option.getMinPrice().equals("") && !option.getMaxPrice().equals("")) {
+			sql = sql + "AND Cclose_price between " + option.getMinPrice() + " AND " + option.getMaxPrice() + " ";
+		}
+		// max only
+		else if(option.getMinPrice().equals("") && !option.getMaxPrice().equals("")) {
+			sql = sql + "AND Cclose_price <= " + option.getMaxPrice() + " ";
+		}
+		// min only
+		else if(!option.getMinPrice().equals("") && option.getMaxPrice().equals("")) {
+			sql = sql + "AND Cclose_price >= " + option.getMinPrice() + " ";
+		}
+				
+		// market cap up or down
+		if (!option.getMarketCap().equals("")) {
+			if (!option.getMarketCapUp().equals("")) {
+				if(option.getForeignUp().equals("true")) 
+					sql = sql + "AND Smarket_cap >= " + option.getMarketCap() + " ";
+				else
+					sql = sql + "AND Smarket_cap <= " + option.getMarketCap() + " ";
+			}
+			
+		}
+		// foreign cap up or down
+		if (!option.getForeign().equals("")) {
+			if(option.getForeignUp().equals("true")) 
+				sql = sql + "AND Sforeign_rate >= " + option.getForeign() + " ";
+			else
+				sql = sql + "AND Sforeign_rate <= " + option.getForeign() + " ";		
 		}
 		
-		if (Smarket != "") {
-			sql = sql + "AND Smarket = \'" + Smarket + "\'\n";
+		// per cap up or down
+		if (!option.getPer().equals("")) {
+			if(option.getPerUp().equals("true")) 
+				sql = sql + "AND Sper >= " + option.getPer() + " ";
+			else
+				sql = sql + "AND Sper <= " + option.getPer() + " ";
 		}
+		// pbr cap up or down
+		if (!option.getPbr().equals("")) {
+			if(option.getPbrUp().equals("true")) 
+				sql = sql + "AND Spbr >= " + option.getPbr() + " ";
+			else
+				sql = sql + "AND Spbr <= " + option.getPbr() + " ";
+		}	
 		
-		if (Smarket_cap != "") {
-			sql = sql + "AND Smarket_cap = " + Smarket_cap + "\n";
+		// roe cap up or down
+		if (!option.getRoe().equals("")) {
+			if(option.getRoeUp().equals("true")) 
+				sql = sql + "AND Sroe >= " + option.getRoe() + " ";
+			else
+				sql = sql + "AND Sroe <= " + option.getRoe() + " ";
 		}
-		
-		if (Sforeign_rate != "") {
-			sql = sql + "AND Sforeign_rate = " + Sforeign_rate + "\n";
-		}
-		
-		if (Sper != "") {
-			sql = sql + "AND Sper = " + Sper + "\n";
-		}
-		
-		if (Sbpr != "") {
-			sql = sql + "AND Sbpr = " + Sbpr + "\n";
-		}
-		
-		if (Sroe != "") {
-			sql = sql + "AND Sbpr = " + Sbpr + "\n";
-		}
-		
-		if (Cscale != "") {
-			sql = sql + "AND Cscale = " + Cscale + "\n";
-		}
-		
+				
+		sql = sql + " ";
 		System.out.println(sql);
 		
 		try {
@@ -1077,22 +1084,35 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public void insertNews() {
+	public synchronized void insertNews(ArrayList<ArrayList<String>> news, String company) {
 		String sql = "";
+		String date, title, url= "";
 		
-		try {
-			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = pstmt.executeQuery(); 
+		// 뉴스 10개씩 얻어옴. news.java 에서
+		
+		for(int i=0;i<10;i++) {
+			date = news.get(0).get(i);
+			title = news.get(1).get(i);
+			url = news.get(2).get(i);
 			
-
-			
-		} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+			sql = "MERGE INTO NEWS " +
+				  "USING DUAL ON(Ncompany = '"+ company + "') " +
+					  "WHEN NOT MATCHED THEN " +
+					  "INSERT VALUES('" + date + "', '" + title + "', '" + url + "', '" + company + "') ";
+			System.out.println(sql);
+			try {
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery(); 
+				
+					
+				
+			} catch (SQLException e) {
+			// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	
 	}
-	
+		
 	public void commit() {
 		try {
 			conn.commit();
@@ -1111,22 +1131,17 @@ public class Oracle {
 		}
 	}
 	
-	public void cursorClose() {
-		try {
-
-			pstmt.close();
-			rs.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public void close() {
 		try {
-			conn.close();
-			pstmt.close();
-			rs.close();
+			if(!conn.isClosed()) {
+				conn.close();
+			}
+			if(!pstmt.isClosed()) {
+				pstmt.close();
+			}
+			if(!rs.isClosed()) {
+				rs.close();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

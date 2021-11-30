@@ -7,7 +7,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 
 import org.jsoup.Connection;
@@ -17,19 +16,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class News {
-	
 	private String url; 
 	
-	public News(String sname) {
-		
-		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start="; 
+	public News(String sname, int page) {		
+		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start=" + page;				
 	}
-	
-	
-	public void getNews() {
-		List<String> title = new ArrayList<>();
-		List<String> dates = new ArrayList<>();
 
+	public ArrayList<ArrayList<String>> getNews() {
+		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
+		ArrayList<String> title = new ArrayList<>();
+		ArrayList<String> dates = new ArrayList<>();
+		ArrayList<String> href = new ArrayList<>();
 		
 		Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -47,11 +44,17 @@ public class News {
 			// title + url			
 			//while(page num) 추가로 볼때 페이지 넘버 받아서 반복문
 			for(Element e: elem.select("a.news_tit")) {		          				
-				str = e.text() + " " + e.attr("href");
+				str = e.text();
+				str = str.replace("'", "\"");
 				title.add(str);
+				str = e.attr("href");
+				href.add(str);
 			}
-						
-			elem = doc.select("span.info");		
+			
+			elem = doc.select("span.info");
+			
+			System.out.println(elem);
+			
 			// date
 			for(Element date : elem) {
 				String text = date.text();
@@ -80,18 +83,31 @@ public class News {
 						
 		}catch(Exception e) {			
 			e.printStackTrace();
+			return null;
 		}
+		result.add(dates);
+		result.add(title);
+		result.add(href);
 		
-		
-		for(int i=0; i< title.size(); i++) {
-			System.out.println(title.get(i) + " " + dates.get(i));
-		}
-		
-					
+		return result;				
 	}
 	
+	
 	public static void main(String[] args) {
-		News news = new News("삼성전자");
-		news.getNews();
+		News news = new News("삼성전자", 1);
+		ArrayList<ArrayList<String>> result = news.getNews();
+		String date, title, url ,sql = "";
+		for(int i=0;i<10;i++) {
+			date = result.get(0).get(i);
+			title = result.get(1).get(i);
+			url = result.get(2).get(i);
+			
+			sql = "MERGE INTO NEWS " +
+				  "USING DUAL ON(Ntitle = '" + title + "') " +
+				  "WHEN NOT MATCHED THEN " +
+				  "INSERT VALUES('" + date + "', '" + title + "', '" + url + "', '삼성전자');";
+			
+			System.out.println(sql);
+		}
 	}
 }

@@ -1,7 +1,8 @@
 package phase4;
 
-public class UserBean {
-		
+public class UserDto {
+	
+	private static UserDto user;
 	private String userId;
 	private String userPw;
 	private int uNum;
@@ -11,6 +12,15 @@ public class UserBean {
 	private String gender;
 	private String email;
 	private String cell_phone_num;
+	
+	private UserDto() {}
+	
+	public static synchronized UserDto getUserInstance() {
+		if(user == null) {
+			user = new UserDto();
+		}
+		return user;
+	}
 	
 	public String getUserId() {
 		return userId;

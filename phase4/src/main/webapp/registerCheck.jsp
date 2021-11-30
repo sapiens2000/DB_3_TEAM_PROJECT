@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="UTF-8"%>
 <%@ page import="phase4.Oracle" %>
-<%@ page import="phase4.UserBean" %>
+<%@ page import="phase4.UserDto" %>
 <% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
@@ -19,7 +19,7 @@
 			out.println("<script>window.history.back();</script>");
 		}else{
 			Oracle orcl = Oracle.getInstance();
-			UserBean user = new UserBean();
+			UserDto user = UserDto.getUserInstance();
 			
 			user.setUserId(request.getParameter("regId"));
 			user.setUserPw(request.getParameter("regPw"));

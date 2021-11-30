@@ -19,7 +19,7 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://code.highcharts.com/stock/highstock.js"></script>
 	<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-
+	
 </head>
 <body>
 <%	
@@ -104,7 +104,7 @@
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
 	String company = request.getParameter("sname");
-	
+	int click = 0;
 	String data = orcl.stockChart(company);
 %>
 
@@ -163,7 +163,7 @@
 					</thead>
 					<tbody>
 <% 
-	rs = orcl.getNewsInChart(company);
+	rs = orcl.getNewsInChart(company, click);
 	
 	int i = 1;
 	if(rs != null){
@@ -173,13 +173,15 @@
 			
 			out.println("<tr>");
 			out.println(title);
-			out.println("</tr>");
 			
 			i++;
 		}
 	}
 %>	
-					</tbody>
+				    <td><button class="page-link" id="prev" onclick="<%click=click-1;System.out.println(click);%>">이전</button></td>
+				    <td><button class="page-link" id="next" onclick="<%click=click-1;System.out.println(click);%>">다음</button></td>
+				    </tr>
+				    </tbody>
 				</table>
     		</div>
 

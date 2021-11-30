@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="phase4.Oracle" %>
-<%@ page import="phase4.UserBean" %>
+<%@ page import="phase4.UserDto" %>
 <% request.setCharacterEncoding("UTF-8"); %>
 <!DOCTYPE html>
 <html>
@@ -68,7 +68,7 @@
     </nav> 
 <% 
 	Oracle orcl = Oracle.getInstance();
-	UserBean user = new UserBean();			
+	UserDto user = UserDto.getUserInstance();		
 	String userId = session.getAttribute("userId").toString();
 	
 	user = orcl.getUserData(userId);	
