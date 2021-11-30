@@ -65,7 +65,7 @@ public class Oracle {
 	}
 		
 	// return Unum for Session
-	public int login(String userId, String userPw) {               
+	public synchronized int login(String userId, String userPw) {               
 		try {			
 			String sql = "SELECT  User_id, Upassword, Unum " +
 						 "FROM USERS " +
@@ -426,7 +426,7 @@ public class Oracle {
 		return false;
 	}
 	
-	public ArrayList<Integer> getUsersByAge(){
+	public synchronized ArrayList<Integer> getUsersByAge(){
 		ArrayList<Integer> numOfUsers = new ArrayList<Integer>();
 		String sql = "";
 		int index = 1;
@@ -472,7 +472,7 @@ public class Oracle {
 		return numOfUsers;
 	}
 	
-	public int getUserByGender(String gender) {
+	public synchronized int getUserByGender(String gender) {
 		String sql = "SELECT COUNT(*) " +
 					 "FROM USERS " + 
 					 "WHERE Usex='" + gender +"' ";
@@ -524,33 +524,8 @@ public class Oracle {
 		}
 		return 0;		
 	}
-	
-	public ResultSet getNewsInChart(String company, int page) {		
-		String sql = "SELECT N.Ntitle, N.Nurl " +
-				 	 "FROM NEWS N " + 
-				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
-	
-		try {
-			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = pstmt.executeQuery(); 
 			
-			if(rs.next()) {
-				rs.beforeFirst();
-				return rs;
-			}
-			else {
-				News news = new News(company, page);
-			}
-			
-		} catch (SQLException e) {
-		// 	TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-		
-	}
-		
-	public ResultSet getAllDataForChart(String company) {
+	public synchronized ResultSet getAllDataForChart(String company) {
 		String sql = "SELECT C.Chigh_price, C.Clow_price, ROUND((C.Cclose_price - C.Cstart_price) / C.Cstart_price * 100, 2), C.Cstart_price, C.Cclose_price, S.Smarket_cap, " +
 					 " S.Smarket, SE.Sector_name, S.Sforeign_rate, S.Sper, S.Spbr, S.Sroe " +
 					 "FROM STOCK S, CHART C, SECTOR SE " +
@@ -572,7 +547,7 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public String stockChart(String company) {					
+	public synchronized String stockChart(String company) {					
 		String sql = "SELECT TO_CHAR(CSTART_DATE, 'yyyy-mm-dd') AS CSTART_DATE, C.CSTART_PRICE, CHIGH_PRICE, C.CLOW_PRICE, C.CCLOSE_PRICE " + 
 			 	 	 "FROM CHART C, STOCK S " +
 			 	 	 "WHERE S.Scode = C.Ccode AND Sname = '" + company + "' " +
@@ -622,7 +597,7 @@ public class Oracle {
 		return arr.toString();
 	}
 
-	public ResultSet getChangeRate() {
+	public synchronized ResultSet getChangeRate() {
 		// get latest data
 		String sql = "SELECT * " +
 					 "FROM LATESTCHANGERATE ";
@@ -642,7 +617,7 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public ResultSet getTransaction(String userId, String start, String end) {
+	public synchronized ResultSet getTransaction(String userId, String start, String end) {
 		String sql;
 		
 		if((start == null & end == null) || (start.equals("") & end.equals(""))) { // all
@@ -682,7 +657,7 @@ public class Oracle {
 		
 	}
 	
-	public ResultSet getHoldingStock(String company, int Unum) {
+	public synchronized ResultSet getHoldingStock(String company, int Unum) {
 		String sql = "SELECT DISTINCT S.Sname, HS.Quantity " +
 					 "FROM USERS U, HOLDINGSTOCK HS, STOCK S " +
 					 "WHERE U.Unum = HS.Hs_unum " +
@@ -705,7 +680,7 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public ResultSet getHoldingStock(String userId) {
+	public synchronized ResultSet getHoldingStock(String userId) {
 		// get latest data		
 		String sql = "";
 		
@@ -724,7 +699,7 @@ public class Oracle {
 		return null;	// error										
 	}
 	
-	public ResultSet getHoldingCash(int Unum) {
+	public synchronized ResultSet getHoldingCash(int Unum) {
 		String sql = "SELECT Ucash  " +
 					 "FROM USERS " +
 					 "WHERE Unum = " + Unum;
@@ -745,7 +720,7 @@ public class Oracle {
 		
 	}
 			
-	public int buyStock(String stockName, int Unum, int amount) {
+	public synchronized int buyStock(String stockName, int Unum, int amount) {
 		
 		String stockCode = "";
 		int price = 0;
@@ -856,7 +831,7 @@ public class Oracle {
 		return -3;
 	}
 	
-	public int sellStock(String Sname, int Unum, int amount) {
+	public synchronized int sellStock(String Sname, int Unum, int amount) {
 		String stockCode = "";
 		int price = 0;
 		
@@ -984,7 +959,7 @@ public class Oracle {
 		return -3;
 	}
 	
-	public ResultSet getAsset(int Unum) {
+	public synchronized ResultSet getAsset(int Unum) {
 		String sql = "SELECT ROWNUM, Sname, Quantity, Item_assets " + 
 					 "FROM USERS, HOLDINGSTOCK, STOCK " +
 					 "WHERE UNUM = HS_UNUM AND SCODE = HS_SCODE AND Unum = " + Unum + " ";
@@ -1008,11 +983,8 @@ public class Oracle {
 		String sql = "SELECT S.Sname, CHANGERATE, CCLOSE_PRICE, SMARKET_CAP, SFOREIGN_RATE, SPER, SPBR, SROE " +
 					 "FROM LATESTCHANGERATE L, STOCK S " +
 					 "WHERE S.Sname = L.Sname "; 
-		
-		
-		// two
-		
-		
+				
+		// two	
 		if(!option.getMinPrice().equals("") && !option.getMaxPrice().equals("")) {
 			sql = sql + "AND Cclose_price between " + option.getMinPrice() + " AND " + option.getMaxPrice() + " ";
 		}
@@ -1027,13 +999,10 @@ public class Oracle {
 				
 		// market cap up or down
 		if (!option.getMarketCap().equals("")) {
-			if (!option.getMarketCapUp().equals("")) {
-				if(option.getForeignUp().equals("true")) 
-					sql = sql + "AND Smarket_cap >= " + option.getMarketCap() + " ";
-				else
-					sql = sql + "AND Smarket_cap <= " + option.getMarketCap() + " ";
-			}
-			
+			if(option.getMarketCap().equals("true")) 
+				sql = sql + "AND Smarket_cap >= " + option.getMarketCap() + " ";
+			else
+				sql = sql + "AND Smarket_cap <= " + option.getMarketCap() + " ";		
 		}
 		// foreign cap up or down
 		if (!option.getForeign().equals("")) {
@@ -1067,7 +1036,6 @@ public class Oracle {
 		}
 				
 		sql = sql + " ";
-		System.out.println(sql);
 		
 		try {
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -1084,6 +1052,45 @@ public class Oracle {
 		return null;	// error
 	}
 	
+	public synchronized ResultSet getNewsInChart(String company, int page) {		
+		String sql = "SELECT N.Ntitle, N.Nurl " +
+				 	 "FROM NEWS N " + 
+				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
+	
+		try {
+			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			rs = pstmt.executeQuery(); 
+			
+			if(rs.next()) {
+				rs.beforeFirst();
+				return rs;
+			}
+			else {
+				News news = new News(company);
+				// insert new news
+				System.out.println("get new news");
+				news.setCompany(company);
+				news.getNews();
+				
+				try {
+					rs = pstmt.executeQuery(); 
+					
+					if(rs.next()) {
+						rs.beforeFirst();
+						return rs;
+					}
+				}catch(SQLException ex){
+					ex.printStackTrace();
+				}
+			}
+			
+		} catch (SQLException e) {
+		// 	TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	public synchronized void insertNews(ArrayList<ArrayList<String>> news, String company) {
 		String sql = "";
 		String date, title, url= "";
@@ -1095,16 +1102,17 @@ public class Oracle {
 			title = news.get(1).get(i);
 			url = news.get(2).get(i);
 			
-			sql = "MERGE INTO NEWS " +
-				  "USING DUAL ON(Ncompany = '"+ company + "') " +
-					  "WHEN NOT MATCHED THEN " +
-					  "INSERT VALUES('" + date + "', '" + title + "', '" + url + "', '" + company + "') ";
+			sql = "INSERT INTO NEWS ( Nwhen, Ntitle, Nurl, Ncompany ) " + 
+				 	 "SELECT '" + date + "', '" + title + "', '" + url + "', '" + company + "' FROM DUAL A " +
+				 	 "WHERE NOT EXISTS " +
+				 	 "(SELECT Nwhen, Ntitle, Nurl, Ncompany FROM NEWS " +
+				 	 "WHERE Nurl = '" + url + "') ";
 			System.out.println(sql);
 			try {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery(); 
-				
-					
+								
+				commit();
 				
 			} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1113,7 +1121,7 @@ public class Oracle {
 		}
 	}
 		
-	public void commit() {
+	public synchronized void commit() {
 		try {
 			conn.commit();
 		} catch (SQLException e) {
@@ -1122,7 +1130,7 @@ public class Oracle {
 		}
 	}
 	
-	public void rollback() {
+	public synchronized void rollback() {
 		try {
 			conn.rollback();
 		} catch (SQLException e) {
@@ -1131,7 +1139,7 @@ public class Oracle {
 		}
 	}
 	
-	public void close() {
+	public synchronized void close() {
 		try {
 			if(!conn.isClosed()) {
 				conn.close();

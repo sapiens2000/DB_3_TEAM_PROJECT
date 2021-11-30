@@ -67,11 +67,12 @@
         </div>
     </nav> 
 <% 
-	Oracle orcl = Oracle.getInstance();
-	UserDto user = UserDto.getUserInstance();		
-	String userId = session.getAttribute("userId").toString();
-	
-	user = orcl.getUserData(userId);	
+if(session.getAttribute("uNum") != null){
+		Oracle orcl = Oracle.getInstance();
+		UserDto user = UserDto.getUserInstance();		
+		String userId = session.getAttribute("userId").toString();
+		
+		user = orcl.getUserData(userId);	
 %>
     
     <div class="container">
@@ -135,7 +136,7 @@
 	        </div>
 	    </div>
 	</div>
-   
+<%}%>  
 	<script src="resource/js/theme.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 

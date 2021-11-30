@@ -79,22 +79,24 @@
 			                </thead>		           
 			                <tbody>
 <% 
-	Oracle orcl = Oracle.getInstance();
-	ResultSet rs = orcl.getAsset(Integer.parseInt(session.getAttribute("uNum").toString()));
-
-	while(rs.next()){
-		
-		int row = rs.getInt(1);
-		String sname = rs.getString(2);
-		int quantity = rs.getInt(3);
-		int item_asset = rs.getInt(4);
-		
-				out.println("<tr>");
-				out.println("<td>" + row + "</td>");	
-				out.println("<td>" + sname + "</td>");
-				out.println("<td>" + quantity + "</td>");
-				out.println("<td>" + item_asset + "</td>");
-				out.println("</tr>");
+	if(session.getAttribute("uNum") != null){
+		Oracle orcl = Oracle.getInstance();
+		ResultSet rs = orcl.getAsset(Integer.parseInt(session.getAttribute("uNum").toString()));
+	
+		while(rs.next()){
+			
+			int row = rs.getInt(1);
+			String sname = rs.getString(2);
+			int quantity = rs.getInt(3);
+			int item_asset = rs.getInt(4);
+			
+					out.println("<tr>");
+					out.println("<td>" + row + "</td>");	
+					out.println("<td>" + sname + "</td>");
+					out.println("<td>" + quantity + "</td>");
+					out.println("<td>" + item_asset + "</td>");
+					out.println("</tr>");
+		}
 	}
 %>			                
 			                </tbody>
@@ -108,7 +110,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
     <script src="resource/js/datatables-simple-demo.js"></script>
-    
-    
+
+
 </body>
-</html>
+</html> 

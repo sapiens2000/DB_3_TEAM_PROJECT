@@ -173,14 +173,12 @@
 			
 			out.println("<tr>");
 			out.println(title);
-			
+			out.println("</tr>");
 			i++;
 		}
 	}
 %>	
-				    <td><button class="page-link" id="prev" onclick="<%click=click-1;System.out.println(click);%>">이전</button></td>
-				    <td><button class="page-link" id="next" onclick="<%click=click-1;System.out.println(click);%>">다음</button></td>
-				    </tr>
+
 				    </tbody>
 				</table>
     		</div>

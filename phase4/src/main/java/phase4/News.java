@@ -17,12 +17,14 @@ import org.jsoup.select.Elements;
 
 public class News {
 	private String url; 
+	private String company;
 	
-	public News(String sname, int page) {		
-		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start=" + page;				
+	public News(String sname) {		
+		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start=";
+		this.company = sname;
 	}
 
-	public ArrayList<ArrayList<String>> getNews() {
+	public void getNews() {
 		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
 		ArrayList<String> title = new ArrayList<>();
 		ArrayList<String> dates = new ArrayList<>();
@@ -31,7 +33,7 @@ public class News {
 		Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        // 현재 날짜 구하기
+        // get today 
         LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
 		try {			
 			String str = "";			
@@ -46,6 +48,7 @@ public class News {
 			for(Element e: elem.select("a.news_tit")) {		          				
 				str = e.text();
 				str = str.replace("'", "\"");
+				
 				title.add(str);
 				str = e.attr("href");
 				href.add(str);
@@ -53,11 +56,12 @@ public class News {
 			
 			elem = doc.select("span.info");
 			
-			System.out.println(elem);
 			
 			// date
 			for(Element date : elem) {
 				String text = date.text();
+				if(text.contains("면"))
+					continue;
 				
 				// : ~시간 전, ~분 전
 				if(text.substring(1, text.length()).equals("시간 전") || text.substring(2, text.length()).equals("시간 전")) {
@@ -76,38 +80,31 @@ public class News {
 	            }
 				// yyyy-mm-dd 
 				else {
-	            	text.replace(".", "-");
+	            	text = text.replace(".", "-");
+	            	if(text.charAt(10) == '-') {
+	            		text = text.substring(0, 10);
+	            	}
 	            	dates.add(text);
 	            }
 	        }
 						
 		}catch(Exception e) {			
 			e.printStackTrace();
-			return null;
 		}
 		result.add(dates);
 		result.add(title);
 		result.add(href);
 		
-		return result;				
+		Oracle orcl = Oracle.getInstance();	
+		orcl.insertNews(result, this.company);
+		orcl.commit();
+	}	
+	
+	public void setCompany(String company) {
+		this.company = company;
 	}
 	
-	
-	public static void main(String[] args) {
-		News news = new News("삼성전자", 1);
-		ArrayList<ArrayList<String>> result = news.getNews();
-		String date, title, url ,sql = "";
-		for(int i=0;i<10;i++) {
-			date = result.get(0).get(i);
-			title = result.get(1).get(i);
-			url = result.get(2).get(i);
-			
-			sql = "MERGE INTO NEWS " +
-				  "USING DUAL ON(Ntitle = '" + title + "') " +
-				  "WHEN NOT MATCHED THEN " +
-				  "INSERT VALUES('" + date + "', '" + title + "', '" + url + "', '삼성전자');";
-			
-			System.out.println(sql);
-		}
+	public String getCompany() {
+		return this.company;
 	}
 }
