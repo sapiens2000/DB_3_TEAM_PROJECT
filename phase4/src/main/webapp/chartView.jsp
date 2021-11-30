@@ -104,7 +104,6 @@
 	Oracle orcl = Oracle.getInstance();
 	ResultSet rs;
 	String company = request.getParameter("sname");
-	int click = 0;
 	String data = orcl.stockChart(company);
 %>
 
@@ -163,7 +162,7 @@
 					</thead>
 					<tbody>
 <% 
-	rs = orcl.getNewsInChart(company, click);
+	rs = orcl.getNewsInChart(company);
 	
 	int i = 1;
 	if(rs != null){

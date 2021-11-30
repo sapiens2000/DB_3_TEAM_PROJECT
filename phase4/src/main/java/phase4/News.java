@@ -16,12 +16,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class News {
+	private static News news;
 	private String url; 
 	private String company;
 	
-	public News(String sname) {		
-		url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start=";
-		this.company = sname;
+	private News() {}
+	
+	public static synchronized News getNewsInstance() {
+		if(news == null) {
+			news = new News();
+		}
+		return news;
 	}
 
 	public void getNews() {
@@ -106,5 +111,13 @@ public class News {
 	
 	public String getCompany() {
 		return this.company;
+	}
+	
+	public void setUrl(String sname) {
+		this.url = "https://search.naver.com/search.naver?where=news&query="+ sname + "&start=";
+	}
+	
+	public String getUrl(){
+		return this.url;
 	}
 }

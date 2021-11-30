@@ -1052,7 +1052,7 @@ public class Oracle {
 		return null;	// error
 	}
 	
-	public synchronized ResultSet getNewsInChart(String company, int page) {		
+	public synchronized ResultSet getNewsInChart(String company) {		
 		String sql = "SELECT N.Ntitle, N.Nurl " +
 				 	 "FROM NEWS N " + 
 				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
@@ -1066,13 +1066,14 @@ public class Oracle {
 				return rs;
 			}
 			else {
-				News news = new News(company);
+				News news = News.getNewsInstance();
 				// insert new news
-				System.out.println("get new news");
+				news.setUrl(company);
 				news.setCompany(company);
 				news.getNews();
 				
 				try {
+					pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 					rs = pstmt.executeQuery(); 
 					
 					if(rs.next()) {
@@ -1091,6 +1092,7 @@ public class Oracle {
 		return null;
 		
 	}
+	
 	public synchronized void insertNews(ArrayList<ArrayList<String>> news, String company) {
 		String sql = "";
 		String date, title, url= "";
@@ -1107,7 +1109,6 @@ public class Oracle {
 				 	 "WHERE NOT EXISTS " +
 				 	 "(SELECT Nwhen, Ntitle, Nurl, Ncompany FROM NEWS " +
 				 	 "WHERE Nurl = '" + url + "') ";
-			System.out.println(sql);
 			try {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery(); 
