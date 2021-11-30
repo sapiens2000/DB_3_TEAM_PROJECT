@@ -1054,7 +1054,7 @@ public class Oracle {
 	
 	public synchronized ResultSet getNewsInChart(String company) {		
 		String sql = "SELECT N.Ntitle, N.Nurl " +
-				 	 "FROM NEWS N " + 
+				 	 "FROM NEWS N, MENTION M " + 
 				 	 "WHERE N.Ntitle LIKE '%" + company + "%' ";
 	
 		try {
@@ -1108,7 +1108,8 @@ public class Oracle {
 				 	 "SELECT '" + date + "', '" + title + "', '" + url + "', '" + company + "' FROM DUAL A " +
 				 	 "WHERE NOT EXISTS " +
 				 	 "(SELECT Nwhen, Ntitle, Nurl, Ncompany FROM NEWS " +
-				 	 "WHERE Nurl = '" + url + "') ";
+				 	 "WHERE Nurl = '" + url + "') ";			
+			
 			try {
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery(); 
@@ -1119,6 +1120,21 @@ public class Oracle {
 			// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			sql = "INSERT INTO MENTION ()";
+			
+			try {
+				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = pstmt.executeQuery(); 
+								
+				commit();
+				
+			} catch (SQLException e) {
+			// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 		}
 	}
 		
