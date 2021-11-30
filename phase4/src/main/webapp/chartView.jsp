@@ -433,7 +433,7 @@
 											$.ajax({
 												  type:'POST',
 												  url:"./AjaxPostServlet",
-												  data :{Cnt:$("#buy_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:1},
+												  data :{Cnt:$("#sell_cnt").val(), uNum:<%if(session.getAttribute("uNum") != null){out.print(Integer.parseInt((session.getAttribute("uNum")).toString()));}%>, stockName:<%=company%>, tradeCase:2},
 												  async:true,
 												  dataType:'json',
 												  success : function(data) {
@@ -447,7 +447,7 @@
 													  console.log(resultValue);
 													  
 													  if(resultValue == 1){
-														  alert("매수 완료");
+														  alert("매도 완료");
 														  window.location.reload();
 													  }
 													  else if(resultValue == -1){
