@@ -1,6 +1,6 @@
 
 
-CREATE OR REPLACE TABLE USERS(
+CREATE TABLE USERS(
     User_id                 VARCHAR(20) NOT NULL,
     Upassword               VARCHAR(20) NOT NULL,
     Unum                    NUMBER      NOT NULL,
@@ -14,7 +14,7 @@ CREATE OR REPLACE TABLE USERS(
     UNIQUE(Unum)
 );
 
-CREATE OR REPLACE TABLE STOCK(
+CREATE TABLE STOCK(
     Scode VARCHAR(6)    NOT NULL,
     Sname VARCHAR(30)   NOT NULL,
     Smarket             NUMBER,
