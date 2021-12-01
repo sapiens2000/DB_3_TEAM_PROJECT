@@ -792,15 +792,17 @@ public class Oracle {
 				rs = pstmt.executeQuery();
 				
 				if(!rs.next()) {
-					sql =	"INSERT INTO HOLDINGSTOCK VALUES ( " + Unum + ", '" + stockCode + "', 0, 0 ) ";
+					sql =	"INSERT INTO HOLDINGSTOCK VALUES ( " + Unum + ", '" + stockCode + "', 0, 0) ";
 					pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 					rs = pstmt.executeQuery();
 				}
 				
 				sql = 	"UPDATE HOLDINGSTOCK " +
 						"SET " +
-						"Quantity = Quantity + " + amount + " " +
+						"Quantity = Quantity + " + amount + ", " +
+						"Item_assets = " + totalPrice + " " +
 						"WHERE Hs_unum = " + Unum + " AND Hs_scode = '" + stockCode + "' ";
+						
 				pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 				rs = pstmt.executeQuery();
 				
@@ -896,7 +898,7 @@ public class Oracle {
 					"SET " +
 					"Ucash = Ucash + " + totalPrice + ", " +
 					"Ucurrent_total_asset = Ucurrent_total_asset - " + totalPrice + " " + 
-					"WHERE Unum = " + Unum;
+					"WHERE Unum = " + Unum + " ";
 			
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery();
@@ -932,7 +934,8 @@ public class Oracle {
 			
 			sql = 	"UPDATE HOLDINGSTOCK " +
 					"SET " +
-					"Quantity = Quantity - " + amount + " " +
+					"Quantity = Quantity - " + amount + ", " +
+					"Item_assets = " + totalPrice + " " +
 					"WHERE Hs_unum = " + Unum + " AND Hs_scode = '" + stockCode + "' ";
 			pstmt = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = pstmt.executeQuery();
